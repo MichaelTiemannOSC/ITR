@@ -1,0 +1,305 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ITR.target_validation &mdash; ITR Temperature Alignment tool  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ITR Temperature Alignment tool
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction to temperature scoring method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started Using Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api.html">Getting Started Using REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../FunctionalOverview.html">Functional Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../DataRequirements.html">Data Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Legends.html">Data Legends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../links.html">Project Links</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../terms.html">Terms of Use</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ITR Temperature Alignment tool</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">ITR.target_validation</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/autoapi/ITR/target_validation/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="module-ITR.target_validation">
+<span id="itr-target-validation"></span><h1><a class="reference internal" href="#module-ITR.target_validation" title="ITR.target_validation"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ITR.target_validation</span></code></a><a class="headerlink" href="#module-ITR.target_validation" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="ITR.target_validation.TargetProtocol">
+<em class="property">class </em><code class="sig-prename descclassname">ITR.target_validation.</code><code class="sig-name descname">TargetProtocol</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>PortfolioAggregationConfig<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">PortfolioAggregationConfig</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.target_validation.TargetProtocol" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class validates the targets, to make sure that only active, useful targets are considered. It then combines the targets with company-related data into a dataframe where there’s one row for each of the nine possible target types (short, mid, long * S1+S2, S3, S1+S2+S3). This class follows the procedures outlined by the target protocol that is a part of the “Temperature Rating Methodology” (2020), which has been created by CDP Worldwide and WWF International.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong> – A Portfolio aggregation config</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="ITR.target_validation.TargetProtocol.process">
+<code class="sig-name descname">process</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">targets</span><span class="p">:</span> <span class="n">List<span class="p">[</span>IDataProviderTarget<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">companies</span><span class="p">:</span> <span class="n">List<span class="p">[</span>IDataProviderCompany<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.target_validation.TargetProtocol.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the targets and companies, validate all targets and return a data frame that combines all targets and company data into a 9-box grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>targets</strong> – A list of targets</p></li>
+<li><p><strong>companies</strong> – A list of companies</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A data frame that combines the processed data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ITR.target_validation.TargetProtocol.validate">
+<code class="sig-name descname">validate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">IDataProviderTarget</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.target_validation.TargetProtocol.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate a target, meaning it should:</p>
+<ul class="simple">
+<li><p>Have a valid type</p></li>
+<li><p>Not be finished</p></li>
+<li><p>A valid end year</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>target</strong> – The target to validate</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if it’s a valid target, false if it isn’t</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ITR.target_validation.TargetProtocol._prepare_target">
+<code class="sig-name descname">_prepare_target</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">IDataProviderTarget</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.target_validation.TargetProtocol._prepare_target" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare a target for usage later on in the process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>target</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ITR.target_validation.TargetProtocol.prepare_targets">
+<code class="sig-name descname">prepare_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">targets</span><span class="p">:</span> <span class="n">List<span class="p">[</span>IDataProviderTarget<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.target_validation.TargetProtocol.prepare_targets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ITR.target_validation.TargetProtocol._find_target">
+<code class="sig-name descname">_find_target</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">row</span><span class="p">:</span> <span class="n">pd.Series</span></em>, <em class="sig-param"><span class="n">target_columns</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.target_validation.TargetProtocol._find_target" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the target that corresponds to a given row. If there are multiple targets available, filter them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>row</strong> – The row from the data set that should be looked for</p></li>
+<li><p><strong>target_columns</strong> – The columns that need to be returned</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>returns records from the input data, which contains company and target information, that meet specific criteria. For example, record of greatest emissions_in_scope</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ITR.target_validation.TargetProtocol.group_targets">
+<code class="sig-name descname">group_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.target_validation.TargetProtocol.group_targets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group the targets and create the 9-box grid (short, mid, long * s1s2, s3, s1s2s3).
+Group valid targets by category &amp; filter multiple targets#
+Input: a list of valid targets for each company:
+For each company:</p>
+<p>Group all valid targets based on scope (S1+S2 / S3 / S1+S2+S3) and time frame (short / mid / long-term)
+into 6 categories.</p>
+<p>For each category: if more than 1 target is available, filter based on the following criteria
+– Highest boundary coverage
+– Latest base year
+– Target type: Absolute over intensity
+– If all else is equal: average the ambition of targets</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, OS-Climate
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

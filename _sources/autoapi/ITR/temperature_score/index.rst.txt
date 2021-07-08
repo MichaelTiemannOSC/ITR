@@ -1,0 +1,139 @@
+:mod:`ITR.temperature_score`
+============================
+
+.. py:module:: ITR.temperature_score
+
+
+Module Contents
+---------------
+
+
+.. py:class:: TemperatureScore(time_frames: List[ETimeFrames], scopes: List[EScope], fallback_score: float = 3.2, model: int = 4, aggregation_method: PortfolioAggregationMethod = PortfolioAggregationMethod.WATS, grouping: Optional[List] = None, config: Type[TemperatureScoreConfig] = TemperatureScoreConfig)
+
+   Bases: :class:`ITR.portfolio_aggregation.PortfolioAggregation`
+
+   This class is provides a temperature score based on the climate goals.
+
+   :param fallback_score: The temp score if a company is not found
+   :param model: The regression model to use
+   :param config: A class defining the constants that are used throughout this class. This parameter is only required
+                   if you'd like to overwrite a constant. This can be done by extending the TemperatureScoreConfig
+                   class and overwriting one of the parameters.
+
+   .. method:: get_annual_reduction_rate(self, target: pd.Series)
+
+
+      Get the annual reduction rate (or None if not available).
+
+      :param target: The target as a row of a dataframe
+      :return: The annual reduction
+
+
+   .. method:: get_score(self, target: pd.Series)
+
+
+      Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.
+
+      :param target: The target as a row of a data frame
+      :return: The temperature score
+
+
+   .. method:: get_ghc_temperature_score(self, row: pd.Series, company_data: pd.DataFrame)
+
+
+      Get the aggregated temperature score and a temperature result, which indicates how much of the score is based on the default score for a certain company based on the emissions of company.
+
+      :param company_data: The original data, grouped by company, time frame and scope category
+      :param row: The row to calculate the temperature score for (if the scope of the row isn't s1s2s3, it will return the original score
+      :return: The aggregated temperature score for a company
+
+
+   .. method:: get_default_score(self, target: pd.Series)
+
+
+      Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.
+
+      :param target: The target as a row of a dataframe
+      :return: The temperature score
+
+
+   .. method:: _prepare_data(self, data: pd.DataFrame)
+
+
+      Prepare the data such that it can be used to calculate the temperature score.
+
+      :param data: The original data set as a pandas data frame
+      :return: The extended data frame
+
+
+   .. method:: _calculate_company_score(self, data)
+
+
+      Calculate the combined s1s2s3 scores for all companies.
+
+      :param data: The original data set as a pandas data frame
+      :return: The data frame, with an updated s1s2s3 temperature score
+
+
+   .. method:: calculate(self, data: Optional[pd.DataFrame] = None, data_providers: Optional[List[data.DataProvider]] = None, portfolio: Optional[List[PortfolioCompany]] = None)
+
+
+      Calculate the temperature for a dataframe of company data. The columns in the data frame should be a combination
+      of IDataProviderTarget and IDataProviderCompany.
+
+      :param data: The data set (or None if the data should be retrieved)
+      :param data_providers: A list of DataProvider instances. Optional, only required if data is empty.
+      :param portfolio: A list of PortfolioCompany models. Optional, only required if data is empty.
+      :return: A data frame containing all relevant information for the targets and companies
+
+
+   .. method:: _get_aggregations(self, data: pd.DataFrame, total_companies: int)
+
+
+      Get the aggregated score over a certain data set. Also calculate the (relative) contribution of each company
+
+      :param data: A data set, containing one row per company
+      :return: An aggregated score and the relative and absolute contribution of each company
+
+
+   .. method:: _get_score_aggregation(self, data: pd.DataFrame, time_frame: ETimeFrames, scope: EScope)
+
+
+      Get a score aggregation for a certain time frame and scope, for the data set as a whole and for the different
+      groupings.
+
+      :param data: The whole data set
+      :param time_frame: A time frame
+      :param scope: A scope
+      :return: A score aggregation, containing the aggregations for the whole data set and each individual group
+
+
+   .. method:: aggregate_scores(self, data: pd.DataFrame)
+
+
+      Aggregate scores to create a portfolio score per time_frame (short, mid, long).
+
+      :param data: The results of the calculate method
+      :return: A weighted temperature score for the portfolio
+
+
+   .. method:: cap_scores(self, scores: pd.DataFrame)
+
+
+      Cap the temperature scores in the input data frame to a certain value, based on the scenario that's being used. 
+      This can either be for the whole data set, or only for the top X contributors.
+
+      :param scores: The data set with the temperature scores
+      :return: The input data frame, with capped scores
+
+
+   .. method:: anonymize_data_dump(self, scores: pd.DataFrame)
+
+
+      Anonymize the scores by deleting the company IDs, ISIN and renaming the companies.
+
+      :param scores: The data set with the temperature scores
+      :return: The input data frame, anonymized
+
+
+
