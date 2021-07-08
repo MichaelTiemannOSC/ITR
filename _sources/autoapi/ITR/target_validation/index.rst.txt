@@ -1,0 +1,81 @@
+:mod:`ITR.target_validation`
+============================
+
+.. py:module:: ITR.target_validation
+
+
+Module Contents
+---------------
+
+
+.. py:class:: TargetProtocol(config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig)
+
+   This class validates the targets, to make sure that only active, useful targets are considered. It then combines the targets with company-related data into a dataframe where there's one row for each of the nine possible target types (short, mid, long * S1+S2, S3, S1+S2+S3). This class follows the procedures outlined by the target protocol that is a part of the "Temperature Rating Methodology" (2020), which has been created by CDP Worldwide and WWF International.
+
+   :param config: A Portfolio aggregation config
+
+   .. method:: process(self, targets: List[IDataProviderTarget], companies: List[IDataProviderCompany])
+
+
+      Process the targets and companies, validate all targets and return a data frame that combines all targets and company data into a 9-box grid.
+
+      :param targets: A list of targets
+      :param companies: A list of companies
+      :return: A data frame that combines the processed data
+
+
+   .. method:: validate(self, target: IDataProviderTarget)
+
+
+      Validate a target, meaning it should:
+
+      * Have a valid type
+      * Not be finished
+      * A valid end year
+
+      :param target: The target to validate
+      :return: True if it's a valid target, false if it isn't
+
+
+   .. method:: _prepare_target(self, target: IDataProviderTarget)
+
+
+      Prepare a target for usage later on in the process.
+
+      :param target:
+      :return:
+
+
+   .. method:: prepare_targets(self, targets: List[IDataProviderTarget])
+
+
+
+   .. method:: _find_target(self, row: pd.Series, target_columns: List[str])
+
+
+      Find the target that corresponds to a given row. If there are multiple targets available, filter them.
+
+      :param row: The row from the data set that should be looked for
+      :param target_columns: The columns that need to be returned
+      :return: returns records from the input data, which contains company and target information, that meet specific criteria. For example, record of greatest emissions_in_scope
+
+
+   .. method:: group_targets(self)
+
+
+      Group the targets and create the 9-box grid (short, mid, long * s1s2, s3, s1s2s3).
+      Group valid targets by category & filter multiple targets#
+      Input: a list of valid targets for each company:
+      For each company:
+
+      Group all valid targets based on scope (S1+S2 / S3 / S1+S2+S3) and time frame (short / mid / long-term)
+      into 6 categories.
+
+      For each category: if more than 1 target is available, filter based on the following criteria
+      -- Highest boundary coverage
+      -- Latest base year
+      -- Target type: Absolute over intensity
+      -- If all else is equal: average the ambition of targets
+
+
+
