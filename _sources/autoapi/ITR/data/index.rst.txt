@@ -52,18 +52,6 @@ Package Contents
       :return: A list containing the company data
 
 
-   .. method:: get_sbti_targets(self, companies: list)
-      :abstractmethod:
-
-
-      For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
-      the SBTi.
-
-      :param companies: A list of companies. Each company should be a dict with a "company_name" and "company_id"
-                          field.
-      :return: The original list, enriched with a field called "sbti_target_status"
-
-
 
 .. py:class:: CSVProvider(path: str, path_targets: str, encoding: str = 'utf-8')
 

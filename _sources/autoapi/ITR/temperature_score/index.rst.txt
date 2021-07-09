@@ -51,8 +51,6 @@ Module Contents
    .. method:: get_default_score(self, target: pd.Series)
 
 
-      Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.
-
       :param target: The target as a row of a dataframe
       :return: The temperature score
 

@@ -366,6 +366,16 @@ Module Contents
 
    TODO: add support for multiple timeframes. Long currently corresponds to 2050.
 
+   .. attribute:: SHORT
+      :annotation: = short
+
+      
+
+   .. attribute:: MID
+      :annotation: = mid
+
+      
+
    .. attribute:: LONG
       :annotation: = long
 

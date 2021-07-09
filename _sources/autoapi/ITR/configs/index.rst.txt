@@ -47,7 +47,7 @@ Module Contents
       
 
    .. attribute:: GLOBAL_BUDGET
-      :annotation: = 678
+      :annotation: = 396
 
       
 
