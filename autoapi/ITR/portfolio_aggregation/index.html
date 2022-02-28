@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
@@ -160,10 +160,22 @@
 <span id="itr-portfolio-aggregation"></span><h1><a class="reference internal" href="#module-ITR.portfolio_aggregation" title="ITR.portfolio_aggregation"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ITR.portfolio_aggregation</span></code></a><a class="headerlink" href="#module-ITR.portfolio_aggregation" title="Permalink to this headline">¶</a></h1>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ITR.portfolio_aggregation.PortfolioAggregationMethod" title="ITR.portfolio_aggregation.PortfolioAggregationMethod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PortfolioAggregationMethod</span></code></a></p></td>
+<td><p>The portfolio aggregation method determines how the temperature scores for the individual companies are aggregated</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ITR.portfolio_aggregation.PortfolioAggregation" title="ITR.portfolio_aggregation.PortfolioAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PortfolioAggregation</span></code></a></p></td>
+<td><p>This class is a base class that provides portfolio aggregation calculation.</p></td>
+</tr>
+</tbody>
+</table>
 <dl class="py class">
 <dt id="ITR.portfolio_aggregation.PortfolioAggregationMethod">
 <em class="property">class </em><code class="sig-prename descclassname">ITR.portfolio_aggregation.</code><code class="sig-name descname">PortfolioAggregationMethod</code><a class="headerlink" href="#ITR.portfolio_aggregation.PortfolioAggregationMethod" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
 <p>The portfolio aggregation method determines how the temperature scores for the individual companies are aggregated
 into a single portfolio score.</p>
 <dl class="py attribute">
@@ -203,13 +215,13 @@ into a single portfolio score.</p>
 
 <dl class="py method">
 <dt id="ITR.portfolio_aggregation.PortfolioAggregationMethod.is_emissions_based">
-<em class="property">static </em><code class="sig-name descname">is_emissions_based</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="p">:</span> <span class="n">PortfolioAggregationMethod</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.portfolio_aggregation.PortfolioAggregationMethod.is_emissions_based" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">is_emissions_based</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="p">:</span> <span class="n">PortfolioAggregationMethod</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#ITR.portfolio_aggregation.PortfolioAggregationMethod.is_emissions_based" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether a given method is emissions-based (i.e. it uses the emissions to calculate the aggregation).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>method</strong> – The method to check</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p></p>
 </dd>
 </dl>
@@ -217,18 +229,18 @@ into a single portfolio score.</p>
 
 <dl class="py method">
 <dt id="ITR.portfolio_aggregation.PortfolioAggregationMethod.get_value_column">
-<em class="property">static </em><code class="sig-name descname">get_value_column</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="p">:</span> <span class="n">PortfolioAggregationMethod</span></em>, <em class="sig-param"><span class="n">column_config</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>ColumnsConfig<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.portfolio_aggregation.PortfolioAggregationMethod.get_value_column" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">get_value_column</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="p">:</span> <span class="n">PortfolioAggregationMethod</span></em>, <em class="sig-param"><span class="n">column_config</span><span class="p">:</span> <span class="n">Type<span class="p">[</span><a class="reference internal" href="../configs/index.html#ITR.configs.ColumnsConfig" title="ITR.configs.ColumnsConfig">ITR.configs.ColumnsConfig</a><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#ITR.portfolio_aggregation.PortfolioAggregationMethod.get_value_column" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="ITR.portfolio_aggregation.PortfolioAggregation">
-<em class="property">class </em><code class="sig-prename descclassname">ITR.portfolio_aggregation.</code><code class="sig-name descname">PortfolioAggregation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>PortfolioAggregationConfig<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">PortfolioAggregationConfig</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.portfolio_aggregation.PortfolioAggregation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">ITR.portfolio_aggregation.</code><code class="sig-name descname">PortfolioAggregation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n">Type<span class="p">[</span><a class="reference internal" href="../configs/index.html#ITR.configs.PortfolioAggregationConfig" title="ITR.configs.PortfolioAggregationConfig">ITR.configs.PortfolioAggregationConfig</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">PortfolioAggregationConfig</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.portfolio_aggregation.PortfolioAggregation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <p>This class is a base class that provides portfolio aggregation calculation.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>config</strong> – A class defining the constants that are used throughout this class. This parameter is only required
 if you’d like to overwrite a constant. This can be done by extending the PortfolioAggregationConfig
 class and overwriting one of the parameters.</p>
@@ -236,16 +248,16 @@ class and overwriting one of the parameters.</p>
 </dl>
 <dl class="py method">
 <dt id="ITR.portfolio_aggregation.PortfolioAggregation._check_column">
-<code class="sig-name descname">_check_column</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">column</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.portfolio_aggregation.PortfolioAggregation._check_column" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_check_column</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pandas.DataFrame</span></em>, <em class="sig-param"><span class="n">column</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.portfolio_aggregation.PortfolioAggregation._check_column" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if a certain column is filled for all companies. If not throw an error.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> – The data to check</p></li>
 <li><p><strong>column</strong> – The column to check</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p></p>
 </dd>
 </dl>
@@ -253,17 +265,17 @@ class and overwriting one of the parameters.</p>
 
 <dl class="py method">
 <dt id="ITR.portfolio_aggregation.PortfolioAggregation._calculate_aggregate_score">
-<code class="sig-name descname">_calculate_aggregate_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">input_column</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">portfolio_aggregation_method</span><span class="p">:</span> <span class="n">PortfolioAggregationMethod</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.portfolio_aggregation.PortfolioAggregation._calculate_aggregate_score" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_calculate_aggregate_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pandas.DataFrame</span></em>, <em class="sig-param"><span class="n">input_column</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">portfolio_aggregation_method</span><span class="p">:</span> <span class="n">PortfolioAggregationMethod</span></em><span class="sig-paren">)</span> &#x2192; pandas.Series<a class="headerlink" href="#ITR.portfolio_aggregation.PortfolioAggregation._calculate_aggregate_score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Aggregate the scores in a given column based on a certain portfolio aggregation method.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> – The data to run the calculations on</p></li>
 <li><p><strong>input_column</strong> – The input column (containing the scores)</p></li>
 <li><p><strong>portfolio_aggregation_method</strong> – The method to use</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The aggregates score</p>
 </dd>
 </dl>
@@ -271,6 +283,7 @@ class and overwriting one of the parameters.</p>
 
 </dd></dl>
 
+</section>
 </section>
 </section>
 

@@ -1,5 +1,5 @@
-:mod:`ITR.data.data_provider`
-=============================
+:py:mod:`ITR.data.data_provider`
+================================
 
 .. py:module:: ITR.data.data_provider
 
@@ -7,16 +7,24 @@
 Module Contents
 ---------------
 
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ITR.data.data_provider.DataProvider
+
+
+
 
 .. py:class:: DataProvider(**kwargs)
 
-   Bases: :class:`abc.ABC`
+   Bases: :py:obj:`abc.ABC`
 
    General data provider super class.
 
-   .. method:: get_targets(self, company_ids: List[str])
+   .. py:method:: get_targets(self, company_ids: List[str]) -> List[ITR.interfaces.IDataProviderTarget]
       :abstractmethod:
-
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -25,9 +33,8 @@ Module Contents
       :return: A list containing the targets
 
 
-   .. method:: get_company_data(self, company_ids: List[str])
+   .. py:method:: get_company_data(self, company_ids: List[str]) -> List[ITR.interfaces.IDataProviderCompany]
       :abstractmethod:
-
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -39,7 +46,7 @@ Module Contents
 
 .. py:exception:: CompanyNotFoundException
 
-   Bases: :class:`Exception`
+   Bases: :py:obj:`Exception`
 
    This exception occurs when a company is not found.
 

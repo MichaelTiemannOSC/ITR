@@ -1,5 +1,5 @@
-:mod:`ITR.configs`
-==================
+:py:mod:`ITR.configs`
+=====================
 
 .. py:module:: ITR.configs
 
@@ -13,45 +13,57 @@
 Module Contents
 ---------------
 
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ITR.configs.ControlsConfig
+   ITR.configs.ColumnsConfig
+   ITR.configs.PortfolioAggregationConfig
+   ITR.configs.TemperatureScoreConfig
+
+
+
 
 .. py:class:: ControlsConfig
 
-   .. attribute:: BASE_YEAR
+   .. py:attribute:: BASE_YEAR
       :annotation: = 2019
 
       
 
-   .. attribute:: TARGET_END_YEAR
+   .. py:attribute:: TARGET_END_YEAR
       :annotation: = 2050
 
       
 
-   .. attribute:: PROJECTION_START_YEAR
+   .. py:attribute:: PROJECTION_START_YEAR
       :annotation: = 2010
 
       
 
-   .. attribute:: PROJECTION_END_YEAR
+   .. py:attribute:: PROJECTION_END_YEAR
       :annotation: = 2019
 
       
 
-   .. attribute:: TCRE
+   .. py:attribute:: TCRE
       :annotation: = 0.000545
 
       
 
-   .. attribute:: SCENARIO_TARGET_TEMPERATURE
+   .. py:attribute:: SCENARIO_TARGET_TEMPERATURE
       :annotation: = 1.5
 
       
 
-   .. attribute:: GLOBAL_BUDGET
+   .. py:attribute:: GLOBAL_BUDGET
       :annotation: = 396
 
       
 
-   .. attribute:: CURRENT_TEMPERATURE
+   .. py:attribute:: CURRENT_TEMPERATURE
       
 
       
@@ -59,302 +71,302 @@ Module Contents
 
 .. py:class:: ColumnsConfig
 
-   .. attribute:: COMPANY_ID
+   .. py:attribute:: COMPANY_ID
       :annotation: = company_id
 
       
 
-   .. attribute:: COMPANY_ISIN
+   .. py:attribute:: COMPANY_ISIN
       :annotation: = company_isin
 
       
 
-   .. attribute:: COMPANY_ISIC
+   .. py:attribute:: COMPANY_ISIC
       :annotation: = isic
 
       
 
-   .. attribute:: REGRESSION_PARAM
+   .. py:attribute:: REGRESSION_PARAM
       :annotation: = param
 
       
 
-   .. attribute:: REGRESSION_INTERCEPT
+   .. py:attribute:: REGRESSION_INTERCEPT
       :annotation: = intercept
 
       
 
-   .. attribute:: MARKET_CAP
+   .. py:attribute:: MARKET_CAP
       :annotation: = company_market_cap
 
       
 
-   .. attribute:: INVESTMENT_VALUE
+   .. py:attribute:: INVESTMENT_VALUE
       :annotation: = investment_value
 
       
 
-   .. attribute:: COMPANY_ENTERPRISE_VALUE
+   .. py:attribute:: COMPANY_ENTERPRISE_VALUE
       :annotation: = company_enterprise_value
 
       
 
-   .. attribute:: COMPANY_EV_PLUS_CASH
+   .. py:attribute:: COMPANY_EV_PLUS_CASH
       :annotation: = company_ev_plus_cash
 
       
 
-   .. attribute:: COMPANY_TOTAL_ASSETS
+   .. py:attribute:: COMPANY_TOTAL_ASSETS
       :annotation: = company_total_assets
 
       
 
-   .. attribute:: TARGET_REFERENCE_NUMBER
+   .. py:attribute:: TARGET_REFERENCE_NUMBER
       :annotation: = target_type
 
       
 
-   .. attribute:: SCOPE
+   .. py:attribute:: SCOPE
       :annotation: = scope
 
       
 
-   .. attribute:: REDUCTION_FROM_BASE_YEAR
+   .. py:attribute:: REDUCTION_FROM_BASE_YEAR
       :annotation: = reduction_from_base_year
 
       
 
-   .. attribute:: START_YEAR
+   .. py:attribute:: START_YEAR
       :annotation: = start_year
 
       
 
-   .. attribute:: VARIABLE
+   .. py:attribute:: VARIABLE
       :annotation: = variable
 
       
 
-   .. attribute:: SLOPE
+   .. py:attribute:: SLOPE
       :annotation: = slope
 
       
 
-   .. attribute:: TIME_FRAME
+   .. py:attribute:: TIME_FRAME
       :annotation: = time_frame
 
       
 
-   .. attribute:: MODEL
+   .. py:attribute:: MODEL
       :annotation: = model
 
       
 
-   .. attribute:: ANNUAL_REDUCTION_RATE
+   .. py:attribute:: ANNUAL_REDUCTION_RATE
       :annotation: = annual_reduction_rate
 
       
 
-   .. attribute:: EMISSIONS_IN_SCOPE
+   .. py:attribute:: EMISSIONS_IN_SCOPE
       :annotation: = emissions_in_scope
 
       
 
-   .. attribute:: TEMPERATURE_SCORE
+   .. py:attribute:: TEMPERATURE_SCORE
       :annotation: = temperature_score
 
       
 
-   .. attribute:: COMPANY_NAME
+   .. py:attribute:: COMPANY_NAME
       :annotation: = company_name
 
       
 
-   .. attribute:: OWNED_EMISSIONS
+   .. py:attribute:: OWNED_EMISSIONS
       :annotation: = owned_emissions
 
       
 
-   .. attribute:: COUNTRY
+   .. py:attribute:: COUNTRY
       :annotation: = country
 
       
 
-   .. attribute:: SECTOR
+   .. py:attribute:: SECTOR
       :annotation: = sector
 
       
 
-   .. attribute:: GHG_SCOPE12
+   .. py:attribute:: GHG_SCOPE12
       :annotation: = ghg_s1s2
 
       
 
-   .. attribute:: GHG_SCOPE3
+   .. py:attribute:: GHG_SCOPE3
       :annotation: = ghg_s3
 
       
 
-   .. attribute:: COMPANY_REVENUE
+   .. py:attribute:: COMPANY_REVENUE
       :annotation: = company_revenue
 
       
 
-   .. attribute:: CASH_EQUIVALENTS
+   .. py:attribute:: CASH_EQUIVALENTS
       :annotation: = company_cash_equivalents
 
       
 
-   .. attribute:: TARGET_CLASSIFICATION
+   .. py:attribute:: TARGET_CLASSIFICATION
       :annotation: = target_classification
 
       
 
-   .. attribute:: REDUCTION_AMBITION
+   .. py:attribute:: REDUCTION_AMBITION
       :annotation: = reduction_ambition
 
       
 
-   .. attribute:: BASE_YEAR
+   .. py:attribute:: BASE_YEAR
       :annotation: = base_year
 
       
 
-   .. attribute:: END_YEAR
+   .. py:attribute:: END_YEAR
       :annotation: = end_year
 
       
 
-   .. attribute:: SBTI_VALIDATED
+   .. py:attribute:: SBTI_VALIDATED
       :annotation: = sbti_validated
 
       
 
-   .. attribute:: ACHIEVED_EMISSIONS
+   .. py:attribute:: ACHIEVED_EMISSIONS
       :annotation: = achieved_reduction
 
       
 
-   .. attribute:: ISIC
+   .. py:attribute:: ISIC
       :annotation: = isic
 
       
 
-   .. attribute:: INDUSTRY_LVL1
+   .. py:attribute:: INDUSTRY_LVL1
       :annotation: = industry_level_1
 
       
 
-   .. attribute:: INDUSTRY_LVL2
+   .. py:attribute:: INDUSTRY_LVL2
       :annotation: = industry_level_2
 
       
 
-   .. attribute:: INDUSTRY_LVL3
+   .. py:attribute:: INDUSTRY_LVL3
       :annotation: = industry_level_3
 
       
 
-   .. attribute:: INDUSTRY_LVL4
+   .. py:attribute:: INDUSTRY_LVL4
       :annotation: = industry_level_4
 
       
 
-   .. attribute:: COVERAGE_S1
+   .. py:attribute:: COVERAGE_S1
       :annotation: = coverage_s1
 
       
 
-   .. attribute:: COVERAGE_S2
+   .. py:attribute:: COVERAGE_S2
       :annotation: = coverage_s2
 
       
 
-   .. attribute:: COVERAGE_S3
+   .. py:attribute:: COVERAGE_S3
       :annotation: = coverage_s3
 
       
 
-   .. attribute:: INTENSITY_METRIC
+   .. py:attribute:: INTENSITY_METRIC
       :annotation: = intensity_metric
 
       
 
-   .. attribute:: INTENSITY_METRIC_SR15
+   .. py:attribute:: INTENSITY_METRIC_SR15
       :annotation: = intensity_metric
 
       
 
-   .. attribute:: TARGET_TYPE_SR15
+   .. py:attribute:: TARGET_TYPE_SR15
       :annotation: = target_type
 
       
 
-   .. attribute:: SR15_VARIABLE
+   .. py:attribute:: SR15_VARIABLE
       :annotation: = sr15_variable
 
       
 
-   .. attribute:: REGRESSION_MODEL
+   .. py:attribute:: REGRESSION_MODEL
       :annotation: = Regression_model
 
       
 
-   .. attribute:: BASEYEAR_GHG_S1
+   .. py:attribute:: BASEYEAR_GHG_S1
       :annotation: = base_year_ghg_s1
 
       
 
-   .. attribute:: BASEYEAR_GHG_S2
+   .. py:attribute:: BASEYEAR_GHG_S2
       :annotation: = base_year_ghg_s2
 
       
 
-   .. attribute:: BASEYEAR_GHG_S3
+   .. py:attribute:: BASEYEAR_GHG_S3
       :annotation: = base_year_ghg_s3
 
       
 
-   .. attribute:: REGION
+   .. py:attribute:: REGION
       :annotation: = region
 
       
 
-   .. attribute:: ENGAGEMENT_TARGET
+   .. py:attribute:: ENGAGEMENT_TARGET
       :annotation: = engagement_target
 
       
 
-   .. attribute:: CUMULATIVE_BUDGET
+   .. py:attribute:: CUMULATIVE_BUDGET
       :annotation: = cumulative_budget
 
       
 
-   .. attribute:: CUMULATIVE_TRAJECTORY
+   .. py:attribute:: CUMULATIVE_TRAJECTORY
       :annotation: = cumulative_trajectory
 
       
 
-   .. attribute:: CUMULATIVE_TARGET
+   .. py:attribute:: CUMULATIVE_TARGET
       :annotation: = cumulative_target
 
       
 
-   .. attribute:: TARGET_PROBABILITY
+   .. py:attribute:: TARGET_PROBABILITY
       :annotation: = target_probability
 
       
 
-   .. attribute:: WEIGHTED_TEMPERATURE_SCORE
+   .. py:attribute:: WEIGHTED_TEMPERATURE_SCORE
       :annotation: = weighted_temperature_score
 
       
 
-   .. attribute:: CONTRIBUTION_RELATIVE
+   .. py:attribute:: CONTRIBUTION_RELATIVE
       :annotation: = contribution_relative
 
       
 
-   .. attribute:: CONTRIBUTION
+   .. py:attribute:: CONTRIBUTION
       :annotation: = contribution
 
       
@@ -362,7 +374,7 @@ Module Contents
 
 .. py:class:: PortfolioAggregationConfig
 
-   .. attribute:: COLS
+   .. py:attribute:: COLS
       
 
       
@@ -370,20 +382,21 @@ Module Contents
 
 .. py:class:: TemperatureScoreConfig
 
-   Bases: :class:`ITR.configs.PortfolioAggregationConfig`
+   Bases: :py:obj:`PortfolioAggregationConfig`
 
-   
-   .. attribute:: TEMPERATURE_RESULTS
+       
+
+   .. py:attribute:: TEMPERATURE_RESULTS
       :annotation: = temperature_results
 
       
 
-   .. attribute:: INVESTMENT_VALUE
+   .. py:attribute:: INVESTMENT_VALUE
       :annotation: = investment_value
 
       
 
-   .. attribute:: CONTROLS_CONFIG
+   .. py:attribute:: CONTROLS_CONFIG
       
 
       

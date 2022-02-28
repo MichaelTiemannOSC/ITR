@@ -1,5 +1,5 @@
-:mod:`ITR.temperature_score`
-============================
+:py:mod:`ITR.temperature_score`
+===============================
 
 .. py:module:: ITR.temperature_score
 
@@ -7,10 +7,19 @@
 Module Contents
 ---------------
 
+Classes
+~~~~~~~
 
-.. py:class:: TemperatureScore(time_frames: List[ETimeFrames], scopes: List[EScope], fallback_score: float = 3.2, model: int = 4, aggregation_method: PortfolioAggregationMethod = PortfolioAggregationMethod.WATS, grouping: Optional[List] = None, config: Type[TemperatureScoreConfig] = TemperatureScoreConfig)
+.. autoapisummary::
 
-   Bases: :class:`ITR.portfolio_aggregation.PortfolioAggregation`
+   ITR.temperature_score.TemperatureScore
+
+
+
+
+.. py:class:: TemperatureScore(time_frames: List[ITR.interfaces.ETimeFrames], scopes: List[ITR.interfaces.EScope], fallback_score: float = 3.2, model: int = 4, aggregation_method: ITR.portfolio_aggregation.PortfolioAggregationMethod = PortfolioAggregationMethod.WATS, grouping: Optional[List] = None, config: Type[ITR.configs.TemperatureScoreConfig] = TemperatureScoreConfig)
+
+   Bases: :py:obj:`ITR.portfolio_aggregation.PortfolioAggregation`
 
    This class is provides a temperature score based on the climate goals.
 
@@ -20,8 +29,7 @@ Module Contents
                    if you'd like to overwrite a constant. This can be done by extending the TemperatureScoreConfig
                    class and overwriting one of the parameters.
 
-   .. method:: get_annual_reduction_rate(self, target: pd.Series)
-
+   .. py:method:: get_annual_reduction_rate(self, target: pandas.Series) -> Optional[float]
 
       Get the annual reduction rate (or None if not available).
 
@@ -29,8 +37,7 @@ Module Contents
       :return: The annual reduction
 
 
-   .. method:: get_score(self, target: pd.Series)
-
+   .. py:method:: get_score(self, target: pandas.Series) -> Tuple[float, float]
 
       Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.
 
@@ -38,8 +45,7 @@ Module Contents
       :return: The temperature score
 
 
-   .. method:: get_ghc_temperature_score(self, row: pd.Series, company_data: pd.DataFrame)
-
+   .. py:method:: get_ghc_temperature_score(self, row: pandas.Series, company_data: pandas.DataFrame) -> Tuple[float, float]
 
       Get the aggregated temperature score and a temperature result, which indicates how much of the score is based on the default score for a certain company based on the emissions of company.
 
@@ -48,15 +54,13 @@ Module Contents
       :return: The aggregated temperature score for a company
 
 
-   .. method:: get_default_score(self, target: pd.Series)
-
+   .. py:method:: get_default_score(self, target: pandas.Series) -> float
 
       :param target: The target as a row of a dataframe
       :return: The temperature score
 
 
-   .. method:: _prepare_data(self, data: pd.DataFrame)
-
+   .. py:method:: _prepare_data(self, data: pandas.DataFrame)
 
       Prepare the data such that it can be used to calculate the temperature score.
 
@@ -64,8 +68,7 @@ Module Contents
       :return: The extended data frame
 
 
-   .. method:: _calculate_company_score(self, data)
-
+   .. py:method:: _calculate_company_score(self, data)
 
       Calculate the combined s1s2s3 scores for all companies.
 
@@ -73,8 +76,7 @@ Module Contents
       :return: The data frame, with an updated s1s2s3 temperature score
 
 
-   .. method:: calculate(self, data: Optional[pd.DataFrame] = None, data_providers: Optional[List[data.DataProvider]] = None, portfolio: Optional[List[PortfolioCompany]] = None)
-
+   .. py:method:: calculate(self, data: Optional[pandas.DataFrame] = None, data_providers: Optional[List[TemperatureScore.calculate.data]] = None, portfolio: Optional[List[ITR.interfaces.PortfolioCompany]] = None)
 
       Calculate the temperature for a dataframe of company data. The columns in the data frame should be a combination
       of IDataProviderTarget and IDataProviderCompany.
@@ -85,8 +87,7 @@ Module Contents
       :return: A data frame containing all relevant information for the targets and companies
 
 
-   .. method:: _get_aggregations(self, data: pd.DataFrame, total_companies: int)
-
+   .. py:method:: _get_aggregations(self, data: pandas.DataFrame, total_companies: int) -> Tuple[ITR.interfaces.Aggregation, pandas.Series, pandas.Series]
 
       Get the aggregated score over a certain data set. Also calculate the (relative) contribution of each company
 
@@ -94,8 +95,7 @@ Module Contents
       :return: An aggregated score and the relative and absolute contribution of each company
 
 
-   .. method:: _get_score_aggregation(self, data: pd.DataFrame, time_frame: ETimeFrames, scope: EScope)
-
+   .. py:method:: _get_score_aggregation(self, data: pandas.DataFrame, time_frame: ITR.interfaces.ETimeFrames, scope: ITR.interfaces.EScope) -> Optional[ITR.interfaces.ScoreAggregation]
 
       Get a score aggregation for a certain time frame and scope, for the data set as a whole and for the different
       groupings.
@@ -106,8 +106,7 @@ Module Contents
       :return: A score aggregation, containing the aggregations for the whole data set and each individual group
 
 
-   .. method:: aggregate_scores(self, data: pd.DataFrame)
-
+   .. py:method:: aggregate_scores(self, data: pandas.DataFrame) -> ITR.interfaces.ScoreAggregations
 
       Aggregate scores to create a portfolio score per time_frame (short, mid, long).
 
@@ -115,8 +114,7 @@ Module Contents
       :return: A weighted temperature score for the portfolio
 
 
-   .. method:: cap_scores(self, scores: pd.DataFrame)
-
+   .. py:method:: cap_scores(self, scores: pandas.DataFrame) -> pandas.DataFrame
 
       Cap the temperature scores in the input data frame to a certain value, based on the scenario that's being used. 
       This can either be for the whole data set, or only for the top X contributors.
@@ -125,8 +123,7 @@ Module Contents
       :return: The input data frame, with capped scores
 
 
-   .. method:: anonymize_data_dump(self, scores: pd.DataFrame)
-
+   .. py:method:: anonymize_data_dump(self, scores: pandas.DataFrame) -> pandas.DataFrame
 
       Anonymize the scores by deleting the company IDs, ISIN and renaming the companies.
 

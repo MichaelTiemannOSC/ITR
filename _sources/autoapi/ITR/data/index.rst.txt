@@ -1,5 +1,5 @@
-:mod:`ITR.data`
-===============
+:py:mod:`ITR.data`
+==================
 
 .. py:module:: ITR.data
 
@@ -23,16 +23,26 @@ Submodules
 Package Contents
 ----------------
 
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ITR.data.DataProvider
+   ITR.data.CSVProvider
+   ITR.data.ExcelProvider
+
+
+
 
 .. py:class:: DataProvider(**kwargs)
 
-   Bases: :class:`abc.ABC`
+   Bases: :py:obj:`abc.ABC`
 
    General data provider super class.
 
-   .. method:: get_targets(self, company_ids: List[str])
+   .. py:method:: get_targets(self, company_ids: List[str]) -> List[ITR.interfaces.IDataProviderTarget]
       :abstractmethod:
-
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -41,9 +51,8 @@ Package Contents
       :return: A list containing the targets
 
 
-   .. method:: get_company_data(self, company_ids: List[str])
+   .. py:method:: get_company_data(self, company_ids: List[str]) -> List[ITR.interfaces.IDataProviderCompany]
       :abstractmethod:
-
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -55,14 +64,13 @@ Package Contents
 
 .. py:class:: CSVProvider(path: str, path_targets: str, encoding: str = 'utf-8')
 
-   Bases: :class:`ITR.data.data_provider.DataProvider`
+   Bases: :py:obj:`ITR.data.data_provider.DataProvider`
 
    Data provider skeleton for CSV files. This class serves primarily for testing purposes only!
 
    :param config: A dictionary containing a "path" field that leads to the path of the CSV file
 
-   .. method:: get_targets(self, company_ids: list)
-
+   .. py:method:: get_targets(self, company_ids: list) -> List[ITR.interfaces.IDataProviderTarget]
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -71,8 +79,7 @@ Package Contents
       :return: A list containing the targets
 
 
-   .. method:: _target_df_to_model(self, df_targets)
-
+   .. py:method:: _target_df_to_model(self, df_targets)
 
       transforms target Dataframe into list of IDataProviderTarget instances
 
@@ -80,8 +87,7 @@ Package Contents
       :return: A list containing the targets
 
 
-   .. method:: get_company_data(self, company_ids: list)
-
+   .. py:method:: get_company_data(self, company_ids: list) -> List[ITR.interfaces.IDataProviderCompany]
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -90,8 +96,7 @@ Package Contents
       :return: A list containing the company data
 
 
-   .. method:: get_sbti_targets(self, companies: list)
-
+   .. py:method:: get_sbti_targets(self, companies: list) -> list
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.
@@ -102,16 +107,15 @@ Package Contents
 
 
 
-.. py:class:: ExcelProvider(path: str, config: Type[ColumnsConfig] = ColumnsConfig)
+.. py:class:: ExcelProvider(path: str, config: Type[ITR.configs.ColumnsConfig] = ColumnsConfig)
 
-   Bases: :class:`ITR.data.data_provider.DataProvider`
+   Bases: :py:obj:`ITR.data.data_provider.DataProvider`
 
    Data provider skeleton for CSV files. This class serves primarily for testing purposes only!
 
    :param config: A dictionary containing a "path" field that leads to the path of the CSV file
 
-   .. method:: get_targets(self, company_ids: List[str])
-
+   .. py:method:: get_targets(self, company_ids: List[str]) -> List[ITR.interfaces.IDataProviderTarget]
 
       Get all relevant targets for a list of company ids (ISIN). This method should return a list of
       IDataProviderTarget instances.
@@ -120,8 +124,7 @@ Package Contents
       :return: A list containing the targets
 
 
-   .. method:: _target_df_to_model(self, df_targets)
-
+   .. py:method:: _target_df_to_model(self, df_targets)
 
       transforms target Dataframe into list of IDataProviderTarget instances
 
@@ -129,8 +132,7 @@ Package Contents
       :return: A list containing the targets
 
 
-   .. method:: get_company_data(self, company_ids: List[str])
-
+   .. py:method:: get_company_data(self, company_ids: List[str]) -> List[ITR.interfaces.IDataProviderCompany]
 
       Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
       instances.
@@ -139,9 +141,8 @@ Package Contents
       :return: A list containing the company data
 
 
-   .. method:: get_sbti_targets(self, companies: list)
+   .. py:method:: get_sbti_targets(self, companies: list) -> list
       :abstractmethod:
-
 
       For each of the companies, get the status of their target (Target set, Committed or No target) as it's known to
       the SBTi.

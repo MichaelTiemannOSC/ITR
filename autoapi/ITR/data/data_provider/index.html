@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
@@ -160,21 +160,30 @@
 <span id="itr-data-data-provider"></span><h1><a class="reference internal" href="#module-ITR.data.data_provider" title="ITR.data.data_provider"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ITR.data.data_provider</span></code></a><a class="headerlink" href="#module-ITR.data.data_provider" title="Permalink to this headline">¶</a></h1>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ITR.data.data_provider.DataProvider" title="ITR.data.data_provider.DataProvider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataProvider</span></code></a></p></td>
+<td><p>General data provider super class.</p></td>
+</tr>
+</tbody>
+</table>
 <dl class="py class">
 <dt id="ITR.data.data_provider.DataProvider">
 <em class="property">class </em><code class="sig-prename descclassname">ITR.data.data_provider.</code><code class="sig-name descname">DataProvider</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.data.data_provider.DataProvider" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <p>General data provider super class.</p>
 <dl class="py method">
 <dt id="ITR.data.data_provider.DataProvider.get_targets">
-<em class="property">abstract </em><code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.data.data_provider.DataProvider.get_targets" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_targets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.IDataProviderTarget" title="ITR.interfaces.IDataProviderTarget">ITR.interfaces.IDataProviderTarget</a><span class="p">]</span><a class="headerlink" href="#ITR.data.data_provider.DataProvider.get_targets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant targets for a list of company ids (ISIN). This method should return a list of
 IDataProviderTarget instances.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>company_ids</strong> – A list of company IDs (ISINs)</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list containing the targets</p>
 </dd>
 </dl>
@@ -182,14 +191,14 @@ IDataProviderTarget instances.</p>
 
 <dl class="py method">
 <dt id="ITR.data.data_provider.DataProvider.get_company_data">
-<em class="property">abstract </em><code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.data.data_provider.DataProvider.get_company_data" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">get_company_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">company_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.IDataProviderCompany" title="ITR.interfaces.IDataProviderCompany">ITR.interfaces.IDataProviderCompany</a><span class="p">]</span><a class="headerlink" href="#ITR.data.data_provider.DataProvider.get_company_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all relevant data for a list of company ids (ISIN). This method should return a list of IDataProviderCompany
 instances.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>company_ids</strong> – A list of company IDs (ISINs)</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list containing the company data</p>
 </dd>
 </dl>
@@ -200,10 +209,11 @@ instances.</p>
 <dl class="py exception">
 <dt id="ITR.data.data_provider.CompanyNotFoundException">
 <em class="property">exception </em><code class="sig-prename descclassname">ITR.data.data_provider.</code><code class="sig-name descname">CompanyNotFoundException</code><a class="headerlink" href="#ITR.data.data_provider.CompanyNotFoundException" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">Exception</span></code></p>
 <p>This exception occurs when a company is not found.</p>
 </dd></dl>
 
+</section>
 </section>
 </section>
 

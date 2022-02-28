@@ -1,5 +1,5 @@
-:mod:`ITR.target_validation`
-============================
+:py:mod:`ITR.target_validation`
+===============================
 
 .. py:module:: ITR.target_validation
 
@@ -7,15 +7,23 @@
 Module Contents
 ---------------
 
+Classes
+~~~~~~~
 
-.. py:class:: TargetProtocol(config: Type[PortfolioAggregationConfig] = PortfolioAggregationConfig)
+.. autoapisummary::
+
+   ITR.target_validation.TargetProtocol
+
+
+
+
+.. py:class:: TargetProtocol(config: Type[ITR.configs.PortfolioAggregationConfig] = PortfolioAggregationConfig)
 
    This class validates the targets, to make sure that only active, useful targets are considered. It then combines the targets with company-related data into a dataframe where there's one row for each of the nine possible target types (short, mid, long * S1+S2, S3, S1+S2+S3). This class follows the procedures outlined by the target protocol that is a part of the "Temperature Rating Methodology" (2020), which has been created by CDP Worldwide and WWF International.
 
    :param config: A Portfolio aggregation config
 
-   .. method:: process(self, targets: List[IDataProviderTarget], companies: List[IDataProviderCompany])
-
+   .. py:method:: process(self, targets: List[ITR.interfaces.IDataProviderTarget], companies: List[ITR.interfaces.IDataProviderCompany]) -> pandas.DataFrame
 
       Process the targets and companies, validate all targets and return a data frame that combines all targets and company data into a 9-box grid.
 
@@ -24,8 +32,7 @@ Module Contents
       :return: A data frame that combines the processed data
 
 
-   .. method:: validate(self, target: IDataProviderTarget)
-
+   .. py:method:: validate(self, target: ITR.interfaces.IDataProviderTarget) -> bool
 
       Validate a target, meaning it should:
 
@@ -37,8 +44,7 @@ Module Contents
       :return: True if it's a valid target, false if it isn't
 
 
-   .. method:: _prepare_target(self, target: IDataProviderTarget)
-
+   .. py:method:: _prepare_target(self, target: ITR.interfaces.IDataProviderTarget)
 
       Prepare a target for usage later on in the process.
 
@@ -46,12 +52,10 @@ Module Contents
       :return:
 
 
-   .. method:: prepare_targets(self, targets: List[IDataProviderTarget])
+   .. py:method:: prepare_targets(self, targets: List[ITR.interfaces.IDataProviderTarget])
 
 
-
-   .. method:: _find_target(self, row: pd.Series, target_columns: List[str])
-
+   .. py:method:: _find_target(self, row: pandas.Series, target_columns: List[str]) -> pandas.Series
 
       Find the target that corresponds to a given row. If there are multiple targets available, filter them.
 
@@ -60,8 +64,7 @@ Module Contents
       :return: returns records from the input data, which contains company and target information, that meet specific criteria. For example, record of greatest emissions_in_scope
 
 
-   .. method:: group_targets(self)
-
+   .. py:method:: group_targets(self)
 
       Group the targets and create the 9-box grid (short, mid, long * s1s2, s3, s1s2s3).
       Group valid targets by category & filter multiple targets#

@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
@@ -160,13 +160,22 @@
 <span id="itr-temperature-score"></span><h1><a class="reference internal" href="#module-ITR.temperature_score" title="ITR.temperature_score"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ITR.temperature_score</span></code></a><a class="headerlink" href="#module-ITR.temperature_score" title="Permalink to this headline">¶</a></h1>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ITR.temperature_score.TemperatureScore" title="ITR.temperature_score.TemperatureScore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TemperatureScore</span></code></a></p></td>
+<td><p>This class is provides a temperature score based on the climate goals.</p></td>
+</tr>
+</tbody>
+</table>
 <dl class="py class">
 <dt id="ITR.temperature_score.TemperatureScore">
-<em class="property">class </em><code class="sig-prename descclassname">ITR.temperature_score.</code><code class="sig-name descname">TemperatureScore</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_frames</span><span class="p">:</span> <span class="n">List<span class="p">[</span>ETimeFrames<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">scopes</span><span class="p">:</span> <span class="n">List<span class="p">[</span>EScope<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">fallback_score</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">3.2</span></em>, <em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">4</span></em>, <em class="sig-param"><span class="n">aggregation_method</span><span class="p">:</span> <span class="n">PortfolioAggregationMethod</span> <span class="o">=</span> <span class="default_value">PortfolioAggregationMethod.WATS</span></em>, <em class="sig-param"><span class="n">grouping</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n">Type<span class="p">[</span>TemperatureScoreConfig<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">TemperatureScoreConfig</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../portfolio_aggregation/index.html#ITR.portfolio_aggregation.PortfolioAggregation" title="ITR.portfolio_aggregation.PortfolioAggregation"><code class="xref py py-class docutils literal notranslate"><span class="pre">ITR.portfolio_aggregation.PortfolioAggregation</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">ITR.temperature_score.</code><code class="sig-name descname">TemperatureScore</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time_frames</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="../interfaces/index.html#ITR.interfaces.ETimeFrames" title="ITR.interfaces.ETimeFrames">ITR.interfaces.ETimeFrames</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">scopes</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="../interfaces/index.html#ITR.interfaces.EScope" title="ITR.interfaces.EScope">ITR.interfaces.EScope</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">fallback_score</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">3.2</span></em>, <em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">4</span></em>, <em class="sig-param"><span class="n">aggregation_method</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../portfolio_aggregation/index.html#ITR.portfolio_aggregation.PortfolioAggregationMethod" title="ITR.portfolio_aggregation.PortfolioAggregationMethod">ITR.portfolio_aggregation.PortfolioAggregationMethod</a></span> <span class="o">=</span> <span class="default_value">PortfolioAggregationMethod.WATS</span></em>, <em class="sig-param"><span class="n">grouping</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n">Type<span class="p">[</span><a class="reference internal" href="../configs/index.html#ITR.configs.TemperatureScoreConfig" title="ITR.configs.TemperatureScoreConfig">ITR.configs.TemperatureScoreConfig</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">TemperatureScoreConfig</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../portfolio_aggregation/index.html#ITR.portfolio_aggregation.PortfolioAggregation" title="ITR.portfolio_aggregation.PortfolioAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ITR.portfolio_aggregation.PortfolioAggregation</span></code></a></p>
 <p>This class is provides a temperature score based on the climate goals.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fallback_score</strong> – The temp score if a company is not found</p></li>
 <li><p><strong>model</strong> – The regression model to use</p></li>
@@ -178,13 +187,13 @@ class and overwriting one of the parameters.</p></li>
 </dl>
 <dl class="py method">
 <dt id="ITR.temperature_score.TemperatureScore.get_annual_reduction_rate">
-<code class="sig-name descname">get_annual_reduction_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">pd.Series</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore.get_annual_reduction_rate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_annual_reduction_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">pandas.Series</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>float<span class="p">]</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore.get_annual_reduction_rate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the annual reduction rate (or None if not available).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>target</strong> – The target as a row of a dataframe</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The annual reduction</p>
 </dd>
 </dl>
@@ -192,13 +201,13 @@ class and overwriting one of the parameters.</p></li>
 
 <dl class="py method">
 <dt id="ITR.temperature_score.TemperatureScore.get_score">
-<code class="sig-name descname">get_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">pd.Series</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore.get_score" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">pandas.Series</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>float<span class="p">, </span>float<span class="p">]</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore.get_score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>target</strong> – The target as a row of a data frame</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The temperature score</p>
 </dd>
 </dl>
@@ -206,16 +215,16 @@ class and overwriting one of the parameters.</p></li>
 
 <dl class="py method">
 <dt id="ITR.temperature_score.TemperatureScore.get_ghc_temperature_score">
-<code class="sig-name descname">get_ghc_temperature_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">row</span><span class="p">:</span> <span class="n">pd.Series</span></em>, <em class="sig-param"><span class="n">company_data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore.get_ghc_temperature_score" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_ghc_temperature_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">row</span><span class="p">:</span> <span class="n">pandas.Series</span></em>, <em class="sig-param"><span class="n">company_data</span><span class="p">:</span> <span class="n">pandas.DataFrame</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>float<span class="p">, </span>float<span class="p">]</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore.get_ghc_temperature_score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the aggregated temperature score and a temperature result, which indicates how much of the score is based on the default score for a certain company based on the emissions of company.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>company_data</strong> – The original data, grouped by company, time frame and scope category</p></li>
 <li><p><strong>row</strong> – The row to calculate the temperature score for (if the scope of the row isn’t s1s2s3, it will return the original score</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The aggregated temperature score for a company</p>
 </dd>
 </dl>
@@ -223,12 +232,12 @@ class and overwriting one of the parameters.</p></li>
 
 <dl class="py method">
 <dt id="ITR.temperature_score.TemperatureScore.get_default_score">
-<code class="sig-name descname">get_default_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">pd.Series</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore.get_default_score" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_default_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">pandas.Series</span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#ITR.temperature_score.TemperatureScore.get_default_score" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>target</strong> – The target as a row of a dataframe</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The temperature score</p>
 </dd>
 </dl>
@@ -236,13 +245,13 @@ class and overwriting one of the parameters.</p></li>
 
 <dl class="py method">
 <dt id="ITR.temperature_score.TemperatureScore._prepare_data">
-<code class="sig-name descname">_prepare_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore._prepare_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_prepare_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pandas.DataFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore._prepare_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepare the data such that it can be used to calculate the temperature score.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> – The original data set as a pandas data frame</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The extended data frame</p>
 </dd>
 </dl>
@@ -253,10 +262,10 @@ class and overwriting one of the parameters.</p></li>
 <code class="sig-name descname">_calculate_company_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore._calculate_company_score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the combined s1s2s3 scores for all companies.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> – The original data set as a pandas data frame</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The data frame, with an updated s1s2s3 temperature score</p>
 </dd>
 </dl>
@@ -264,18 +273,18 @@ class and overwriting one of the parameters.</p></li>
 
 <dl class="py method">
 <dt id="ITR.temperature_score.TemperatureScore.calculate">
-<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>pd.DataFrame<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data_providers</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span>data.DataProvider<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">portfolio</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span>PortfolioCompany<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore.calculate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">calculate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>pandas.DataFrame<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data_providers</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span>TemperatureScore.calculate.data<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">portfolio</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="../interfaces/index.html#ITR.interfaces.PortfolioCompany" title="ITR.interfaces.PortfolioCompany">ITR.interfaces.PortfolioCompany</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore.calculate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the temperature for a dataframe of company data. The columns in the data frame should be a combination
 of IDataProviderTarget and IDataProviderCompany.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> – The data set (or None if the data should be retrieved)</p></li>
 <li><p><strong>data_providers</strong> – A list of DataProvider instances. Optional, only required if data is empty.</p></li>
 <li><p><strong>portfolio</strong> – A list of PortfolioCompany models. Optional, only required if data is empty.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A data frame containing all relevant information for the targets and companies</p>
 </dd>
 </dl>
@@ -283,13 +292,13 @@ of IDataProviderTarget and IDataProviderCompany.</p>
 
 <dl class="py method">
 <dt id="ITR.temperature_score.TemperatureScore._get_aggregations">
-<code class="sig-name descname">_get_aggregations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">total_companies</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore._get_aggregations" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_get_aggregations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pandas.DataFrame</span></em>, <em class="sig-param"><span class="n">total_companies</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span><a class="reference internal" href="../interfaces/index.html#ITR.interfaces.Aggregation" title="ITR.interfaces.Aggregation">ITR.interfaces.Aggregation</a><span class="p">, </span>pandas.Series<span class="p">, </span>pandas.Series<span class="p">]</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore._get_aggregations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the aggregated score over a certain data set. Also calculate the (relative) contribution of each company</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> – A data set, containing one row per company</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>An aggregated score and the relative and absolute contribution of each company</p>
 </dd>
 </dl>
@@ -297,18 +306,18 @@ of IDataProviderTarget and IDataProviderCompany.</p>
 
 <dl class="py method">
 <dt id="ITR.temperature_score.TemperatureScore._get_score_aggregation">
-<code class="sig-name descname">_get_score_aggregation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em>, <em class="sig-param"><span class="n">time_frame</span><span class="p">:</span> <span class="n">ETimeFrames</span></em>, <em class="sig-param"><span class="n">scope</span><span class="p">:</span> <span class="n">EScope</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore._get_score_aggregation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">_get_score_aggregation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pandas.DataFrame</span></em>, <em class="sig-param"><span class="n">time_frame</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../interfaces/index.html#ITR.interfaces.ETimeFrames" title="ITR.interfaces.ETimeFrames">ITR.interfaces.ETimeFrames</a></span></em>, <em class="sig-param"><span class="n">scope</span><span class="p">:</span> <span class="n"><a class="reference internal" href="../interfaces/index.html#ITR.interfaces.EScope" title="ITR.interfaces.EScope">ITR.interfaces.EScope</a></span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="../interfaces/index.html#ITR.interfaces.ScoreAggregation" title="ITR.interfaces.ScoreAggregation">ITR.interfaces.ScoreAggregation</a><span class="p">]</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore._get_score_aggregation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a score aggregation for a certain time frame and scope, for the data set as a whole and for the different
 groupings.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> – The whole data set</p></li>
 <li><p><strong>time_frame</strong> – A time frame</p></li>
 <li><p><strong>scope</strong> – A scope</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A score aggregation, containing the aggregations for the whole data set and each individual group</p>
 </dd>
 </dl>
@@ -316,13 +325,13 @@ groupings.</p>
 
 <dl class="py method">
 <dt id="ITR.temperature_score.TemperatureScore.aggregate_scores">
-<code class="sig-name descname">aggregate_scores</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore.aggregate_scores" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">aggregate_scores</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">pandas.DataFrame</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../interfaces/index.html#ITR.interfaces.ScoreAggregations" title="ITR.interfaces.ScoreAggregations">ITR.interfaces.ScoreAggregations</a><a class="headerlink" href="#ITR.temperature_score.TemperatureScore.aggregate_scores" title="Permalink to this definition">¶</a></dt>
 <dd><p>Aggregate scores to create a portfolio score per time_frame (short, mid, long).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> – The results of the calculate method</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A weighted temperature score for the portfolio</p>
 </dd>
 </dl>
@@ -330,14 +339,14 @@ groupings.</p>
 
 <dl class="py method">
 <dt id="ITR.temperature_score.TemperatureScore.cap_scores">
-<code class="sig-name descname">cap_scores</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">scores</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore.cap_scores" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">cap_scores</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">scores</span><span class="p">:</span> <span class="n">pandas.DataFrame</span></em><span class="sig-paren">)</span> &#x2192; pandas.DataFrame<a class="headerlink" href="#ITR.temperature_score.TemperatureScore.cap_scores" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cap the temperature scores in the input data frame to a certain value, based on the scenario that’s being used.
 This can either be for the whole data set, or only for the top X contributors.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>scores</strong> – The data set with the temperature scores</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The input data frame, with capped scores</p>
 </dd>
 </dl>
@@ -345,13 +354,13 @@ This can either be for the whole data set, or only for the top X contributors.</
 
 <dl class="py method">
 <dt id="ITR.temperature_score.TemperatureScore.anonymize_data_dump">
-<code class="sig-name descname">anonymize_data_dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">scores</span><span class="p">:</span> <span class="n">pd.DataFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.temperature_score.TemperatureScore.anonymize_data_dump" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">anonymize_data_dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">scores</span><span class="p">:</span> <span class="n">pandas.DataFrame</span></em><span class="sig-paren">)</span> &#x2192; pandas.DataFrame<a class="headerlink" href="#ITR.temperature_score.TemperatureScore.anonymize_data_dump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Anonymize the scores by deleting the company IDs, ISIN and renaming the companies.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>scores</strong> – The data set with the temperature scores</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The input data frame, anonymized</p>
 </dd>
 </dl>
@@ -359,6 +368,7 @@ This can either be for the whole data set, or only for the top X contributors.</
 
 </dd></dl>
 
+</section>
 </section>
 </section>
 
