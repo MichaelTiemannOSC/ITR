@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ITR.data.base_providers &mdash; ITR Temperature Alignment tool  documentation</title>
+      <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../index.html" class="icon icon-home"> ITR Temperature Alignment tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../intro.html">Introduction to temperature scoring method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting_started.html">Getting Started Using Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../rest_api.html">Getting Started Using REST API &amp; UI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../FunctionalOverview.html">Functional Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../DataRequirements.html">Data Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../Legends.html">Data Legends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../links.html">Project Links</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../terms.html">Terms of Use</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">ITR Temperature Alignment tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">ITR.data.base_providers</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/ITR/data/base_providers/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ITR.data.base_providers">
+<span id="itr-data-base-providers"></span><h1><a class="reference internal" href="#module-ITR.data.base_providers" title="ITR.data.base_providers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ITR.data.base_providers</span></code></a><a class="headerlink" href="#module-ITR.data.base_providers" title="Permalink to this headline"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ITR.data.base_providers.BaseProviderProductionBenchmark" title="ITR.data.base_providers.BaseProviderProductionBenchmark"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseProviderProductionBenchmark</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ITR.data.base_providers.BaseProviderIntensityBenchmark" title="ITR.data.base_providers.BaseProviderIntensityBenchmark"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseProviderIntensityBenchmark</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ITR.data.base_providers.BaseCompanyDataProvider" title="ITR.data.base_providers.BaseCompanyDataProvider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseCompanyDataProvider</span></code></a></p></td>
+<td><p>Data provider skeleton for JSON files parsed by the fastAPI json encoder. This class serves primarily for connecting</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ITR.data.base_providers.EITrajectoryProjector" title="ITR.data.base_providers.EITrajectoryProjector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EITrajectoryProjector</span></code></a></p></td>
+<td><p>This class projects emissions intensities on company level based on historic data on:</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ITR.data.base_providers.EITargetProjector" title="ITR.data.base_providers.EITargetProjector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EITargetProjector</span></code></a></p></td>
+<td><p>This class projects emissions intensities from a company's targets and historic data. Targets are specified per</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ITR.data.base_providers.logger" title="ITR.data.base_providers.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="ITR.data.base_providers.logger">
+<span class="sig-prename descclassname"><span class="pre">ITR.data.base_providers.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#ITR.data.base_providers.logger" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseProviderProductionBenchmark">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ITR.data.base_providers.</span></span><span class="sig-name descname"><span class="pre">BaseProviderProductionBenchmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">production_benchmarks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.IProductionBenchmarkScopes" title="ITR.interfaces.IProductionBenchmarkScopes"><span class="pre">ITR.interfaces.IProductionBenchmarkScopes</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../configs/index.html#ITR.configs.ColumnsConfig" title="ITR.configs.ColumnsConfig"><span class="pre">ITR.configs.ColumnsConfig</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ColumnsConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tempscore_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../configs/index.html#ITR.configs.TemperatureScoreConfig" title="ITR.configs.TemperatureScoreConfig"><span class="pre">ITR.configs.TemperatureScoreConfig</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">TemperatureScoreConfig</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.data.base_providers.BaseProviderProductionBenchmark" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../data_providers/index.html#ITR.data.data_providers.ProductionBenchmarkDataProvider" title="ITR.data.data_providers.ProductionBenchmarkDataProvider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ITR.data.data_providers.ProductionBenchmarkDataProvider</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseProviderProductionBenchmark._convert_benchmark_to_series">
+<span class="sig-name descname"><span class="pre">_convert_benchmark_to_series</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">benchmark</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.IBenchmark" title="ITR.interfaces.IBenchmark"><span class="pre">ITR.interfaces.IBenchmark</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseProviderProductionBenchmark._convert_benchmark_to_series" title="Permalink to this definition"></a></dt>
+<dd><p>extracts the company projected intensity or production targets for a given scope
+:param scope: a scope
+:return: pd.Series</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseProviderProductionBenchmark._get_projected_production">
+<span class="sig-name descname"><span class="pre">_get_projected_production</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.EScope" title="ITR.interfaces.EScope"><span class="pre">ITR.interfaces.EScope</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">EScope.S1S2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseProviderProductionBenchmark._get_projected_production" title="Permalink to this definition"></a></dt>
+<dd><p>Converts IProductionBenchmarkScopes into dataframe for a scope
+:param scope: a scope
+:return: pd.DataFrame</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseProviderProductionBenchmark.get_company_projected_production">
+<span class="sig-name descname"><span class="pre">get_company_projected_production</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_sector_region_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseProviderProductionBenchmark.get_company_projected_production" title="Permalink to this definition"></a></dt>
+<dd><p>get the projected productions for list of companies in ghg_scope12
+:param company_sector_region_info: DataFrame with at least the following columns :
+ColumnsConfig.COMPANY_ID, ColumnsConfig.GHG_SCOPE12, ColumnsConfig.SECTOR and ColumnsConfig.REGION
+:return: DataFrame of projected productions for [base_year - base_year + 50]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseProviderProductionBenchmark.get_benchmark_projections">
+<span class="sig-name descname"><span class="pre">get_benchmark_projections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_sector_region_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.EScope" title="ITR.interfaces.EScope"><span class="pre">ITR.interfaces.EScope</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">EScope.S1S2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseProviderProductionBenchmark.get_benchmark_projections" title="Permalink to this definition"></a></dt>
+<dd><p>Overrides subclass method
+returns a Dataframe with production benchmarks per company_id given a region and sector.
+:param company_sector_region_info: DataFrame with at least the following columns :
+ColumnsConfig.COMPANY_ID, ColumnsConfig.SECTOR and ColumnsConfig.REGION
+:param scope: a scope
+:return: A DataFrame with company and intensity benchmarks per calendar year per row</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseProviderIntensityBenchmark">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ITR.data.base_providers.</span></span><span class="sig-name descname"><span class="pre">BaseProviderIntensityBenchmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">EI_benchmarks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.IEIBenchmarkScopes" title="ITR.interfaces.IEIBenchmarkScopes"><span class="pre">ITR.interfaces.IEIBenchmarkScopes</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../configs/index.html#ITR.configs.ColumnsConfig" title="ITR.configs.ColumnsConfig"><span class="pre">ITR.configs.ColumnsConfig</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ColumnsConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tempscore_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../configs/index.html#ITR.configs.TemperatureScoreConfig" title="ITR.configs.TemperatureScoreConfig"><span class="pre">ITR.configs.TemperatureScoreConfig</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">TemperatureScoreConfig</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.data.base_providers.BaseProviderIntensityBenchmark" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../data_providers/index.html#ITR.data.data_providers.IntensityBenchmarkDataProvider" title="ITR.data.data_providers.IntensityBenchmarkDataProvider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ITR.data.data_providers.IntensityBenchmarkDataProvider</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseProviderIntensityBenchmark.get_SDA_intensity_benchmarks">
+<span class="sig-name descname"><span class="pre">get_SDA_intensity_benchmarks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_info_at_base_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseProviderIntensityBenchmark.get_SDA_intensity_benchmarks" title="Permalink to this definition"></a></dt>
+<dd><p>Overrides subclass method
+returns a Dataframe with intensity benchmarks per company_id given a region and sector.
+:param company_info_at_base_year: DataFrame with at least the following columns :
+ColumnsConfig.COMPANY_ID, ColumnsConfig.BASE_EI, ColumnsConfig.SECTOR and ColumnsConfig.REGION
+:return: A DataFrame with company and SDA intensity benchmarks per calendar year per row</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseProviderIntensityBenchmark._get_decarbonizations_paths">
+<span class="sig-name descname"><span class="pre">_get_decarbonizations_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intensity_benchmarks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseProviderIntensityBenchmark._get_decarbonizations_paths" title="Permalink to this definition"></a></dt>
+<dd><p>Overrides subclass method
+Returns a DataFrame with the projected decarbonization paths for the supplied companies in intensity_benchmarks.
+:param: A DataFrame with company and intensity benchmarks per calendar year per row
+:return: A pd.DataFrame with company and decarbonisation path s per calendar year per row</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseProviderIntensityBenchmark._get_decarbonization">
+<span class="sig-name descname"><span class="pre">_get_decarbonization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intensity_benchmark_row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseProviderIntensityBenchmark._get_decarbonization" title="Permalink to this definition"></a></dt>
+<dd><p>Overrides subclass method
+returns a Series with the decarbonization path for a benchmark.
+:param: A Series with a company’s intensity benchmarks per calendar year per row
+:return: A pd.Series with a company’s decarbonisation paths per calendar year per row</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseProviderIntensityBenchmark._convert_benchmark_to_series">
+<span class="sig-name descname"><span class="pre">_convert_benchmark_to_series</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">benchmark</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.IBenchmark" title="ITR.interfaces.IBenchmark"><span class="pre">ITR.interfaces.IBenchmark</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseProviderIntensityBenchmark._convert_benchmark_to_series" title="Permalink to this definition"></a></dt>
+<dd><p>extracts the company projected intensities or targets for a given scope
+:param scope: a scope
+:return: pd.Series</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseProviderIntensityBenchmark._get_projected_intensities">
+<span class="sig-name descname"><span class="pre">_get_projected_intensities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.EScope" title="ITR.interfaces.EScope"><span class="pre">ITR.interfaces.EScope</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">EScope.S1S2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseProviderIntensityBenchmark._get_projected_intensities" title="Permalink to this definition"></a></dt>
+<dd><p>Converts IEmissionIntensityBenchmarkScopes into dataframe for a scope
+:param scope: a scope
+:return: pd.DataFrame</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseProviderIntensityBenchmark._get_intensity_benchmarks">
+<span class="sig-name descname"><span class="pre">_get_intensity_benchmarks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_sector_region_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.EScope" title="ITR.interfaces.EScope"><span class="pre">ITR.interfaces.EScope</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">EScope.S1S2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseProviderIntensityBenchmark._get_intensity_benchmarks" title="Permalink to this definition"></a></dt>
+<dd><p>Overrides subclass method
+returns a Dataframe with production benchmarks per company_id given a region and sector.
+:param company_sector_region_info: DataFrame with at least the following columns :
+ColumnsConfig.COMPANY_ID, ColumnsConfig.SECTOR and ColumnsConfig.REGION
+:param scope: a scope
+:return: A DataFrame with company and intensity benchmarks per calendar year per row</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseCompanyDataProvider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ITR.data.base_providers.</span></span><span class="sig-name descname"><span class="pre">BaseCompanyDataProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">companies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.ICompanyData" title="ITR.interfaces.ICompanyData"><span class="pre">ITR.interfaces.ICompanyData</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../configs/index.html#ITR.configs.ColumnsConfig" title="ITR.configs.ColumnsConfig"><span class="pre">ITR.configs.ColumnsConfig</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ColumnsConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tempscore_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../configs/index.html#ITR.configs.TemperatureScoreConfig" title="ITR.configs.TemperatureScoreConfig"><span class="pre">ITR.configs.TemperatureScoreConfig</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">TemperatureScoreConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projection_controls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.ProjectionControls" title="ITR.interfaces.ProjectionControls"><span class="pre">ITR.interfaces.ProjectionControls</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ProjectionControls()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.data.base_providers.BaseCompanyDataProvider" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../data_providers/index.html#ITR.data.data_providers.CompanyDataProvider" title="ITR.data.data_providers.CompanyDataProvider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ITR.data.data_providers.CompanyDataProvider</span></code></a></p>
+<p>Data provider skeleton for JSON files parsed by the fastAPI json encoder. This class serves primarily for connecting
+to the ITR tool via API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>companies</strong> – A list of ICompanyData objects that each contain fundamental company data</p></li>
+<li><p><strong>column_config</strong> – An optional ColumnsConfig object containing relevant variable names</p></li>
+<li><p><strong>tempscore_config</strong> – An optional TemperatureScoreConfig object containing temperature scoring settings</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseCompanyDataProvider._validate_projected_trajectories">
+<span class="sig-name descname"><span class="pre">_validate_projected_trajectories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">companies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.ICompanyData" title="ITR.interfaces.ICompanyData"><span class="pre">ITR.interfaces.ICompanyData</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.ICompanyData" title="ITR.interfaces.ICompanyData"><span class="pre">ITR.interfaces.ICompanyData</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseCompanyDataProvider._validate_projected_trajectories" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseCompanyDataProvider._convert_projections_to_series">
+<span class="sig-name descname"><span class="pre">_convert_projections_to_series</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.ICompanyData" title="ITR.interfaces.ICompanyData"><span class="pre">ITR.interfaces.ICompanyData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.EScope" title="ITR.interfaces.EScope"><span class="pre">ITR.interfaces.EScope</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">EScope.S1S2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseCompanyDataProvider._convert_projections_to_series" title="Permalink to this definition"></a></dt>
+<dd><p>extracts the company projected intensities or targets for a given scope
+:param feature: PROJECTED_TRAJECTORIES or PROJECTED_TARGETS (both are intensities)
+:param scope: a scope
+:return: pd.Series</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseCompanyDataProvider._calculate_target_projections">
+<span class="sig-name descname"><span class="pre">_calculate_target_projections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">production_bm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ITR.data.base_providers.BaseProviderProductionBenchmark" title="ITR.data.base_providers.BaseProviderProductionBenchmark"><span class="pre">BaseProviderProductionBenchmark</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.data.base_providers.BaseCompanyDataProvider._calculate_target_projections" title="Permalink to this definition"></a></dt>
+<dd><p>We cannot calculate target projections until after we have loaded benchmark data.
+We do so when companies are associated with benchmarks, in the DataWarehouse construction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>production_bm</strong> – A Production Benchmark (multi-sector, single-scope, 2020-2050)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseCompanyDataProvider._get_company_intensity_at_year">
+<span class="sig-name descname"><span class="pre">_get_company_intensity_at_year</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseCompanyDataProvider._get_company_intensity_at_year" title="Permalink to this definition"></a></dt>
+<dd><p>Returns projected intensities for a given set of companies and year
+:param year: calendar year
+:param company_ids: List of company ids
+:return: pd.Series with intensities for given company ids</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseCompanyDataProvider.get_company_data">
+<span class="sig-name descname"><span class="pre">get_company_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.ICompanyData" title="ITR.interfaces.ICompanyData"><span class="pre">ITR.interfaces.ICompanyData</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseCompanyDataProvider.get_company_data" title="Permalink to this definition"></a></dt>
+<dd><p>Get all relevant data for a list of company ids. This method should return a list of ICompanyData
+instances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>company_ids</strong> – A list of company IDs (ISINs)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list containing the company data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseCompanyDataProvider.get_value">
+<span class="sig-name descname"><span class="pre">get_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseCompanyDataProvider.get_value" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the value of a variable for a list of companies ids
+:param company_ids: list of company ids
+:param variable_name: variable name of the projected feature
+:return: series of values</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseCompanyDataProvider.get_company_intensity_and_production_at_base_year">
+<span class="sig-name descname"><span class="pre">get_company_intensity_and_production_at_base_year</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseCompanyDataProvider.get_company_intensity_and_production_at_base_year" title="Permalink to this definition"></a></dt>
+<dd><p>overrides subclass method
+:param: company_ids: list of company ids
+:return: DataFrame the following columns :
+ColumnsConfig.COMPANY_ID, ColumnsConfig.PRODUCTION_METRIC, ColumnsConfig.GHG_SCOPE12, ColumnsConfig.BASE_EI,
+ColumnsConfig.SECTOR and ColumnsConfig.REGION</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseCompanyDataProvider.get_company_fundamentals">
+<span class="sig-name descname"><span class="pre">get_company_fundamentals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseCompanyDataProvider.get_company_fundamentals" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>company_ids</strong> – A list of company IDs</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A pandas DataFrame with company fundamental info per company (company_id is a column)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseCompanyDataProvider.get_company_projected_trajectories">
+<span class="sig-name descname"><span class="pre">get_company_projected_trajectories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseCompanyDataProvider.get_company_projected_trajectories" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>company_ids</strong> – A list of company IDs</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A pandas DataFrame with projected intensity trajectories per company, indexed by company_id</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.BaseCompanyDataProvider.get_company_projected_targets">
+<span class="sig-name descname"><span class="pre">get_company_projected_targets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ITR.data.base_providers.BaseCompanyDataProvider.get_company_projected_targets" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>company_ids</strong> – A list of company IDs</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A pandas DataFrame with projected intensity targets per company, indexed by company_id</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITrajectoryProjector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ITR.data.base_providers.</span></span><span class="sig-name descname"><span class="pre">EITrajectoryProjector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">projection_controls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.ProjectionControls" title="ITR.interfaces.ProjectionControls"><span class="pre">ITR.interfaces.ProjectionControls</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ProjectionControls()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.data.base_providers.EITrajectoryProjector" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class projects emissions intensities on company level based on historic data on:
+- A company’s emission history (in t CO2)
+- A company’s production history (units depend on industry, e.g. TWh for electricity)</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITrajectoryProjector.project_ei_trajectories">
+<span class="sig-name descname"><span class="pre">project_ei_trajectories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">companies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.ICompanyData" title="ITR.interfaces.ICompanyData"><span class="pre">ITR.interfaces.ICompanyData</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.ICompanyData" title="ITR.interfaces.ICompanyData"><span class="pre">ITR.interfaces.ICompanyData</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#ITR.data.base_providers.EITrajectoryProjector.project_ei_trajectories" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITrajectoryProjector._extract_historic_data">
+<span class="sig-name descname"><span class="pre">_extract_historic_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">companies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.ICompanyData" title="ITR.interfaces.ICompanyData"><span class="pre">ITR.interfaces.ICompanyData</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ITR.data.base_providers.EITrajectoryProjector._extract_historic_data" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITrajectoryProjector._historic_productions_to_dict">
+<span class="sig-name descname"><span class="pre">_historic_productions_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">productions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.IProductionRealization" title="ITR.interfaces.IProductionRealization"><span class="pre">ITR.interfaces.IProductionRealization</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#ITR.data.base_providers.EITrajectoryProjector._historic_productions_to_dict" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITrajectoryProjector._historic_emissions_to_dicts">
+<span class="sig-name descname"><span class="pre">_historic_emissions_to_dicts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emissions_scopes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.IHistoricEmissionsScopes" title="ITR.interfaces.IHistoricEmissionsScopes"><span class="pre">ITR.interfaces.IHistoricEmissionsScopes</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#ITR.data.base_providers.EITrajectoryProjector._historic_emissions_to_dicts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITrajectoryProjector._historic_ei_to_dicts">
+<span class="sig-name descname"><span class="pre">_historic_ei_to_dicts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intensities_scopes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.IHistoricEIScopes" title="ITR.interfaces.IHistoricEIScopes"><span class="pre">ITR.interfaces.IHistoricEIScopes</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#ITR.data.base_providers.EITrajectoryProjector._historic_ei_to_dicts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITrajectoryProjector._compute_missing_historic_ei">
+<span class="sig-name descname"><span class="pre">_compute_missing_historic_ei</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">companies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">historic_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.data.base_providers.EITrajectoryProjector._compute_missing_historic_ei" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITrajectoryProjector._add_projections_to_companies">
+<span class="sig-name descname"><span class="pre">_add_projections_to_companies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">companies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.ICompanyData" title="ITR.interfaces.ICompanyData"><span class="pre">ITR.interfaces.ICompanyData</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extrapolations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.data.base_providers.EITrajectoryProjector._add_projections_to_companies" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITrajectoryProjector._standardize">
+<span class="sig-name descname"><span class="pre">_standardize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intensities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ITR.data.base_providers.EITrajectoryProjector._standardize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITrajectoryProjector._winsorize">
+<span class="sig-name descname"><span class="pre">_winsorize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">historic_intensities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ITR.data.base_providers.EITrajectoryProjector._winsorize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITrajectoryProjector._interpolate">
+<span class="sig-name descname"><span class="pre">_interpolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">historic_intensities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ITR.data.base_providers.EITrajectoryProjector._interpolate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITrajectoryProjector._get_trends">
+<span class="sig-name descname"><span class="pre">_get_trends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intensities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.data.base_providers.EITrajectoryProjector._get_trends" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITrajectoryProjector._extrapolate">
+<span class="sig-name descname"><span class="pre">_extrapolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trends</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projection_years</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">historic_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="headerlink" href="#ITR.data.base_providers.EITrajectoryProjector._extrapolate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITrajectoryProjector._year_on_year_ratio">
+<span class="sig-name descname"><span class="pre">_year_on_year_ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#ITR.data.base_providers.EITrajectoryProjector._year_on_year_ratio" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITargetProjector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ITR.data.base_providers.</span></span><span class="sig-name descname"><span class="pre">EITargetProjector</span></span><a class="headerlink" href="#ITR.data.base_providers.EITargetProjector" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class projects emissions intensities from a company’s targets and historic data. Targets are specified per
+scope in terms of either emissions or emission intensity reduction. Interpolation between last known historic data
+and (a) target(s) is CAGR-based.</p>
+<p>Remember that pd.Series are always well-behaved with pint[] quantities.  pd.DataFrame columns are well-behaved,
+but data across columns is not always well-behaved.  We therefore make this function assume we are projecting targets
+for a specific company, in a specific sector.  If we want to project targets for multiple sectors, we have to call it multiple times.
+This function doesn’t need to know what sector it’s computing for…only tha there is only one such, for however many scopes.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITargetProjector._normalize_scope_targets">
+<span class="sig-name descname"><span class="pre">_normalize_scope_targets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope_targets</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.data.base_providers.EITargetProjector._normalize_scope_targets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITargetProjector.project_ei_targets">
+<span class="sig-name descname"><span class="pre">project_ei_targets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.ICompanyData" title="ITR.interfaces.ICompanyData"><span class="pre">ITR.interfaces.ICompanyData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">production_bm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.ICompanyEIProjectionsScopes" title="ITR.interfaces.ICompanyEIProjectionsScopes"><span class="pre">ITR.interfaces.ICompanyEIProjectionsScopes</span></a></span></span><a class="headerlink" href="#ITR.data.base_providers.EITargetProjector.project_ei_targets" title="Permalink to this definition"></a></dt>
+<dd><p>Input:
+&#64;targets: a list of a company’s targets
+&#64;historic_data: a company’s historic production, emissions, and emission intensities realizations per scope
+&#64;production_bm: company’s production projection computed from region-sector benchmark growth rates</p>
+<p>If the company has no target or the target can’t be processed, then the output the emission database, unprocessed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ITR.data.base_providers.EITargetProjector._compute_CAGR">
+<span class="sig-name descname"><span class="pre">_compute_CAGR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ITR.data.base_providers.EITargetProjector._compute_CAGR" title="Permalink to this definition"></a></dt>
+<dd><p>Input:
+&#64;first: the value of the first datapoint in the Calculation (most recent actual datapoint)
+&#64;last: last value (value at future target year)
+&#64;period: number of periods in the CAGR</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, OS-Climate.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -18,6 +18,31 @@ Classes
 
 
 
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ITR.portfolio_aggregation.ureg
+   ITR.portfolio_aggregation.Q_
+   ITR.portfolio_aggregation.PA_
+
+
+.. py:data:: ureg
+   
+
+   
+
+.. py:data:: Q_
+   
+
+   
+
+.. py:data:: PA_
+   
+
+   
+
 .. py:class:: PortfolioAggregationMethod
 
    Bases: :py:obj:`enum.Enum`
@@ -100,7 +125,7 @@ Classes
       :param data: The data to run the calculations on
       :param input_column: The input column (containing the scores)
       :param portfolio_aggregation_method: The method to use
-      :return: The aggregates score
+      :return: The aggregates score as a pd.Series
 
 
 

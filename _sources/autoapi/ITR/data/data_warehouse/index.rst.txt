@@ -1,0 +1,64 @@
+:py:mod:`ITR.data.data_warehouse`
+=================================
+
+.. py:module:: ITR.data.data_warehouse
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ITR.data.data_warehouse.DataWarehouse
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ITR.data.data_warehouse.logger
+
+
+.. py:data:: logger
+   
+
+   
+
+.. py:class:: DataWarehouse(company_data: ITR.data.data_providers.CompanyDataProvider, benchmark_projected_production: ITR.data.data_providers.ProductionBenchmarkDataProvider, benchmarks_projected_ei: ITR.data.data_providers.IntensityBenchmarkDataProvider, column_config: Type[ITR.configs.ColumnsConfig] = ColumnsConfig, tempscore_config: Type[ITR.configs.TemperatureScoreConfig] = TemperatureScoreConfig)
+
+   Bases: :py:obj:`abc.ABC`
+
+   General data provider super class.
+
+   .. py:method:: get_preprocessed_company_data(self, company_ids: List[str]) -> List[ITR.interfaces.ICompanyAggregates]
+
+      Get all relevant data for a list of company ids. This method should return a list of ICompanyAggregates
+      instances.
+
+      :param company_ids: A list of company IDs (ISINs)
+      :return: A list containing the company data and additional precalculated fields
+
+
+   .. py:method:: _convert_df_to_model(self, df_company_data: pandas.DataFrame) -> List[ITR.interfaces.ICompanyAggregates]
+
+      transforms Dataframe Company data and preprocessed values into list of ICompanyAggregates instances
+
+      :param df_company_data: pandas Dataframe with targets
+      :return: A list containing the targets
+
+
+   .. py:method:: _get_cumulative_emissions(self, projected_ei: pandas.DataFrame, projected_production: pandas.DataFrame) -> pandas.Series
+
+      get the weighted sum of the projected emission
+      :param projected_ei: series of projected emissions intensities
+      :param projected_production: PintArray of projected production amounts
+      :return: cumulative emissions based on weighted sum of emissions intensity * production
+
+
+

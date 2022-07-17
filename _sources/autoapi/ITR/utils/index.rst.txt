@@ -13,9 +13,7 @@ Functions
 
 .. autoapisummary::
 
-   ITR.utils.get_data_providers
-   ITR.utils.get_company_data
-   ITR.utils.get_targets
+   ITR.utils.get_project_root
    ITR.utils._flatten_user_fields
    ITR.utils._make_isin_map
    ITR.utils.dataframe_to_portfolio
@@ -29,43 +27,15 @@ Attributes
 
 .. autoapisummary::
 
-   ITR.utils.DATA_PROVIDER_MAP
+   ITR.utils.logger
 
 
-.. py:data:: DATA_PROVIDER_MAP
-   :annotation: :Dict[str, Type[ITR.data.DataProvider]]
+.. py:data:: logger
+   
 
    
 
-.. py:function:: get_data_providers(data_providers_configs: List[dict], data_providers_input: List[str]) -> List[ITR.data.DataProvider]
-
-   Determines which data provider and in which order should be used.
-
-   :param data_providers_configs: A list of data provider configurations
-   :param data_providers_input: A list of data provider names
-   :return: a list of data providers in order.
-
-
-.. py:function:: get_company_data(data_providers: list, company_ids: List[str]) -> List[ITR.interfaces.IDataProviderCompany]
-
-   Get the company data in a waterfall method, given a list of companies and a list of data providers. This will go
-   through the list of data providers and retrieve the required info until either there are no companies left or there
-   are no data providers left.
-
-   :param data_providers: A list of data providers instances
-   :param company_ids: A list of company ids (ISINs)
-   :return: A data frame containing the company data
-
-
-.. py:function:: get_targets(data_providers: list, companies: list) -> List[ITR.interfaces.IDataProviderTarget]
-
-   Get the targets in a waterfall method, given a list of companies and a list of data providers. This will go through
-   the list of data providers and retrieve the required info until either there are no companies left or there are no
-   data providers left.
-
-   :param data_providers: A list of data providers instances
-   :param companies: A list of companies. Each company should be a dict and contain a company_name and company_id field
-   :return: A data frame containing the targets
+.. py:function:: get_project_root() -> pathlib.Path
 
 
 .. py:function:: _flatten_user_fields(record: ITR.interfaces.PortfolioCompany)
@@ -78,7 +48,7 @@ Attributes
 
 .. py:function:: _make_isin_map(df_portfolio: pandas.DataFrame) -> dict
 
-   Create a mapping from company_id to ISIN (required for the SBTi matching).
+   Create a mapping from company_id to ISIN
 
    :param df_portfolio: The complete portfolio
    :return: A mapping from company_id to ISIN
@@ -93,16 +63,16 @@ Attributes
    :return: A list of portfolio companies
 
 
-.. py:function:: get_data(data_providers: List[ITR.data.DataProvider], portfolio: List[ITR.interfaces.PortfolioCompany]) -> pandas.DataFrame
+.. py:function:: get_data(data_warehouse: ITR.data.data_warehouse.DataWarehouse, portfolio: List[ITR.interfaces.PortfolioCompany]) -> pandas.DataFrame
 
-   Get the required data from the data provider(s), validate the targets and return a 9-box grid for each company.
+   Get the required data from the data provider(s) and return a 9-box grid for each company.
 
-   :param data_providers: A list of DataProvider instances
+   :param data_warehouse: DataWarehouse instances
    :param portfolio: A list of PortfolioCompany models
-   :return: A data frame containing the relevant company-target data
+   :return: A data frame containing the relevant company data
 
 
-.. py:function:: calculate(portfolio_data: pandas.DataFrame, fallback_score: float, aggregation_method: ITR.portfolio_aggregation.PortfolioAggregationMethod, grouping: Optional[List[str]], time_frames: List[ITR.interfaces.ETimeFrames], scopes: List[ITR.interfaces.EScope], anonymize: bool, aggregate: bool = True) -> Tuple[pandas.DataFrame, Optional[ITR.interfaces.ScoreAggregations]]
+.. py:function:: calculate(portfolio_data: pandas.DataFrame, fallback_score: pint.Quantity[delta_degC], aggregation_method: ITR.portfolio_aggregation.PortfolioAggregationMethod, grouping: Optional[List[str]], time_frames: List[ITR.interfaces.ETimeFrames], scopes: List[ITR.interfaces.EScope], anonymize: bool, aggregate: bool = True, controls: Optional[ITR.interfaces.TemperatureScoreControls] = None) -> Tuple[pandas.DataFrame, Optional[ITR.interfaces.ScoreAggregations]]
 
    Calculate the different parts of the temperature score (actual scores, aggregations, column distribution).
 

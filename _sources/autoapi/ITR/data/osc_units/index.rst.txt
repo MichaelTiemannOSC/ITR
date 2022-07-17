@@ -1,0 +1,34 @@
+:py:mod:`ITR.data.osc_units`
+============================
+
+.. py:module:: ITR.data.osc_units
+
+.. autoapi-nested-parse::
+
+   This module handles initialization of pint functionality
+
+
+
+Module Contents
+---------------
+
+.. py:data:: ureg
+   
+
+   
+
+.. py:data:: ureg
+   
+
+   
+
+.. py:data:: Q_
+   
+
+   
+
+.. py:data:: PA_
+   
+
+   
+

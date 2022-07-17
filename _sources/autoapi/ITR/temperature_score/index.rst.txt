@@ -17,44 +17,36 @@ Classes
 
 
 
-.. py:class:: TemperatureScore(time_frames: List[ITR.interfaces.ETimeFrames], scopes: List[ITR.interfaces.EScope], fallback_score: float = 3.2, model: int = 4, aggregation_method: ITR.portfolio_aggregation.PortfolioAggregationMethod = PortfolioAggregationMethod.WATS, grouping: Optional[List] = None, config: Type[ITR.configs.TemperatureScoreConfig] = TemperatureScoreConfig)
+.. py:class:: TemperatureScore(time_frames: List[ITR.interfaces.ETimeFrames], scopes: List[ITR.interfaces.EScope], fallback_score: float = Q_(3.2, ureg.delta_degC), aggregation_method: ITR.portfolio_aggregation.PortfolioAggregationMethod = PortfolioAggregationMethod.WATS, grouping: Optional[List] = None, config: Type[ITR.configs.TemperatureScoreConfig] = TemperatureScoreConfig)
 
    Bases: :py:obj:`ITR.portfolio_aggregation.PortfolioAggregation`
 
    This class is provides a temperature score based on the climate goals.
 
    :param fallback_score: The temp score if a company is not found
-   :param model: The regression model to use
    :param config: A class defining the constants that are used throughout this class. This parameter is only required
                    if you'd like to overwrite a constant. This can be done by extending the TemperatureScoreConfig
                    class and overwriting one of the parameters.
 
-   .. py:method:: get_annual_reduction_rate(self, target: pandas.Series) -> Optional[float]
-
-      Get the annual reduction rate (or None if not available).
-
-      :param target: The target as a row of a dataframe
-      :return: The annual reduction
-
-
-   .. py:method:: get_score(self, target: pandas.Series) -> Tuple[float, float]
+   .. py:method:: get_score(self, scorable_row: pandas.Series) -> Tuple[pint.Quantity[delta_degC], pint.Quantity[delta_degC], float, pint.Quantity[delta_degC], float, ITR.interfaces.EScoreResultType]
 
       Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.
 
-      :param target: The target as a row of a data frame
-      :return: The temperature score
+      :param scorable_row: The target as a row of a data frame
+      :return: The temperature score, which is a tuple of (TEMPERATURE_SCORE, TRAJECTORY_SCORE, TRAJECTORY_OVERSHOOT,
+                      TARGET_SCORE, TARGET_OVERSHOOT, TEMPERATURE_RESULTS])
 
 
-   .. py:method:: get_ghc_temperature_score(self, row: pandas.Series, company_data: pandas.DataFrame) -> Tuple[float, float]
+   .. py:method:: get_ghc_temperature_score(self, row: pandas.Series, company_data: pandas.DataFrame) -> pint.Quantity[delta_degC]
 
-      Get the aggregated temperature score and a temperature result, which indicates how much of the score is based on the default score for a certain company based on the emissions of company.
+      Get the aggregated temperature score. S1+S2+S3 is an emissions weighted sum of S1+S2 and S3.
 
       :param company_data: The original data, grouped by company, time frame and scope category
-      :param row: The row to calculate the temperature score for (if the scope of the row isn't s1s2s3, it will return the original score
+      :param row: The row to calculate the temperature score for (if the scope of the row isn't s1s2s3, it will return the original score)
       :return: The aggregated temperature score for a company
 
 
-   .. py:method:: get_default_score(self, target: pandas.Series) -> float
+   .. py:method:: get_default_score(self, target: pandas.Series) -> pint.Quantity[delta_degC]
 
       :param target: The target as a row of a dataframe
       :return: The temperature score
@@ -76,13 +68,13 @@ Classes
       :return: The data frame, with an updated s1s2s3 temperature score
 
 
-   .. py:method:: calculate(self, data: Optional[pandas.DataFrame] = None, data_providers: Optional[List[TemperatureScore.calculate.data]] = None, portfolio: Optional[List[ITR.interfaces.PortfolioCompany]] = None)
+   .. py:method:: calculate(self, data: Optional[pandas.DataFrame] = None, data_warehouse: Optional[ITR.data.data_warehouse.DataWarehouse] = None, portfolio: Optional[List[ITR.interfaces.PortfolioCompany]] = None)
 
       Calculate the temperature for a dataframe of company data. The columns in the data frame should be a combination
       of IDataProviderTarget and IDataProviderCompany.
 
       :param data: The data set (or None if the data should be retrieved)
-      :param data_providers: A list of DataProvider instances. Optional, only required if data is empty.
+      :param data_warehouse: A list of DataProvider instances. Optional, only required if data is empty.
       :param portfolio: A list of PortfolioCompany models. Optional, only required if data is empty.
       :return: A data frame containing all relevant information for the targets and companies
 

@@ -18,61 +18,27 @@ Classes
 
 .. autoapisummary::
 
-   ITR.configs.ControlsConfig
    ITR.configs.ColumnsConfig
+   ITR.configs.SectorsConfig
+   ITR.configs.VariablesConfig
+   ITR.configs.TargetConfig
+   ITR.configs.TabsConfig
    ITR.configs.PortfolioAggregationConfig
    ITR.configs.TemperatureScoreConfig
+   ITR.configs.LoggingConfig
 
 
-
-
-.. py:class:: ControlsConfig
-
-   .. py:attribute:: BASE_YEAR
-      :annotation: = 2019
-
-      
-
-   .. py:attribute:: TARGET_END_YEAR
-      :annotation: = 2050
-
-      
-
-   .. py:attribute:: PROJECTION_START_YEAR
-      :annotation: = 2010
-
-      
-
-   .. py:attribute:: PROJECTION_END_YEAR
-      :annotation: = 2019
-
-      
-
-   .. py:attribute:: TCRE
-      :annotation: = 0.000545
-
-      
-
-   .. py:attribute:: SCENARIO_TARGET_TEMPERATURE
-      :annotation: = 1.5
-
-      
-
-   .. py:attribute:: GLOBAL_BUDGET
-      :annotation: = 396
-
-      
-
-   .. py:attribute:: CURRENT_TEMPERATURE
-      
-
-      
 
 
 .. py:class:: ColumnsConfig
 
    .. py:attribute:: COMPANY_ID
       :annotation: = company_id
+
+      
+
+   .. py:attribute:: COMPANY_LEI
+      :annotation: = company_lei
 
       
 
@@ -86,17 +52,7 @@ Classes
 
       
 
-   .. py:attribute:: REGRESSION_PARAM
-      :annotation: = param
-
-      
-
-   .. py:attribute:: REGRESSION_INTERCEPT
-      :annotation: = intercept
-
-      
-
-   .. py:attribute:: MARKET_CAP
+   .. py:attribute:: COMPANY_MARKET_CAP
       :annotation: = company_market_cap
 
       
@@ -121,18 +77,8 @@ Classes
 
       
 
-   .. py:attribute:: TARGET_REFERENCE_NUMBER
-      :annotation: = target_type
-
-      
-
    .. py:attribute:: SCOPE
       :annotation: = scope
-
-      
-
-   .. py:attribute:: REDUCTION_FROM_BASE_YEAR
-      :annotation: = reduction_from_base_year
 
       
 
@@ -153,21 +99,6 @@ Classes
 
    .. py:attribute:: TIME_FRAME
       :annotation: = time_frame
-
-      
-
-   .. py:attribute:: MODEL
-      :annotation: = model
-
-      
-
-   .. py:attribute:: ANNUAL_REDUCTION_RATE
-      :annotation: = annual_reduction_rate
-
-      
-
-   .. py:attribute:: EMISSIONS_IN_SCOPE
-      :annotation: = emissions_in_scope
 
       
 
@@ -196,6 +127,36 @@ Classes
 
       
 
+   .. py:attribute:: TEMPLATE_EXPOSURE
+      :annotation: = exposure
+
+      
+
+   .. py:attribute:: TEMPLATE_CURRENCY
+      :annotation: = currency
+
+      
+
+   .. py:attribute:: TEMPLATE_REPORT_DATE
+      :annotation: = report_date
+
+      
+
+   .. py:attribute:: EMISSIONS_METRIC
+      :annotation: = emissions_metric
+
+      
+
+   .. py:attribute:: PRODUCTION_METRIC
+      :annotation: = production_metric
+
+      
+
+   .. py:attribute:: BASE_YEAR_PRODUCTION
+      :annotation: = base_year_production
+
+      
+
    .. py:attribute:: GHG_SCOPE12
       :annotation: = ghg_s1s2
 
@@ -203,6 +164,46 @@ Classes
 
    .. py:attribute:: GHG_SCOPE3
       :annotation: = ghg_s3
+
+      
+
+   .. py:attribute:: TEMPLATE_SCOPE1
+      :annotation: = em_s1
+
+      
+
+   .. py:attribute:: TEMPLATE_SCOPE2
+      :annotation: = em_s2
+
+      
+
+   .. py:attribute:: TEMPLATE_SCOPE12
+      :annotation: = em_s1s2
+
+      
+
+   .. py:attribute:: TEMPLATE_SCOPE3
+      :annotation: = em_s3
+
+      
+
+   .. py:attribute:: TEMPLATE_SCOPE123
+      :annotation: = em_s1s2s3
+
+      
+
+   .. py:attribute:: HISTORIC_DATA
+      :annotation: = historic_data
+
+      
+
+   .. py:attribute:: TARGET_DATA
+      :annotation: = target_data
+
+      
+
+   .. py:attribute:: TEMPLATE_PRODUCTION
+      :annotation: = production
 
       
 
@@ -216,16 +217,6 @@ Classes
 
       
 
-   .. py:attribute:: TARGET_CLASSIFICATION
-      :annotation: = target_classification
-
-      
-
-   .. py:attribute:: REDUCTION_AMBITION
-      :annotation: = reduction_ambition
-
-      
-
    .. py:attribute:: BASE_YEAR
       :annotation: = base_year
 
@@ -233,16 +224,6 @@ Classes
 
    .. py:attribute:: END_YEAR
       :annotation: = end_year
-
-      
-
-   .. py:attribute:: SBTI_VALIDATED
-      :annotation: = sbti_validated
-
-      
-
-   .. py:attribute:: ACHIEVED_EMISSIONS
-      :annotation: = achieved_reduction
 
       
 
@@ -271,68 +252,8 @@ Classes
 
       
 
-   .. py:attribute:: COVERAGE_S1
-      :annotation: = coverage_s1
-
-      
-
-   .. py:attribute:: COVERAGE_S2
-      :annotation: = coverage_s2
-
-      
-
-   .. py:attribute:: COVERAGE_S3
-      :annotation: = coverage_s3
-
-      
-
-   .. py:attribute:: INTENSITY_METRIC
-      :annotation: = intensity_metric
-
-      
-
-   .. py:attribute:: INTENSITY_METRIC_SR15
-      :annotation: = intensity_metric
-
-      
-
-   .. py:attribute:: TARGET_TYPE_SR15
-      :annotation: = target_type
-
-      
-
-   .. py:attribute:: SR15_VARIABLE
-      :annotation: = sr15_variable
-
-      
-
-   .. py:attribute:: REGRESSION_MODEL
-      :annotation: = Regression_model
-
-      
-
-   .. py:attribute:: BASEYEAR_GHG_S1
-      :annotation: = base_year_ghg_s1
-
-      
-
-   .. py:attribute:: BASEYEAR_GHG_S2
-      :annotation: = base_year_ghg_s2
-
-      
-
-   .. py:attribute:: BASEYEAR_GHG_S3
-      :annotation: = base_year_ghg_s3
-
-      
-
    .. py:attribute:: REGION
       :annotation: = region
-
-      
-
-   .. py:attribute:: ENGAGEMENT_TARGET
-      :annotation: = engagement_target
 
       
 
@@ -356,6 +277,66 @@ Classes
 
       
 
+   .. py:attribute:: BENCHMARK_TEMP
+      :annotation: = benchmark_temperature
+
+      
+
+   .. py:attribute:: BENCHMARK_GLOBAL_BUDGET
+      :annotation: = benchmark_global_budget
+
+      
+
+   .. py:attribute:: BASE_EI
+      :annotation: = ei_at_base_year
+
+      
+
+   .. py:attribute:: PROJECTED_EI
+      :annotation: = projected_intensities
+
+      
+
+   .. py:attribute:: PROJECTED_TARGETS
+      :annotation: = projected_targets
+
+      
+
+   .. py:attribute:: HISTORIC_PRODUCTIONS
+      :annotation: = historic_productions
+
+      
+
+   .. py:attribute:: HISTORIC_EMISSIONS
+      :annotation: = historic_emissions
+
+      
+
+   .. py:attribute:: HISTORIC_EI
+      :annotation: = historic_ei
+
+      
+
+   .. py:attribute:: TRAJECTORY_SCORE
+      :annotation: = trajectory_score
+
+      
+
+   .. py:attribute:: TRAJECTORY_OVERSHOOT
+      :annotation: = trajectory_overshoot_ratio
+
+      
+
+   .. py:attribute:: TARGET_SCORE
+      :annotation: = target_score
+
+      
+
+   .. py:attribute:: TARGET_OVERSHOOT
+      :annotation: = target_overshoot_ratio
+
+      
+
    .. py:attribute:: WEIGHTED_TEMPERATURE_SCORE
       :annotation: = weighted_temperature_score
 
@@ -372,6 +353,175 @@ Classes
       
 
 
+.. py:class:: SectorsConfig
+
+   .. py:attribute:: STEEL
+      :annotation: = Steel
+
+      
+
+   .. py:attribute:: ELECTRICITY
+      :annotation: = Electricity Utilities
+
+      
+
+   .. py:attribute:: INFORMATION_TECHNOLOGY
+      :annotation: = Information Technology
+
+      
+
+   .. py:attribute:: INDUSTRIALS
+      :annotation: = Industrials
+
+      
+
+   .. py:attribute:: FINANCIALS
+      :annotation: = Financials
+
+      
+
+   .. py:attribute:: HEALTH_CARE
+      :annotation: = Health Care
+
+      
+
+   .. py:attribute:: AUTOMOBILE
+      :annotation: = Autos
+
+      
+
+   .. py:method:: get_configured_sectors(cls) -> List[str]
+      :classmethod:
+
+      Get a list of sectors configured in the tool.
+      :return: A list of sectors string values
+
+
+
+.. py:class:: VariablesConfig
+
+   .. py:attribute:: EMISSIONS
+      :annotation: = Emissions
+
+      
+
+   .. py:attribute:: PRODUCTIONS
+      :annotation: = Productions
+
+      
+
+   .. py:attribute:: EMISSIONS_INTENSITIES
+      :annotation: = Emissions Intensities
+
+      
+
+
+.. py:class:: TargetConfig
+
+   .. py:attribute:: COMPANY_ID
+      :annotation: = company_id
+
+      
+
+   .. py:attribute:: COMPANY_LEI
+      :annotation: = company_lei
+
+      
+
+   .. py:attribute:: COMPANY_ISIN
+      :annotation: = company_isin
+
+      
+
+   .. py:attribute:: COMPANY_ISIC
+      :annotation: = isic
+
+      
+
+   .. py:attribute:: NETZERO_DATE
+      :annotation: = netzero_date
+
+      
+
+   .. py:attribute:: TARGET_TYPE
+      :annotation: = target_type
+
+      
+
+   .. py:attribute:: TARGET_SCOPE
+      :annotation: = target_scope
+
+      
+
+   .. py:attribute:: TARGET_START_YEAR
+      :annotation: = target_start_year
+
+      
+
+   .. py:attribute:: TARGET_BASE_YEAR
+      :annotation: = target_base_year
+
+      
+
+   .. py:attribute:: TARGET_BASE_MAGNITUDE
+      :annotation: = target_base_year_qty
+
+      
+
+   .. py:attribute:: TARGET_BASE_UNITS
+      :annotation: = target_base_year_unit
+
+      
+
+   .. py:attribute:: TARGET_YEAR
+      :annotation: = target_year
+
+      
+
+   .. py:attribute:: TARGET_REDUCTION_VS_BASE
+      :annotation: = target_reduction_ambition
+
+      
+
+
+.. py:class:: TabsConfig
+
+   .. py:attribute:: FUNDAMENTAL
+      :annotation: = fundamental_data
+
+      
+
+   .. py:attribute:: PROJECTED_EI
+      :annotation: = projected_ei_in_Wh
+
+      
+
+   .. py:attribute:: PROJECTED_PRODUCTION
+      :annotation: = projected_production
+
+      
+
+   .. py:attribute:: PROJECTED_TARGET
+      :annotation: = projected_target
+
+      
+
+   .. py:attribute:: HISTORIC_DATA
+      :annotation: = historic_data
+
+      
+
+   .. py:attribute:: TEMPLATE_INPUT_DATA
+      :annotation: = ITR input data
+
+      
+
+   .. py:attribute:: TEMPLATE_TARGET_DATA
+      :annotation: = ITR target input data
+
+      
+
+
 .. py:class:: PortfolioAggregationConfig
 
    .. py:attribute:: COLS
@@ -384,15 +534,8 @@ Classes
 
    Bases: :py:obj:`PortfolioAggregationConfig`
 
-       
-
-   .. py:attribute:: TEMPERATURE_RESULTS
-      :annotation: = temperature_results
-
-      
-
-   .. py:attribute:: INVESTMENT_VALUE
-      :annotation: = investment_value
+   .. py:attribute:: SCORE_RESULT_TYPE
+      :annotation: = score_result_type
 
       
 
@@ -400,5 +543,17 @@ Classes
       
 
       
+
+
+.. py:class:: LoggingConfig
+
+   .. py:attribute:: FORMAT
+      :annotation: = %(asctime)s - %(name)s - %(levelname)s - %(message)s
+
+      
+
+   .. py:method:: add_config_to_logger(cls, logger: logging.Logger)
+      :classmethod:
+
 
 
