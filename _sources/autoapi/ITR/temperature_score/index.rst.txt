@@ -28,7 +28,7 @@ Classes
                    if you'd like to overwrite a constant. This can be done by extending the TemperatureScoreConfig
                    class and overwriting one of the parameters.
 
-   .. py:method:: get_score(self, scorable_row: pandas.Series) -> Tuple[pint.Quantity[delta_degC], pint.Quantity[delta_degC], float, pint.Quantity[delta_degC], float, ITR.interfaces.EScoreResultType]
+   .. py:method:: get_score(scorable_row: pandas.Series) -> Tuple[pint.Quantity[delta_degC], pint.Quantity[delta_degC], float, pint.Quantity[delta_degC], float, ITR.interfaces.EScoreResultType]
 
       Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.
 
@@ -37,7 +37,7 @@ Classes
                       TARGET_SCORE, TARGET_OVERSHOOT, TEMPERATURE_RESULTS])
 
 
-   .. py:method:: get_ghc_temperature_score(self, row: pandas.Series, company_data: pandas.DataFrame) -> pint.Quantity[delta_degC]
+   .. py:method:: get_ghc_temperature_score(row: pandas.Series, company_data: pandas.DataFrame) -> pint.Quantity[delta_degC]
 
       Get the aggregated temperature score. S1+S2+S3 is an emissions weighted sum of S1+S2 and S3.
 
@@ -46,13 +46,13 @@ Classes
       :return: The aggregated temperature score for a company
 
 
-   .. py:method:: get_default_score(self, target: pandas.Series) -> pint.Quantity[delta_degC]
+   .. py:method:: get_default_score(target: pandas.Series) -> pint.Quantity[delta_degC]
 
       :param target: The target as a row of a dataframe
       :return: The temperature score
 
 
-   .. py:method:: _prepare_data(self, data: pandas.DataFrame)
+   .. py:method:: _prepare_data(data: pandas.DataFrame)
 
       Prepare the data such that it can be used to calculate the temperature score.
 
@@ -60,7 +60,7 @@ Classes
       :return: The extended data frame
 
 
-   .. py:method:: _calculate_company_score(self, data)
+   .. py:method:: _calculate_company_score(data)
 
       Calculate the combined s1s2s3 scores for all companies.
 
@@ -68,7 +68,7 @@ Classes
       :return: The data frame, with an updated s1s2s3 temperature score
 
 
-   .. py:method:: calculate(self, data: Optional[pandas.DataFrame] = None, data_warehouse: Optional[ITR.data.data_warehouse.DataWarehouse] = None, portfolio: Optional[List[ITR.interfaces.PortfolioCompany]] = None)
+   .. py:method:: calculate(data: Optional[pandas.DataFrame] = None, data_warehouse: Optional[ITR.data.data_warehouse.DataWarehouse] = None, portfolio: Optional[List[ITR.interfaces.PortfolioCompany]] = None)
 
       Calculate the temperature for a dataframe of company data. The columns in the data frame should be a combination
       of IDataProviderTarget and IDataProviderCompany.
@@ -79,7 +79,7 @@ Classes
       :return: A data frame containing all relevant information for the targets and companies
 
 
-   .. py:method:: _get_aggregations(self, data: pandas.DataFrame, total_companies: int) -> Tuple[ITR.interfaces.Aggregation, pandas.Series, pandas.Series]
+   .. py:method:: _get_aggregations(data: pandas.DataFrame, total_companies: int) -> Tuple[ITR.interfaces.Aggregation, pandas.Series, pandas.Series]
 
       Get the aggregated score over a certain data set. Also calculate the (relative) contribution of each company
 
@@ -87,7 +87,7 @@ Classes
       :return: An aggregated score and the relative and absolute contribution of each company
 
 
-   .. py:method:: _get_score_aggregation(self, data: pandas.DataFrame, time_frame: ITR.interfaces.ETimeFrames, scope: ITR.interfaces.EScope) -> Optional[ITR.interfaces.ScoreAggregation]
+   .. py:method:: _get_score_aggregation(data: pandas.DataFrame, time_frame: ITR.interfaces.ETimeFrames, scope: ITR.interfaces.EScope) -> Optional[ITR.interfaces.ScoreAggregation]
 
       Get a score aggregation for a certain time frame and scope, for the data set as a whole and for the different
       groupings.
@@ -98,7 +98,7 @@ Classes
       :return: A score aggregation, containing the aggregations for the whole data set and each individual group
 
 
-   .. py:method:: aggregate_scores(self, data: pandas.DataFrame) -> ITR.interfaces.ScoreAggregations
+   .. py:method:: aggregate_scores(data: pandas.DataFrame) -> ITR.interfaces.ScoreAggregations
 
       Aggregate scores to create a portfolio score per time_frame (short, mid, long).
 
@@ -106,7 +106,7 @@ Classes
       :return: A weighted temperature score for the portfolio
 
 
-   .. py:method:: cap_scores(self, scores: pandas.DataFrame) -> pandas.DataFrame
+   .. py:method:: cap_scores(scores: pandas.DataFrame) -> pandas.DataFrame
 
       Cap the temperature scores in the input data frame to a certain value, based on the scenario that's being used. 
       This can either be for the whole data set, or only for the top X contributors.
@@ -115,7 +115,7 @@ Classes
       :return: The input data frame, with capped scores
 
 
-   .. py:method:: anonymize_data_dump(self, scores: pandas.DataFrame) -> pandas.DataFrame
+   .. py:method:: anonymize_data_dump(scores: pandas.DataFrame) -> pandas.DataFrame
 
       Anonymize the scores by deleting the company IDs, ISIN and renaming the companies.
 

@@ -13,6 +13,7 @@
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -73,40 +74,40 @@
            <div itemprop="articleBody">
              
   <section id="module-ITR.utils">
-<span id="itr-utils"></span><h1><a class="reference internal" href="#module-ITR.utils" title="ITR.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ITR.utils</span></code></a><a class="headerlink" href="#module-ITR.utils" title="Permalink to this headline"></a></h1>
+<span id="itr-utils"></span><h1><a class="reference internal" href="#module-ITR.utils" title="ITR.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ITR.utils</span></code></a><a class="headerlink" href="#module-ITR.utils" title="Permalink to this heading"></a></h1>
 <section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline"></a></h2>
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
 <section id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline"></a></h3>
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#ITR.utils.get_project_root" title="ITR.utils.get_project_root"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_project_root</span></code></a>() → pathlib.Path</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ITR.utils.get_project_root" title="ITR.utils.get_project_root"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_project_root</span></code></a>(→ pathlib.Path)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#ITR.utils._flatten_user_fields" title="ITR.utils._flatten_user_fields"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_flatten_user_fields</span></code></a>(record: ITR.interfaces.PortfolioCompany)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#ITR.utils._flatten_user_fields" title="ITR.utils._flatten_user_fields"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_flatten_user_fields</span></code></a>(record)</p></td>
 <td><p>Flatten the user fields in a portfolio company and return it as a dictionary.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#ITR.utils._make_isin_map" title="ITR.utils._make_isin_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_make_isin_map</span></code></a>(df_portfolio: pandas.DataFrame) → dict</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ITR.utils._make_isin_map" title="ITR.utils._make_isin_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_make_isin_map</span></code></a>(→ dict)</p></td>
 <td><p>Create a mapping from company_id to ISIN</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#ITR.utils.dataframe_to_portfolio" title="ITR.utils.dataframe_to_portfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataframe_to_portfolio</span></code></a>(df_portfolio: pandas.DataFrame) → List[ITR.interfaces.PortfolioCompany]</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#ITR.utils.dataframe_to_portfolio" title="ITR.utils.dataframe_to_portfolio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataframe_to_portfolio</span></code></a>(...)</p></td>
 <td><p>Convert a data frame to a list of portfolio company objects.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#ITR.utils.get_data" title="ITR.utils.get_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data</span></code></a>(data_warehouse: ITR.data.data_warehouse.DataWarehouse, portfolio: List[ITR.interfaces.PortfolioCompany]) → pandas.DataFrame</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ITR.utils.get_data" title="ITR.utils.get_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data</span></code></a>(→ pandas.DataFrame)</p></td>
 <td><p>Get the required data from the data provider(s) and return a 9-box grid for each company.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#ITR.utils.calculate" title="ITR.utils.calculate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate</span></code></a>(portfolio_data: pandas.DataFrame, fallback_score: pint.Quantity[delta_degC], aggregation_method: ITR.portfolio_aggregation.PortfolioAggregationMethod, grouping: Optional[List[str]], time_frames: List[ITR.interfaces.ETimeFrames], scopes: List[ITR.interfaces.EScope], anonymize: bool, aggregate: bool = True, controls: Optional[ITR.interfaces.TemperatureScoreControls] = None) → Tuple[pandas.DataFrame, Optional[ITR.interfaces.ScoreAggregations]]</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#ITR.utils.calculate" title="ITR.utils.calculate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate</span></code></a>(→ Tuple[pandas.DataFrame, ...)</p></td>
 <td><p>Calculate the different parts of the temperature score (actual scores, aggregations, column distribution).</p></td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="attributes">
-<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline"></a></h3>
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />

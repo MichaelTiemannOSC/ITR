@@ -109,7 +109,7 @@ Attributes
                    if you'd like to overwrite a constant. This can be done by extending the PortfolioAggregationConfig
                    class and overwriting one of the parameters.
 
-   .. py:method:: _check_column(self, data: pandas.DataFrame, column: str)
+   .. py:method:: _check_column(data: pandas.DataFrame, column: str)
 
       Check if a certain column is filled for all companies. If not throw an error.
 
@@ -118,7 +118,7 @@ Attributes
       :return:
 
 
-   .. py:method:: _calculate_aggregate_score(self, data: pandas.DataFrame, input_column: str, portfolio_aggregation_method: PortfolioAggregationMethod) -> pandas.Series
+   .. py:method:: _calculate_aggregate_score(data: pandas.DataFrame, input_column: str, portfolio_aggregation_method: PortfolioAggregationMethod) -> pandas.Series
 
       Aggregate the scores in a given column based on a certain portfolio aggregation method.
 

@@ -13,6 +13,7 @@
         <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
         <script src="../../../../_static/jquery.js"></script>
         <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../../_static/doctools.js"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -73,11 +74,11 @@
            <div itemprop="articleBody">
              
   <section id="module-ITR.data.data_warehouse">
-<span id="itr-data-data-warehouse"></span><h1><a class="reference internal" href="#module-ITR.data.data_warehouse" title="ITR.data.data_warehouse"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ITR.data.data_warehouse</span></code></a><a class="headerlink" href="#module-ITR.data.data_warehouse" title="Permalink to this headline"></a></h1>
+<span id="itr-data-data-warehouse"></span><h1><a class="reference internal" href="#module-ITR.data.data_warehouse" title="ITR.data.data_warehouse"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ITR.data.data_warehouse</span></code></a><a class="headerlink" href="#module-ITR.data.data_warehouse" title="Permalink to this heading"></a></h1>
 <section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline"></a></h2>
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline"></a></h3>
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
@@ -91,7 +92,7 @@
 </table>
 </section>
 <section id="attributes">
-<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline"></a></h3>
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
@@ -115,7 +116,7 @@
 <p>General data provider super class.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="ITR.data.data_warehouse.DataWarehouse.get_preprocessed_company_data">
-<span class="sig-name descname"><span class="pre">get_preprocessed_company_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.ICompanyAggregates" title="ITR.interfaces.ICompanyAggregates"><span class="pre">ITR.interfaces.ICompanyAggregates</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#ITR.data.data_warehouse.DataWarehouse.get_preprocessed_company_data" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_preprocessed_company_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">company_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.ICompanyAggregates" title="ITR.interfaces.ICompanyAggregates"><span class="pre">ITR.interfaces.ICompanyAggregates</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#ITR.data.data_warehouse.DataWarehouse.get_preprocessed_company_data" title="Permalink to this definition"></a></dt>
 <dd><p>Get all relevant data for a list of company ids. This method should return a list of ICompanyAggregates
 instances.</p>
 <dl class="field-list simple">
@@ -130,7 +131,7 @@ instances.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ITR.data.data_warehouse.DataWarehouse._convert_df_to_model">
-<span class="sig-name descname"><span class="pre">_convert_df_to_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_company_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.ICompanyAggregates" title="ITR.interfaces.ICompanyAggregates"><span class="pre">ITR.interfaces.ICompanyAggregates</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#ITR.data.data_warehouse.DataWarehouse._convert_df_to_model" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">_convert_df_to_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_company_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../interfaces/index.html#ITR.interfaces.ICompanyAggregates" title="ITR.interfaces.ICompanyAggregates"><span class="pre">ITR.interfaces.ICompanyAggregates</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#ITR.data.data_warehouse.DataWarehouse._convert_df_to_model" title="Permalink to this definition"></a></dt>
 <dd><p>transforms Dataframe Company data and preprocessed values into list of ICompanyAggregates instances</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -144,7 +145,7 @@ instances.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ITR.data.data_warehouse.DataWarehouse._get_cumulative_emissions">
-<span class="sig-name descname"><span class="pre">_get_cumulative_emissions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projected_ei</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projected_production</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="headerlink" href="#ITR.data.data_warehouse.DataWarehouse._get_cumulative_emissions" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">_get_cumulative_emissions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">projected_ei</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projected_production</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.Series</span></span></span><a class="headerlink" href="#ITR.data.data_warehouse.DataWarehouse._get_cumulative_emissions" title="Permalink to this definition"></a></dt>
 <dd><p>get the weighted sum of the projected emission
 :param projected_ei: series of projected emissions intensities
 :param projected_production: PintArray of projected production amounts

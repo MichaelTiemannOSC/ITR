@@ -390,7 +390,7 @@ Classes
 
       
 
-   .. py:method:: get_configured_sectors(cls) -> List[str]
+   .. py:method:: get_configured_sectors() -> List[str]
       :classmethod:
 
       Get a list of sectors configured in the tool.
@@ -552,7 +552,7 @@ Classes
 
       
 
-   .. py:method:: add_config_to_logger(cls, logger: logging.Logger)
+   .. py:method:: add_config_to_logger(logger: logging.Logger)
       :classmethod:
 
 

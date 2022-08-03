@@ -38,21 +38,26 @@ Attributes
 
    Bases: :py:obj:`ITR.data.data_providers.ProductionBenchmarkDataProvider`
 
-   .. py:method:: _convert_benchmark_to_series(self, benchmark: ITR.interfaces.IBenchmark) -> pandas.Series
+   Production projecton data provider super class.
+
+   This Data Container contains Production data on benchmark level. Data has a regions and sector indices.
+   Initialized ProductionBenchmarkDataProvider is required when setting up a data warehouse instance.
+
+   .. py:method:: _convert_benchmark_to_series(benchmark: ITR.interfaces.IBenchmark) -> pandas.Series
 
       extracts the company projected intensity or production targets for a given scope
       :param scope: a scope
       :return: pd.Series
 
 
-   .. py:method:: _get_projected_production(self, scope: ITR.interfaces.EScope = EScope.S1S2) -> pandas.DataFrame
+   .. py:method:: _get_projected_production(scope: ITR.interfaces.EScope = EScope.S1S2) -> pandas.DataFrame
 
       Converts IProductionBenchmarkScopes into dataframe for a scope
       :param scope: a scope
       :return: pd.DataFrame
 
 
-   .. py:method:: get_company_projected_production(self, company_sector_region_info: pandas.DataFrame) -> pandas.DataFrame
+   .. py:method:: get_company_projected_production(company_sector_region_info: pandas.DataFrame) -> pandas.DataFrame
 
       get the projected productions for list of companies in ghg_scope12
       :param company_sector_region_info: DataFrame with at least the following columns :
@@ -60,7 +65,7 @@ Attributes
       :return: DataFrame of projected productions for [base_year - base_year + 50]
 
 
-   .. py:method:: get_benchmark_projections(self, company_sector_region_info: pandas.DataFrame, scope: ITR.interfaces.EScope = EScope.S1S2) -> pandas.DataFrame
+   .. py:method:: get_benchmark_projections(company_sector_region_info: pandas.DataFrame, scope: ITR.interfaces.EScope = EScope.S1S2) -> pandas.DataFrame
 
       Overrides subclass method
       returns a Dataframe with production benchmarks per company_id given a region and sector.
@@ -75,7 +80,11 @@ Attributes
 
    Bases: :py:obj:`ITR.data.data_providers.IntensityBenchmarkDataProvider`
 
-   .. py:method:: get_SDA_intensity_benchmarks(self, company_info_at_base_year: pandas.DataFrame) -> pandas.DataFrame
+   Production intensity data provider super class.
+   This Data Container contains emission intensity data on benchmark level. Data has a regions and sector indices.
+   Initialized IntensityBenchmarkDataProvider is required when setting up a data warehouse instance.
+
+   .. py:method:: get_SDA_intensity_benchmarks(company_info_at_base_year: pandas.DataFrame) -> pandas.DataFrame
 
       Overrides subclass method
       returns a Dataframe with intensity benchmarks per company_id given a region and sector.
@@ -84,7 +93,7 @@ Attributes
       :return: A DataFrame with company and SDA intensity benchmarks per calendar year per row
 
 
-   .. py:method:: _get_decarbonizations_paths(self, intensity_benchmarks: pandas.DataFrame) -> pandas.DataFrame
+   .. py:method:: _get_decarbonizations_paths(intensity_benchmarks: pandas.DataFrame) -> pandas.DataFrame
 
       Overrides subclass method
       Returns a DataFrame with the projected decarbonization paths for the supplied companies in intensity_benchmarks.
@@ -92,7 +101,7 @@ Attributes
       :return: A pd.DataFrame with company and decarbonisation path s per calendar year per row
 
 
-   .. py:method:: _get_decarbonization(self, intensity_benchmark_row: pandas.Series) -> pandas.Series
+   .. py:method:: _get_decarbonization(intensity_benchmark_row: pandas.Series) -> pandas.Series
 
       Overrides subclass method
       returns a Series with the decarbonization path for a benchmark.
@@ -100,21 +109,21 @@ Attributes
       :return: A pd.Series with a company's decarbonisation paths per calendar year per row
 
 
-   .. py:method:: _convert_benchmark_to_series(self, benchmark: ITR.interfaces.IBenchmark) -> pandas.Series
+   .. py:method:: _convert_benchmark_to_series(benchmark: ITR.interfaces.IBenchmark) -> pandas.Series
 
       extracts the company projected intensities or targets for a given scope
       :param scope: a scope
       :return: pd.Series
 
 
-   .. py:method:: _get_projected_intensities(self, scope: ITR.interfaces.EScope = EScope.S1S2) -> pandas.DataFrame
+   .. py:method:: _get_projected_intensities(scope: ITR.interfaces.EScope = EScope.S1S2) -> pandas.DataFrame
 
       Converts IEmissionIntensityBenchmarkScopes into dataframe for a scope
       :param scope: a scope
       :return: pd.DataFrame
 
 
-   .. py:method:: _get_intensity_benchmarks(self, company_sector_region_info: pandas.DataFrame, scope: ITR.interfaces.EScope = EScope.S1S2) -> pandas.DataFrame
+   .. py:method:: _get_intensity_benchmarks(company_sector_region_info: pandas.DataFrame, scope: ITR.interfaces.EScope = EScope.S1S2) -> pandas.DataFrame
 
       Overrides subclass method
       returns a Dataframe with production benchmarks per company_id given a region and sector.
@@ -136,10 +145,10 @@ Attributes
    :param column_config: An optional ColumnsConfig object containing relevant variable names
    :param tempscore_config: An optional TemperatureScoreConfig object containing temperature scoring settings
 
-   .. py:method:: _validate_projected_trajectories(self, companies: List[ITR.interfaces.ICompanyData]) -> List[ITR.interfaces.ICompanyData]
+   .. py:method:: _validate_projected_trajectories(companies: List[ITR.interfaces.ICompanyData]) -> List[ITR.interfaces.ICompanyData]
 
 
-   .. py:method:: _convert_projections_to_series(self, company: ITR.interfaces.ICompanyData, feature: str, scope: ITR.interfaces.EScope = EScope.S1S2) -> pandas.Series
+   .. py:method:: _convert_projections_to_series(company: ITR.interfaces.ICompanyData, feature: str, scope: ITR.interfaces.EScope = EScope.S1S2) -> pandas.Series
 
       extracts the company projected intensities or targets for a given scope
       :param feature: PROJECTED_TRAJECTORIES or PROJECTED_TARGETS (both are intensities)
@@ -147,7 +156,7 @@ Attributes
       :return: pd.Series
 
 
-   .. py:method:: _calculate_target_projections(self, production_bm: BaseProviderProductionBenchmark)
+   .. py:method:: _calculate_target_projections(production_bm: BaseProviderProductionBenchmark)
 
       We cannot calculate target projections until after we have loaded benchmark data.
       We do so when companies are associated with benchmarks, in the DataWarehouse construction
@@ -155,7 +164,7 @@ Attributes
       :param production_bm: A Production Benchmark (multi-sector, single-scope, 2020-2050)
 
 
-   .. py:method:: _get_company_intensity_at_year(self, year: int, company_ids: List[str]) -> pandas.Series
+   .. py:method:: _get_company_intensity_at_year(year: int, company_ids: List[str]) -> pandas.Series
 
       Returns projected intensities for a given set of companies and year
       :param year: calendar year
@@ -163,7 +172,7 @@ Attributes
       :return: pd.Series with intensities for given company ids
 
 
-   .. py:method:: get_company_data(self, company_ids: List[str]) -> List[ITR.interfaces.ICompanyData]
+   .. py:method:: get_company_data(company_ids: List[str]) -> List[ITR.interfaces.ICompanyData]
 
       Get all relevant data for a list of company ids. This method should return a list of ICompanyData
       instances.
@@ -172,7 +181,7 @@ Attributes
       :return: A list containing the company data
 
 
-   .. py:method:: get_value(self, company_ids: List[str], variable_name: str) -> pandas.Series
+   .. py:method:: get_value(company_ids: List[str], variable_name: str) -> pandas.Series
 
       Gets the value of a variable for a list of companies ids
       :param company_ids: list of company ids
@@ -180,7 +189,7 @@ Attributes
       :return: series of values
 
 
-   .. py:method:: get_company_intensity_and_production_at_base_year(self, company_ids: List[str]) -> pandas.DataFrame
+   .. py:method:: get_company_intensity_and_production_at_base_year(company_ids: List[str]) -> pandas.DataFrame
 
       overrides subclass method
       :param: company_ids: list of company ids
@@ -189,19 +198,19 @@ Attributes
       ColumnsConfig.SECTOR and ColumnsConfig.REGION
 
 
-   .. py:method:: get_company_fundamentals(self, company_ids: List[str]) -> pandas.DataFrame
+   .. py:method:: get_company_fundamentals(company_ids: List[str]) -> pandas.DataFrame
 
       :param company_ids: A list of company IDs
       :return: A pandas DataFrame with company fundamental info per company (company_id is a column)
 
 
-   .. py:method:: get_company_projected_trajectories(self, company_ids: List[str]) -> pandas.DataFrame
+   .. py:method:: get_company_projected_trajectories(company_ids: List[str]) -> pandas.DataFrame
 
       :param company_ids: A list of company IDs
       :return: A pandas DataFrame with projected intensity trajectories per company, indexed by company_id
 
 
-   .. py:method:: get_company_projected_targets(self, company_ids: List[str]) -> pandas.DataFrame
+   .. py:method:: get_company_projected_targets(company_ids: List[str]) -> pandas.DataFrame
 
       :param company_ids: A list of company IDs
       :return: A pandas DataFrame with projected intensity targets per company, indexed by company_id
@@ -216,43 +225,43 @@ Attributes
    - A company's emission history (in t CO2)
    - A company's production history (units depend on industry, e.g. TWh for electricity)
 
-   .. py:method:: project_ei_trajectories(self, companies: List[ITR.interfaces.ICompanyData]) -> List[ITR.interfaces.ICompanyData]
+   .. py:method:: project_ei_trajectories(companies: List[ITR.interfaces.ICompanyData]) -> List[ITR.interfaces.ICompanyData]
 
 
-   .. py:method:: _extract_historic_data(self, companies: List[ITR.interfaces.ICompanyData]) -> pandas.DataFrame
+   .. py:method:: _extract_historic_data(companies: List[ITR.interfaces.ICompanyData]) -> pandas.DataFrame
 
 
-   .. py:method:: _historic_productions_to_dict(self, id: str, productions: List[ITR.interfaces.IProductionRealization]) -> Dict[str, str]
+   .. py:method:: _historic_productions_to_dict(id: str, productions: List[ITR.interfaces.IProductionRealization]) -> Dict[str, str]
 
 
-   .. py:method:: _historic_emissions_to_dicts(self, id: str, emissions_scopes: ITR.interfaces.IHistoricEmissionsScopes) -> List[Dict[str, str]]
+   .. py:method:: _historic_emissions_to_dicts(id: str, emissions_scopes: ITR.interfaces.IHistoricEmissionsScopes) -> List[Dict[str, str]]
 
 
-   .. py:method:: _historic_ei_to_dicts(self, id: str, intensities_scopes: ITR.interfaces.IHistoricEIScopes) -> List[Dict[str, str]]
+   .. py:method:: _historic_ei_to_dicts(id: str, intensities_scopes: ITR.interfaces.IHistoricEIScopes) -> List[Dict[str, str]]
 
 
-   .. py:method:: _compute_missing_historic_ei(self, companies, historic_data)
+   .. py:method:: _compute_missing_historic_ei(companies, historic_data)
 
 
-   .. py:method:: _add_projections_to_companies(self, companies: List[ITR.interfaces.ICompanyData], extrapolations: pandas.DataFrame)
+   .. py:method:: _add_projections_to_companies(companies: List[ITR.interfaces.ICompanyData], extrapolations: pandas.DataFrame)
 
 
-   .. py:method:: _standardize(self, intensities: pandas.DataFrame) -> pandas.DataFrame
+   .. py:method:: _standardize(intensities: pandas.DataFrame) -> pandas.DataFrame
 
 
-   .. py:method:: _winsorize(self, historic_intensities: pandas.DataFrame) -> pandas.DataFrame
+   .. py:method:: _winsorize(historic_intensities: pandas.DataFrame) -> pandas.DataFrame
 
 
-   .. py:method:: _interpolate(self, historic_intensities: pandas.DataFrame) -> pandas.DataFrame
+   .. py:method:: _interpolate(historic_intensities: pandas.DataFrame) -> pandas.DataFrame
 
 
-   .. py:method:: _get_trends(self, intensities: pandas.DataFrame)
+   .. py:method:: _get_trends(intensities: pandas.DataFrame)
 
 
-   .. py:method:: _extrapolate(self, trends: pandas.DataFrame, projection_years: range, historic_data: pandas.DataFrame) -> pandas.DataFrame
+   .. py:method:: _extrapolate(trends: pandas.DataFrame, projection_years: range, historic_data: pandas.DataFrame) -> pandas.DataFrame
 
 
-   .. py:method:: _year_on_year_ratio(self, arr: numpy.ndarray) -> float
+   .. py:method:: _year_on_year_ratio(arr: numpy.ndarray) -> float
 
 
 
@@ -269,10 +278,10 @@ Attributes
    for a specific company, in a specific sector.  If we want to project targets for multiple sectors, we have to call it multiple times.
    This function doesn't need to know what sector it's computing for...only tha there is only one such, for however many scopes.
 
-   .. py:method:: _normalize_scope_targets(self, scope_targets)
+   .. py:method:: _normalize_scope_targets(scope_targets)
 
 
-   .. py:method:: project_ei_targets(self, company: ITR.interfaces.ICompanyData, production_bm: pandas.Series) -> ITR.interfaces.ICompanyEIProjectionsScopes
+   .. py:method:: project_ei_targets(company: ITR.interfaces.ICompanyData, production_bm: pandas.Series) -> ITR.interfaces.ICompanyEIProjectionsScopes
 
       Input:
       @targets: a list of a company's targets
@@ -282,7 +291,7 @@ Attributes
       If the company has no target or the target can't be processed, then the output the emission database, unprocessed
 
 
-   .. py:method:: _compute_CAGR(self, first, last, period)
+   .. py:method:: _compute_CAGR(first, last, period)
 
       Input:
       @first: the value of the first datapoint in the Calculation (most recent actual datapoint)

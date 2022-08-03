@@ -89,7 +89,7 @@ Functions
 
       
 
-   .. py:method:: unit_must_be_energy(cls, v)
+   .. py:method:: unit_must_be_energy(v)
 
 
 
@@ -102,7 +102,7 @@ Functions
 
       
 
-   .. py:method:: units_must_be_Fe_ton(cls, v)
+   .. py:method:: units_must_be_Fe_ton(v)
 
 
 
@@ -115,7 +115,7 @@ Functions
 
       
 
-   .. py:method:: unit_must_be_production(cls, v)
+   .. py:method:: unit_must_be_production(v)
 
 
 
@@ -128,7 +128,7 @@ Functions
 
       
 
-   .. py:method:: units_must_be_tCO2(cls, v)
+   .. py:method:: units_must_be_tCO2(v)
 
 
 
@@ -141,7 +141,7 @@ Functions
 
       
 
-   .. py:method:: units_must_be_EI(cls, v)
+   .. py:method:: units_must_be_EI(v)
 
 
 
@@ -154,7 +154,7 @@ Functions
 
       
 
-   .. py:method:: units_must_be_EI(cls, v)
+   .. py:method:: units_must_be_EI(v)
 
 
 
@@ -167,7 +167,7 @@ Functions
 
       
 
-   .. py:method:: units_must_be_EI(cls, v)
+   .. py:method:: units_must_be_EI(v)
 
 
 
@@ -180,7 +180,7 @@ Functions
 
       
 
-   .. py:method:: units_must_be_EI(cls, v)
+   .. py:method:: units_must_be_EI(v)
 
 
 
@@ -203,7 +203,7 @@ Functions
 
       
 
-   .. py:method:: units_must_be_OSC(cls, v)
+   .. py:method:: units_must_be_OSC(v)
 
 
 
@@ -215,27 +215,27 @@ Functions
 
    Derive from this class to define new enumerations.
 
-   .. py:method:: __str__(self)
+   .. py:method:: __str__()
 
       Return str(self).
 
 
-   .. py:method:: __ge__(self, other)
+   .. py:method:: __ge__(other)
 
       Return self>=value.
 
 
-   .. py:method:: __gt__(self, other)
+   .. py:method:: __gt__(other)
 
       Return self>value.
 
 
-   .. py:method:: __le__(self, other)
+   .. py:method:: __le__(other)
 
       Return self<=value.
 
 
-   .. py:method:: __lt__(self, other)
+   .. py:method:: __lt__(other)
 
       Return self<value.
 
@@ -274,14 +274,14 @@ Functions
 
       
 
-   .. py:method:: get_scopes(cls) -> List[str]
+   .. py:method:: get_scopes() -> List[str]
       :classmethod:
 
       Get a list of all scopes.
       :return: A list of EScope string values
 
 
-   .. py:method:: get_result_scopes(cls) -> List[EScope]
+   .. py:method:: get_result_scopes() -> List[EScope]
       :classmethod:
 
       Get a list of scopes that should be calculated if the user leaves it open.
@@ -389,7 +389,7 @@ Functions
 
       
 
-   .. py:method:: __getitem__(self, item)
+   .. py:method:: __getitem__(item)
 
 
 
@@ -412,7 +412,7 @@ Functions
 
       
 
-   .. py:method:: __getitem__(self, item)
+   .. py:method:: __getitem__(item)
 
 
 
@@ -435,7 +435,7 @@ Functions
 
       
 
-   .. py:method:: __getitem__(self, item)
+   .. py:method:: __getitem__(item)
 
 
 
@@ -458,7 +458,7 @@ Functions
 
       
 
-   .. py:method:: __getitem__(self, item)
+   .. py:method:: __getitem__(item)
 
 
 
@@ -481,7 +481,7 @@ Functions
 
       
 
-   .. py:method:: __getitem__(self, item)
+   .. py:method:: __getitem__(item)
 
 
 
@@ -575,7 +575,7 @@ Functions
 
       
 
-   .. py:method:: __getitem__(self, item)
+   .. py:method:: __getitem__(item)
 
 
 
@@ -588,7 +588,7 @@ Functions
 
       
 
-   .. py:method:: __getitem__(self, item)
+   .. py:method:: __getitem__(item)
 
 
 
@@ -646,7 +646,7 @@ Functions
 
       
 
-   .. py:method:: __getitem__(self, item)
+   .. py:method:: __getitem__(item)
 
 
 
@@ -679,7 +679,7 @@ Functions
 
       
 
-   .. py:method:: __getitem__(self, item)
+   .. py:method:: __getitem__(item)
 
 
 
@@ -712,7 +712,7 @@ Functions
 
       
 
-   .. py:method:: __getitem__(self, item)
+   .. py:method:: __getitem__(item)
 
 
 
@@ -890,7 +890,7 @@ Functions
 
       
 
-   .. py:method:: must_be_greater_than_2022(cls, v)
+   .. py:method:: must_be_greater_than_2022(v)
 
 
 
@@ -1023,16 +1023,16 @@ Functions
 
       
 
-   .. py:method:: _fixup_year_value_list(self, ListType, u_list, metric, inferred_metric)
+   .. py:method:: _fixup_year_value_list(ListType, u_list, metric, inferred_metric)
 
 
-   .. py:method:: _fixup_ei_projections(self, projections, production_metric, emissions_metric, sector)
+   .. py:method:: _fixup_ei_projections(projections, production_metric, emissions_metric, sector)
 
 
-   .. py:method:: _fixup_historic_data(self, historic_data, production_metric, emissions_metric, sector)
+   .. py:method:: _fixup_historic_data(historic_data, production_metric, emissions_metric, sector)
 
 
-   .. py:method:: _get_base_realization_from_historic(self, realized_values: List[PintModel], units, base_year=None)
+   .. py:method:: _get_base_realization_from_historic(realized_values: List[PintModel], units, base_year=None)
 
 
 
@@ -1105,10 +1105,10 @@ Functions
 
       
 
-   .. py:method:: __getitem__(self, item)
+   .. py:method:: __getitem__(item)
 
 
-   .. py:method:: tcre_multiplier(self) -> pint.Quantity[delta_degC/CO2]
+   .. py:method:: tcre_multiplier() -> pint.Quantity[delta_degC/CO2]
       :property:
 
 

@@ -36,7 +36,7 @@ Attributes
 
    General data provider super class.
 
-   .. py:method:: get_preprocessed_company_data(self, company_ids: List[str]) -> List[ITR.interfaces.ICompanyAggregates]
+   .. py:method:: get_preprocessed_company_data(company_ids: List[str]) -> List[ITR.interfaces.ICompanyAggregates]
 
       Get all relevant data for a list of company ids. This method should return a list of ICompanyAggregates
       instances.
@@ -45,7 +45,7 @@ Attributes
       :return: A list containing the company data and additional precalculated fields
 
 
-   .. py:method:: _convert_df_to_model(self, df_company_data: pandas.DataFrame) -> List[ITR.interfaces.ICompanyAggregates]
+   .. py:method:: _convert_df_to_model(df_company_data: pandas.DataFrame) -> List[ITR.interfaces.ICompanyAggregates]
 
       transforms Dataframe Company data and preprocessed values into list of ICompanyAggregates instances
 
@@ -53,7 +53,7 @@ Attributes
       :return: A list containing the targets
 
 
-   .. py:method:: _get_cumulative_emissions(self, projected_ei: pandas.DataFrame, projected_production: pandas.DataFrame) -> pandas.Series
+   .. py:method:: _get_cumulative_emissions(projected_ei: pandas.DataFrame, projected_production: pandas.DataFrame) -> pandas.Series
 
       get the weighted sum of the projected emission
       :param projected_ei: series of projected emissions intensities
