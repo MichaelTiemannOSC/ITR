@@ -13,7 +13,8 @@ from pydantic import BaseModel, parse_obj_as, validator, root_validator, Validat
 import ITR
 
 from ITR.data.osc_units import ureg, Q_, M_, PA_, \
-    BenchmarkMetric, BenchmarkQuantity, ProductionMetric, ProductionQuantity, EmissionsMetric, EmissionsQuantity, EI_Metric, EI_Quantity, quantity
+    BenchmarkMetric, BenchmarkQuantity, ProductionMetric, ProductionQuantity, EmissionsMetric, EmissionsQuantity, EI_Metric, EI_Quantity, \
+    MonetaryQuantity, quantity
 from ITR.configs import ProjectionControls, LoggingConfig
 
 import logging
@@ -176,7 +177,7 @@ class PortfolioCompany(BaseModel):
     company_name: str
     company_id: str
     company_isin: Optional[str]
-    investment_value: float
+    investment_value: MonetaryQuantity
     user_fields: Optional[dict]
 
 
@@ -466,13 +467,18 @@ class ITargetData(BaseModel):
     target_end_year: int
 
     target_base_year_qty: float
+    target_base_year_err: Optional[float]
     target_base_year_unit: str
     target_reduction_pct: float # This is actually a fraction, not a percentage.  1.0 = complete reduction to zero.
 
     @root_validator
-    def must_be_greater_than_2022(cls, v):
-        if v['target_end_year'] < 2023:
-            raise ValueError(f"Scope {v['target_scope']}: Target end year ({v['target_end_year']}) must be greater than 2022")
+    def start_end_base_order(cls, v):
+        if v['target_start_year'] < v['target_base_year']:
+            raise ValueError(f"Scope {v['target_scope']}: Target start year ({v['target_start_year']}) must be equal or greater than base year {v['target_base_year']}")
+        if v['target_end_year'] <= v['target_base_year']:
+            raise ValueError(f"Scope {v['target_scope']}: Target end year ({v['target_end_year']}) must be greater than base year {v['target_base_year']}")
+        if v['target_end_year'] <= v['target_start_year']:
+            raise ValueError(f"Scope {v['target_scope']}: Target end year ({v['target_end_year']}) must be greater than start year {v['target_start_year']}")
         return v
 
 
@@ -502,12 +508,12 @@ class ICompanyData(BaseModel):
     industry_level_3: Optional[str]
     industry_level_4: Optional[str]
 
-    company_revenue: Optional[float]
-    company_market_cap: Optional[float]
-    company_enterprise_value: Optional[float]
-    company_ev_plus_cash: Optional[float]
-    company_total_assets: Optional[float]
-    company_cash_equivalents: Optional[float]
+    company_revenue: Optional[MonetaryQuantity]
+    company_market_cap: Optional[MonetaryQuantity]
+    company_enterprise_value: Optional[MonetaryQuantity]
+    company_ev_plus_cash: Optional[MonetaryQuantity]
+    company_total_assets: Optional[MonetaryQuantity]
+    company_cash_equivalents: Optional[MonetaryQuantity]
 
     # Initialized later when we have benchmark information.  It is OK to initialize as None and fix later.
     # They will show up as {'S1S2': { 'projections': [ ... ] }}
@@ -527,7 +533,7 @@ class ICompanyData(BaseModel):
             'Coal': { 'Global': 't Coal' },
             'Oil': { 'Global': 'bbl/d' },
             'Gas': { 'Global': 'bcm' },
-            # 'Oil & Gas': { 'Global': 'mmboe' },
+            'Oil & Gas': { 'Global': 'PJ' },
             'Autos': { 'Global': 'pkm' },
             'Trucking': { 'Global': 'tkm' },
             'Cement': { 'Global': 't Cement' },

@@ -2,6 +2,7 @@
 This module handles initialization of pint functionality
 """
 
+import re
 import numpy as np
 import pandas as pd
 import pint
@@ -19,6 +20,9 @@ PintType.ureg = ureg
 PA_ = PintArray
 
 ureg.define("CO2e = CO2 = CO2eq = CO2_eq")
+# openscm_units does this for all gas species...we just have to keep up.
+ureg.define("tCO2e = t CO2e")
+
 ureg.define("LNG = 3.44 / 2.75 CH4")
 # with ureg.context("CH4_conversions"):
 #     print(ureg("t LNG").to("t CO2"))
@@ -45,7 +49,8 @@ ureg.define('fraction = [] = frac')
 ureg.define('percent = 1e-2 frac = pct = percentage')
 ureg.define('ppm = 1e-6 fraction')
 
-# USD are the reserve currency of the ITR tool
+# By default, USD are the reserve currency of the ITR tool.  But data template can change that
+base_currency_unit = 'USD'
 ureg.define("USD = [currency] = $")
 for currency_symbol, currency_abbrev in ITR.data.currency_dict.items():
     ureg.define(f"{currency_abbrev} = nan USD = {currency_symbol}")
@@ -67,6 +72,7 @@ ureg.define("scf = ft**3")
 ureg.define("mscf = 1000 scf = Mscf")
 ureg.define("mmscf = 1000000 scf = MMscf")
 ureg.define("bscf = 1000000000 scf = Bscf")
+ureg.define("MMMscf = 1000000000 scf")
 ureg.define("bcm = 1000000000 m**3")
 # ureg.define("bcm = 38.2 PJ") # Also bcm = 17 Mt CO2e, but that wrecks CO2e emissions intensities (which would devolve to dimensionless numbers)
 
@@ -376,6 +382,7 @@ schema_extra = dict(definitions=[
         ProductionQuantity=dict(type="string"),
         EI_Quantity=dict(type="string"),
         BenchmarkQuantity=dict(type="string"),
+        MonetaryQuantity=dict(type="string"),
     )
 ])
 
@@ -451,7 +458,7 @@ class EmissionsQuantity(Quantity):
         # the returned value will be ignored
         field_schema.update(
             # simplified regex here for brevity, see the wikipedia link above
-            dimensionaltiy='t CO2',
+            dimensionality='t CO2',
             # some example postcodes
             examples=['g CO2', 'kg CO2', 't CO2', 'Mt CO2'],
         )
@@ -504,7 +511,7 @@ class ProductionQuantity(str):
         # the returned value will be ignored
         field_schema.update(
             # simplified regex here for brevity, see the wikipedia link above
-            dimensionaltiy='[production_units]',
+            dimensionality='[production_units]',
             # some example postcodes
             examples=_production_units,
         )
@@ -561,7 +568,7 @@ class EI_Quantity(str):
         # the returned value will be ignored
         field_schema.update(
             # simplified regex here for brevity, see the wikipedia link above
-            dimensionaltiy='ei units',
+            dimensionality='ei units',
             # some example postcodes
             examples=_ei_units,
         )
@@ -618,7 +625,7 @@ class BenchmarkQuantity(str):
         # the returned value will be ignored
         field_schema.update(
             # simplified regex here for brevity, see the wikipedia link above
-            dimensionaltiy='ei units',
+            dimensionality='ei units',
             # some example postcodes
             examples=_ei_units,
         )
@@ -652,6 +659,63 @@ class BenchmarkQuantity(str):
         }
 
 
+class MonetaryQuantity(str):
+    """A method for making a pydantic compliant Pint Financial quantity (which is basically some amount of money denominated in a currency)."""
+
+    def __new__(cls, value, units=None):
+        # Re-used the instance we are passed.  Do we need to copy?
+        return value
+
+    @classmethod
+    def __get_validators__(cls):
+        # one or more validators may be yielded which will be called in the
+        # order to validate the input, each validator will receive as an input
+        # the value returned from the previous validator
+        yield cls.validate
+
+    @classmethod
+    def __modify_schema__(cls, field_schema):
+        # __modify_schema__ should mutate the dict it receives in place,
+        # the returned value will be ignored
+        field_schema.update(
+            # simplified regex here for brevity, see the wikipedia link above
+            dimensionality='[currency]',
+            # some example currencies
+            examples=['USD', 'EUR', 'JPY'],
+        )
+
+    @classmethod
+    def validate(cls, quantity):
+        if isinstance(quantity, str):
+            v, u = quantity.split(' ', 1)
+            try:
+                q = Q_(float(v), u)
+            except ValueError:
+                raise ValueError(f"cannot convert '{quantity}' to quantity")
+            quantity = q
+        if not isinstance(quantity, Quantity):
+            raise TypeError('pint.Quantity required')
+        try:
+            if quantity.is_compatible_with('USD'):
+                return quantity
+        except RecursionError:
+            breakpoint()
+        for currency in ITR.data.currency_dict.values():
+            if quantity.is_compatible_with(currency):
+                return quantity
+        raise DimensionalityError (quantity, 'USD', dim1='', dim2='', extra_msg=f"Dimensionality must be 'dimensionless' or compatible with [{ITR.data.currency_dict.values()}]")
+
+    def __repr__(self):
+        return f'MonetaryQuantity({super().__repr__()})'
+
+    class Config:
+        validate_assignment = True
+        schema_extra = schema_extra
+        json_encoders = {
+            Quantity: str,
+        }
+
+
 def asPintSeries(series: pd.Series, name=None, errors='ignore', inplace=False) -> pd.Series:
     """
     Parameters
@@ -670,6 +734,10 @@ def asPintSeries(series: pd.Series, name=None, errors='ignore', inplace=False) -
     Raises ValueError if there are more than one type of units in the series.
     Silently series if no conversion needed to be done.
     """
+
+    # FIXME: Errors in the imput template can trigger this assertion
+    assert not isinstance(series, pd.DataFrame)
+
     if series.dtype != 'O':
         if errors == 'ignore':
             return series
@@ -718,10 +786,35 @@ def asPintDataFrame(df: pd.DataFrame, errors='ignore', inplace=False) -> pd.Data
     else:
         new_df = pd.DataFrame()
     for col in df.columns:
-        new_df[col] = asPintSeries(df[col], name=col, errors=errors, inplace=inplace)
+        new_df[col] = asPintSeries(df[col].squeeze(), name=col, errors=errors, inplace=inplace)
     new_df.index = df.index
     # When DF.COLUMNS is a MultiIndex, the naive column-by-column construction replaces MultiIndex values
     # with the anonymous tuple of the MultiIndex and DF.COLUMNS becomes just an Index of tuples.
     # We need to restore the MultiIndex or lose information.
     new_df.columns = df.columns
     return new_df
+
+def requantify_df_from_columns(df: pd.DataFrame, inplace=False) -> pd.DataFrame:
+    """
+    Parameters
+    ----------
+    df: pd.DataFrame
+    inplace: bool, default False
+             If True, perform operation in-place.
+
+    Returns
+    -------
+    A pd.DataFrame with columns originally matching the pattern COLUMN_NAME [UNITS] renamed
+    to COLUMN_NAME and replaced with a PintArray with dtype=ureg(UNITS) (aka 'pint[UNITS]')
+    """
+    p = re.compile(r'^(.*)\s*\[(.*)\]\s*$')
+    if not inplace:
+        df = df.copy()
+    for column in df.columns:
+        m = p.match(column)
+        if m:
+            name = m.group(1).strip()
+            unit = m.group(2).strip()
+            df.rename(columns={column: name}, inplace=True)
+            df[name] = pd.Series(df[name], dtype='pint[' + unit + ']')
+    return df
