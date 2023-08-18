@@ -13,13 +13,15 @@ from ITR.interfaces import ICompanyData, ICompanyEIProjectionsScopes, ICompanyEI
 class ITR_Encoder(json.JSONEncoder):
     def default(self, q):
         if isinstance(q, Quantity):
-            if ITR.isnan(q.m):
+            if ITR.isna(q.m):
                 return f"nan {q.u}"
             return f"{q:.5f}"
         elif isinstance(q, EScope):
             return q.value
         elif isinstance(q, pd.Series):
-            res = pd.DataFrame(q.map(lambda x: f"nan {x.u}" if ITR.isnan(x.m) else f"{x:.5f}"), columns=['value']).reset_index().to_dict('records')
+            # Inside the map function NA values become float64 nans and lose their units
+            ser = q.map(lambda x: f"nan {q.pint.u}" if ITR.isna(x) else f"{x:.5f}")
+            res = pd.DataFrame(data={'year': ser.index, 'value': ser.values}).to_dict('records')
             return res
         else:
             super().default(q)
@@ -37,10 +39,14 @@ def assert_pint_series_equal(case: unittest.case, left: pd.Series, right: pd.Ser
     left_values = left.tolist()
     right_values = right.tolist()
     for i, value in enumerate(left_values):
-        case.assertAlmostEqual(value, right_values[i].to(value.u), places, msg, delta)
+        case.assertAlmostEqual(ITR.nominal_values(value.m),
+                               ITR.nominal_values(right_values[i].to(value.u).m),
+                               places, msg, delta)
 
     for i, value in enumerate(right_values):
-        case.assertAlmostEqual(value, left_values[i].to(value.u), places, msg, delta)
+        case.assertAlmostEqual(ITR.nominal_values(value.m),
+                               ITR.nominal_values(left_values[i].to(value.u).m),
+                               places, msg, delta)
 
 
 def assert_pint_frame_equal(case: unittest.case, left: pd.DataFrame, right: pd.DataFrame, places=7, msg=None, delta=None):
@@ -51,7 +57,9 @@ def assert_pint_frame_equal(case: unittest.case, left: pd.DataFrame, right: pd.D
     errors = []
     for d, data in enumerate(left_flat):
         try:
-            case.assertAlmostEqual(data, right_flat[d], places, msg, delta)
+            case.assertAlmostEqual(ITR.nominal_values(data.m),
+                                   ITR.nominal_values(right_flat[d].to(data.u).m),
+                                   places, msg, delta)
         except AssertionError as e:
             errors.append(e.args[0])
     if errors:
@@ -59,7 +67,9 @@ def assert_pint_frame_equal(case: unittest.case, left: pd.DataFrame, right: pd.D
 
     for d, data in enumerate(right_flat):
         try:
-            case.assertAlmostEqual(data, left_flat[d], places, msg, delta)
+            case.assertAlmostEqual(ITR.nominal_values(data.m),
+                                   ITR.nominal_values(left_flat[d].to(data.u).m),
+                                   places, msg, delta)
         except AssertionError as e:
             errors.append((e.args[0]))
     if errors:

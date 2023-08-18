@@ -106,8 +106,11 @@ def get_data(data_warehouse: DataWarehouse, portfolio: List[PortfolioCompany]) -
     # Until we have https://github.com/hgrecco/pint-pandas/pull/58...
     df_company_data.ghg_s1s2 = df_company_data.ghg_s1s2.astype('pint[Mt CO2e]')
     s3_data_invalid = df_company_data[ColumnsConfig.GHG_SCOPE3].isna()
-    df_company_data.loc[s3_data_invalid, ColumnsConfig.GHG_SCOPE3] = pd.Series([np.nan] * len(df_company_data), index=df_company_data.index).astype('pint[Mt CO2e]')
-    for col in [ColumnsConfig.GHG_SCOPE3, ColumnsConfig.CUMULATIVE_BUDGET, ColumnsConfig.CUMULATIVE_TARGET, ColumnsConfig.CUMULATIVE_TRAJECTORY]:
+    if len(s3_data_invalid[s3_data_invalid].index)>0:
+        df_company_data.loc[s3_data_invalid, ColumnsConfig.GHG_SCOPE3] = df_company_data.loc[s3_data_invalid, ColumnsConfig.GHG_SCOPE3].map(
+            lambda x: Q_(np.nan, 'Mt CO2e'))
+    for col in [ColumnsConfig.GHG_SCOPE3, ColumnsConfig.CUMULATIVE_BUDGET, ColumnsConfig.CUMULATIVE_SCALED_BUDGET,
+                ColumnsConfig.CUMULATIVE_TARGET, ColumnsConfig.CUMULATIVE_TRAJECTORY]:
         df_company_data[col] = df_company_data[col].astype('pint[Mt CO2e]')
     for col in [ColumnsConfig.COMPANY_REVENUE, ColumnsConfig.COMPANY_MARKET_CAP, ColumnsConfig.COMPANY_ENTERPRISE_VALUE, ColumnsConfig.COMPANY_EV_PLUS_CASH, ColumnsConfig.COMPANY_TOTAL_ASSETS, ColumnsConfig.COMPANY_CASH_EQUIVALENTS]:
         df_company_data[col] = asPintSeries(df_company_data[col])
@@ -160,18 +163,27 @@ def umean(unquantified_data):
     Assuming Gaussian statistics, uncertainties stem from Gaussian parent distributions. In such a case,
     it is standard to weight the measurements (nominal values) by the inverse variance.
 
+    Following the pattern of np.mean, this function is really nan_mean, meaning it calculates based on non-NaN values.
+    If there are no such, it returns np.nan, just like np.mean does with an empty array.
+
     This function uses error propagation on the to get an uncertainty of the weighted average.
     :param: A set of uncertainty values
     :return: The weighted mean of the values, with a freshly calculated error term
     """
     values = np.array(list(map(lambda v: v if isinstance(v, ITR.UFloat) else ITR.ufloat(v, 0), unquantified_data)))
-    epsilon = 1e-7
+    values_notnan = [v for v in values if not ITR.isnan(v)]
+    if sum([v.s for v in values_notnan])==0:
+        if len(values_notnan)==0:
+            return np.nan
+        return sum([v.n for v in values_notnan]) / len(values_notnan)
+    minval = min([abs(v.n) for v in values_notnan])
+    if minval==0:
+        epsilon = 1e-12
+    else:
+        epsilon = 1e-12 * minval
     wavg = ITR.ufloat(sum([v.n/(v.s**2+epsilon) for v in values])/sum([1/(v.s**2+epsilon) for v in values]), 
                       np.sqrt(len(values)/sum([1/(v.s**2+epsilon) for v in values])))
-    if wavg.s==0.0:
-        # Uncertainties of zero can unpromote back to floats
-        return wavg.n
-    elif wavg.s < epsilon:
+    if wavg.s <= sqrt(epsilon):
         logger.debug(f"Casting out small uncertainty {wavg.s} from {wavg}; epsilon = {epsilon}.")
         wavg = wavg.n
 
@@ -182,16 +194,16 @@ def uround(u, ndigits):
     """
     Round an uncertainty to ndigits.
     """
-    if ITR.isnan(u.n):
+    if np.isnan(u.n):
         return ITR._ufloat_nan
-    if ITR.isnan(u.s):
+    if np.isnan(u.s):
         return ITR.ufloat(round(u.n, ndigits), u.s)
     return ITR.ufloat(round(u.n, ndigits), round(u.s, ndigits))
 
 try:
-    import uncertainties as un
-    un.UFloat.__round__ = uround
-except (ImportError, ModuleNotFoundError):
+    import uncertainties
+    uncertainties.UFloat.__round__ = uround
+except (ImportError, ModuleNotFoundError, AttributeError):
     pass
 
 

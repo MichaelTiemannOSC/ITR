@@ -66,6 +66,7 @@ ureg.define("mmbtu = 1e6 btu")
 ureg.define("boe = 6.1178632 GJ = BoE")
 ureg.define("mboe = 1e3 boe")
 ureg.define("mmboe = 1e6 boe")
+ureg.define("Mbbl = 1e3 bbl")
 ureg.define("MMbbl = 1e6 bbl")
 
 ureg.define("scf = ft**3")
@@ -234,7 +235,7 @@ ureg.define("Fe_ton = t Steel")
 # List of all the production units we know
 _production_units = [ "Wh", "pkm", "tkm", "bcm CH4", "bbl", "boe", 't Alloys', "t Aluminum", "t Cement", "t Coal", "t Copper",
                       "t Paper", "t Steel", "USD", "m**2", 't Biofuel', 't Petrochemicals', 't Petroleum' ]
-_ei_units = [f"t CO2/({pu})" if ' ' in pu else f"t CO2/{pu}" for pu in _production_units]
+_ei_units = [f"t CO2e/({pu})" if ' ' in pu else f"t CO2e/{pu}" for pu in _production_units]
 
 class ProductionMetric(str):
     """
@@ -532,9 +533,13 @@ class ProductionQuantity(str):
         for pu in _production_units:
             if quantity.is_compatible_with(pu):
                 return quantity
+        try:
             quantity_as_annual = convert_to_annual(quantity, errors='ignore')
-            if quantity_as_annual.is_compatible_with(pu):
-                return quantity_as_annual
+            for pu in _production_units:
+                if quantity_as_annual.is_compatible_with(pu):
+                    return quantity_as_annual
+        except DimensionalityError:
+            pass
         raise DimensionalityError (quantity, str(_production_units), dim1='', dim2='', extra_msg=f"Dimensionality must be compatible with [{_production_units}]")
 
     def __repr__(self):
@@ -575,8 +580,6 @@ class EI_Quantity(str):
 
     @classmethod
     def validate(cls, quantity):
-        if quantity is None:
-            raise ValueError
         if isinstance(quantity, str):
             v, u = quantity.split(' ', 1)
             try:
@@ -584,14 +587,18 @@ class EI_Quantity(str):
             except ValueError:
                 raise ValueError(f"cannot convert '{quantity}' to quantity")
             quantity = q
-        if not isinstance(quantity, Quantity):
+        elif not isinstance(quantity, Quantity):
             raise TypeError('pint.Quantity required')
         for ei_u in _ei_units:
             if quantity.is_compatible_with(ei_u):
                 return quantity
-            quantity_as_annual = convert_to_annual(quantity, errors='ignore')
-            if quantity_as_annual.is_compatible_with(ei_u):
-                return quantity_as_annual
+        try:
+            quantity_as_annual = convert_to_annual(quantity, errors='raise')
+            for ei_u in _ei_units:
+                if quantity_as_annual.is_compatible_with(ei_u):
+                    return quantity_as_annual
+        except DimensionalityError:
+            pass
         raise DimensionalityError (quantity, str(_ei_units), dim1='', dim2='', extra_msg=f"Dimensionality must be compatible with [{_ei_units}]")
 
     def __repr__(self):
@@ -699,7 +706,8 @@ class MonetaryQuantity(str):
             if quantity.is_compatible_with('USD'):
                 return quantity
         except RecursionError:
-            breakpoint()
+            # breakpoint()
+            raise
         for currency in ITR.data.currency_dict.values():
             if quantity.is_compatible_with(currency):
                 return quantity
@@ -736,7 +744,9 @@ def asPintSeries(series: pd.Series, name=None, errors='ignore', inplace=False) -
     """
 
     # FIXME: Errors in the imput template can trigger this assertion
-    assert not isinstance(series, pd.DataFrame)
+    if isinstance(series, pd.DataFrame):
+        assert len(series)==1
+        series = series.iloc[0]
 
     if series.dtype != 'O':
         if errors == 'ignore':
@@ -748,7 +758,7 @@ def asPintSeries(series: pd.Series, name=None, errors='ignore', inplace=False) -
         else:
             raise ValueError ("Series not dtype('O')")
     # NA_VALUEs are true NaNs, missing units
-    na_values = series.isna()
+    na_values = ITR.isna(series)
     units = series[~na_values].map(lambda x: x.u if isinstance(x, Quantity) else None)
     unit_first_idx = units.first_valid_index()
     if unit_first_idx is None:
@@ -764,7 +774,8 @@ def asPintSeries(series: pd.Series, name=None, errors='ignore', inplace=False) -
     if name:
         new_series.name = name
     na_index = na_values[na_values].index
-    new_series.loc[na_index] = pd.Series(Q_(np.nan, unit), index=na_index)
+    if len(na_index)>0:
+        new_series.loc[na_index] = new_series.loc[na_index].map(lambda x: Q_(np.nan, unit))
     return new_series.astype(f"pint[{unit}]")
 
 def asPintDataFrame(df: pd.DataFrame, errors='ignore', inplace=False) -> pd.DataFrame:
@@ -786,7 +797,7 @@ def asPintDataFrame(df: pd.DataFrame, errors='ignore', inplace=False) -> pd.Data
     else:
         new_df = pd.DataFrame()
     for col in df.columns:
-        new_df[col] = asPintSeries(df[col].squeeze(), name=col, errors=errors, inplace=inplace)
+        new_df[col] = asPintSeries(df[col], name=col, errors=errors, inplace=inplace)
     new_df.index = df.index
     # When DF.COLUMNS is a MultiIndex, the naive column-by-column construction replaces MultiIndex values
     # with the anonymous tuple of the MultiIndex and DF.COLUMNS becomes just an Index of tuples.
@@ -813,8 +824,8 @@ def requantify_df_from_columns(df: pd.DataFrame, inplace=False) -> pd.DataFrame:
     for column in df.columns:
         m = p.match(column)
         if m:
-            name = m.group(1).strip()
+            col = m.group(1).strip()
             unit = m.group(2).strip()
-            df.rename(columns={column: name}, inplace=True)
-            df[name] = pd.Series(df[name], dtype='pint[' + unit + ']')
+            df.rename(columns={column: col}, inplace=True)
+            df[col] = pd.Series(PA_(df[col], unit))
     return df

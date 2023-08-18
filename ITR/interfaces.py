@@ -23,7 +23,8 @@ LoggingConfig.add_config_to_logger(logger)
 
 import pint
 from pint.errors import DimensionalityError
-import pint_pandas
+from pint_pandas import PintType
+from pint_pandas.pint_array import PintSeriesAccessor
 
 class SortableEnum(Enum):
     def __str__(self):
@@ -273,7 +274,7 @@ class ICompanyEIProjection(BaseModel):
     def __eq__(self, o):
         if self.year != o.year:
             raise ValueError(f"EI Projection years not aligned for __eq__(): {self.year} vs. {o.year}")
-        if ITR.isnan(self.value.m) and ITR.isnan(o.value.m):
+        if ITR.isna(self.value.m) and ITR.isna(o.value.m):
             return True
         return self.value == o.value
 
@@ -282,7 +283,7 @@ class ICompanyEIProjection(BaseModel):
             # breakpoint()
             raise ValueError(f"EI Projection years not aligned for add(): {self.year} vs. {o.year}")
         return ICompanyEIProjection(year=self.year,
-                                    value = self.value + (0 if ITR.isnan(o.value.m) else o.value))
+                                    value = self.value if ITR.isna(o.value.m) else self.value + o.value.to(self.value.units))
 
     def min(self, o):
         if self.year != o.year:
@@ -298,9 +299,9 @@ class ICompanyEIProjections(BaseModel):
 
     def __str__(self):
         # Work-around for https://github.com/hgrecco/pint/issues/1687
-        ei_metric = str(ureg.parse_units(self.ei_metric))
-        series = (lambda z: (idx:=z[0], values:=z[1], pd.Series(PA_(values, dtype=f"pint[{ei_metric}]"), index=idx))[-1]) \
-                 (list (zip(*[(x.year, round(x.value.m_as(ei_metric), 4)) for x in self.projections])) )
+        ei_metric = ureg.parse_units(self.ei_metric)
+        series = (lambda z: (idx:=z[0], values:=z[1], pd.Series(PA_(np.asarray(values), dtype=str(ei_metric)), index=idx))[-1]) \
+                 (list (zip(*[(x.year, round(ITR.Q_m_as(x.value, ei_metric), 4)) for x in self.projections])) )
         return str(series)
 
 class DF_ICompanyEIProjections(BaseModel):
@@ -312,7 +313,7 @@ class DF_ICompanyEIProjections(BaseModel):
 
     @validator('projections')
     def allow_projections(cls, v):
-        if isinstance(v.pint, pint_pandas.pint_array.PintSeriesAccessor):
+        if isinstance(v.pint, PintSeriesAccessor):
             return v
         raise ValidationError(f"{v} is not composed of a PintArray")
 
@@ -330,11 +331,11 @@ class DF_ICompanyEIProjections(BaseModel):
                 projections = None
         if projections_gen is not None:
             # Work-around for https://github.com/hgrecco/pint/issues/1687
-            ei_metric = str(ureg.parse_units(ei_metric))
-            years, values = list( map(list, zip(*[(x['year'], np.nan if x['value'] is None else pint.Quantity(x['value']).m_as(ei_metric))
+            ei_metric = ureg.parse_units(ei_metric)
+            years, values = list( map(list, zip(*[(x['year'], np.nan if x['value'] is None else ITR.Q_m_as(x['value'], ei_metric, inplace=True))
                                                   for x in projections_gen])) )
-            projections = pd.Series(PA_(values, dtype=ei_metric), index=pd.Index(years, name='year'), name='value')
-        super().__init__(ei_metric=ei_metric, projections=projections)
+            projections = pd.Series(PA_(np.asarray(values), dtype=str(ei_metric)), index=pd.Index(years, name='year'), name='value')
+        super().__init__(ei_metric=str(ei_metric), projections=projections)
 
 
 class ICompanyEIProjectionsScopes(BaseModel):
@@ -355,7 +356,10 @@ class ICompanyEIProjectionsScopes(BaseModel):
             elif isinstance(v, ICompanyEIProjections):
                 setattr(self, k, DF_ICompanyEIProjections(icompany_ei_projections=v))
             elif isinstance(v, pd.Series):
-                setattr(self, k, DF_ICompanyEIProjections(ei_metric=EI_Metric(str(v.dtype)), projections=v))
+                ei_metric = EI_Metric(str(v.dtype))
+                if ei_metric.startswith('pint['):
+                    ei_metric = ei_metric[5:-1]
+                setattr(self, k, DF_ICompanyEIProjections(ei_metric=ei_metric, projections=v))
             elif isinstance(v, DF_ICompanyEIProjections) or v is None:
                 setattr(self, k, v)
             else:
@@ -387,14 +391,14 @@ class IEmissionRealization(BaseModel):
 
     def __eq__(self, o):
         assert self.year==o.year
-        if ITR.isnan(self.value.m) and ITR.isnan(o.value.m):
+        if ITR.isna(self.value.m) and ITR.isna(o.value.m):
             return True
         return self.value == o.value
 
     def add(self, o):
         assert self.year==o.year
         return IEmissionRealization(year=self.year,
-                                    value = self.value + (0 if ITR.isnan(o.value.m) else o.value))
+                                    value = self.value if ITR.isna(o.value.m) else self.value + o.value.to(self.value.units))
 
 
 class IHistoricEmissionsScopes(BaseModel):
@@ -408,8 +412,8 @@ class IHistoricEmissionsScopes(BaseModel):
         return getattr(self, item)
 
     def __str__(self):
-        dict_items = {scope: (lambda z: (idx:=z[0], values:=z[1], pd.Series(PA_(values, dtype=f"pint[Mt CO2e]"), index=idx))[-1])
-                             (list(zip(*[(x.year, round(x.value.m_as('Mt CO2e'), 4)) for x in getattr(self, scope)])))
+        dict_items = {scope: (lambda z: (idx:=z[0], values:=z[1], pd.Series(PA_(np.asarray(values), dtype="Mt CO2e"), index=idx))[-1])
+                             (list(zip(*[(x.year, round(x.value.to('Mt CO2e').m, 4)) for x in getattr(self, scope)])))
                       for scope in ['S1', 'S2', 'S1S2', 'S3', 'S1S2S3']
                       if getattr(self, scope) is not None}
         return str(pd.DataFrame.from_dict(dict_items))
@@ -423,14 +427,14 @@ class IEIRealization(BaseModel):
 
     def __eq__(self, o):
         assert self.year==o.year
-        if ITR.isnan(self.value.m) and ITR.isnan(o.value.m):
+        if ITR.isna(self.value.m) and ITR.isna(o.value.m):
             return True
         return self.value == o.value
 
     def add(self, o):
         assert self.year==o.year
         return IEIRealization(year=self.year,
-                              value = self.value + (0 if ITR.isnan(o.value.m) else o.value))
+                              value = self.value if ITR.isna(o.value.m) else self.value + o.value.to(self.value.units))
 
 
 class IHistoricEIScopes(BaseModel):
@@ -444,8 +448,8 @@ class IHistoricEIScopes(BaseModel):
         return getattr(self, item)
 
     def __str__(self):
-        dict_items = {scope: (lambda z: (idx:=z[0], values:=z[1], pd.Series(PA_(values, dtype=f"pint[{ei_metric}]"), index=idx))[-1])
-                             (list(zip(*[(x.year, round(x.value.m_as(ei_metric), 4)) for x in getattr(self, scope)])))
+        dict_items = {scope: (lambda z: (idx:=z[0], values:=z[1], pd.Series(PA_(np.asarray(values), dtype=ei_metric), index=idx))[-1])
+                             (list(zip(*[(x.year, round(x.value.to(ei_metric).m, 4)) for x in getattr(self, scope)])))
                       for scope in ['S1', 'S2', 'S1S2', 'S3', 'S1S2S3']
                       # Work-around for https://github.com/hgrecco/pint/issues/1687
                       for ei_metric in [ str(ureg.parse_units(getattr(self, scope).ei_metric)) ]
@@ -488,7 +492,9 @@ class ICompanyData(BaseModel):
 
     sector: str  # TODO: make SortableEnums
     region: str  # TODO: make SortableEnums
-    target_probability: float = 0.5
+    # TemperatureScoreConfig.CONTROLS_CONFIG.target_probability is not company-specific,
+    # while target_probability in ICompanyData is company-specific
+    target_probability: float = np.nan
 
     target_data: Optional[List[ITargetData]]
     historic_data: Optional[IHistoricData] # IHistoric data can contain None values; need to convert to Quantified NaNs
@@ -560,8 +566,8 @@ class ICompanyData(BaseModel):
             raise ValueError(f"No source of production metrics for {self.company_name}")
         return units        
 
-    def _get_base_realization_from_historic(self, realized_values: List[BaseModel], units, base_year=None):
-        valid_realizations = [rv for rv in realized_values if rv.value is not None and not ITR.isnan(rv.value.magnitude)]
+    def _get_base_realization_from_historic(self, realized_values: List[BaseModel], metric, base_year=None):
+        valid_realizations = [rv for rv in realized_values if not ITR.isna(rv.value)]
         if not valid_realizations:
             retval = realized_values[0].copy()
             retval.year = None
@@ -571,27 +577,32 @@ class ICompanyData(BaseModel):
             retval = realized_values[0].copy()
             retval.year = base_year
             # FIXME: Unless and until we accept uncertainties as input, rather than computed data, we don't need to make this a UFloat here
-            retval.value = Q_(np.nan, units)
+            retval.value = PintType(metric).na_value
             return retval
         return valid_realizations[0]
 
     def _normalize_historic_data(self, historic_data: IHistoricData, production_metric: ProductionMetric, emissions_metric: EmissionsMetric) -> IHistoricData:
         def _normalize(value, metric):
             if value is not None:
+                if value.u==metric:
+                    return value
+                if ITR.isna(value):
+                    return PintType(metric).na_value
                 # We've pre-conditioned metric so don't need to work around https://github.com/hgrecco/pint/issues/1687
                 return value.to(metric)
-            return Q_(np.nan, metric)
+            return PintType(metric).na_value
         
         if historic_data is None:
             return None
 
         if historic_data.productions:
             # Work-around for https://github.com/hgrecco/pint/issues/1687
-            production_metric = str(ureg.parse_units(production_metric))
-            historic_data.productions = [IProductionRealization(year=p.year, value=_normalize (p.value, production_metric))
+            production_metric = ureg.parse_units(production_metric)  # Catch things like '$'
+            historic_data.productions = [IProductionRealization(year=p.year, value=_normalize(p.value, production_metric))
                                          for p in historic_data.productions]
         # Work-around for https://github.com/hgrecco/pint/issues/1687
-        ei_metric = str(ureg.parse_units(f"{emissions_metric} / ({production_metric})"))
+        # emissions_metric = ureg(emissions_metric).u
+        ei_metric = ureg.parse_units(f"{emissions_metric} / ({production_metric})")
         for scope_name in EScope.get_scopes():
             if historic_data.emissions:
                 setattr(historic_data.emissions, scope_name, [IEmissionRealization(year=p.year, value=_normalize(p.value, emissions_metric))
@@ -633,33 +644,33 @@ class ICompanyData(BaseModel):
         # Right now historic_data comes in via template.py ESG data
         elif self.historic_data.productions:
             # TODO: This is a hack to get things going.
-            base_realization = self._get_base_realization_from_historic(self.historic_data.productions, str(self.production_metric), base_year)
+            base_realization = self._get_base_realization_from_historic(self.historic_data.productions, self.production_metric, base_year)
             base_year = base_realization.year
             self.base_year_production = base_realization.value
         else:
             logger.warning(f"missing historic data for base_year_production for {self.company_name}")
-            self.base_year_production = Q_(np.nan, str(self.production_metric))
+            self.base_year_production = PintType(self.production_metric).na_value
         if self.ghg_s1s2 is None and self.historic_data.emissions:
             if self.historic_data.emissions.S1S2:
-                base_realization = self._get_base_realization_from_historic(self.historic_data.emissions.S1S2, str(self.emissions_metric), base_year)
+                base_realization = self._get_base_realization_from_historic(self.historic_data.emissions.S1S2, self.emissions_metric, base_year)
                 base_year = base_year or base_realization.year
                 self.ghg_s1s2 = base_realization.value
             elif self.historic_data.emissions.S1 and self.historic_data.emissions.S2:
-                base_realization_s1 = self._get_base_realization_from_historic(self.historic_data.emissions.S1, str(self.emissions_metric), base_year)
-                base_realization_s2 = self._get_base_realization_from_historic(self.historic_data.emissions.S2, str(self.emissions_metric), base_year)
+                base_realization_s1 = self._get_base_realization_from_historic(self.historic_data.emissions.S1, self.emissions_metric, base_year)
+                base_realization_s2 = self._get_base_realization_from_historic(self.historic_data.emissions.S2, self.emissions_metric, base_year)
                 base_year = base_year or base_realization_s1.year
                 if base_realization_s1.value is not None and base_realization_s2.value is not None:
                     self.ghg_s1s2 = base_realization_s1.value + base_realization_s2.value
         if self.ghg_s1s2 is None and self.historic_data.emissions_intensities:
-            intensity_units = (Q_(self.emissions_metric) / Q_(self.production_metric)).units
+            intensity_metric = ureg.parse_units(f"({self.emissions_metric}) / ({self.production_metric})")
             if self.historic_data.emissions_intensities.S1S2:
-                base_realization = self._get_base_realization_from_historic(self.historic_data.emissions_intensities.S1S2, intensity_units, base_year)
+                base_realization = self._get_base_realization_from_historic(self.historic_data.emissions_intensities.S1S2, intensity_metric, base_year)
                 base_year = base_year or base_realization.year
                 if base_realization.value is not None:
                     self.ghg_s1s2 = base_realization.value * self.base_year_production
             elif self.historic_data.emissions_intensities.S1 and self.historic_data.emissions_intensities.S2:
-                base_realization_s1 = self._get_base_realization_from_historic(self.historic_data.emissions_intensities.S1, intensity_units, base_year)
-                base_realization_s2 = self._get_base_realization_from_historic(self.historic_data.emissions_intensities.S2, intensity_units, base_year)
+                base_realization_s1 = self._get_base_realization_from_historic(self.historic_data.emissions_intensities.S1, intensity_metric, base_year)
+                base_realization_s2 = self._get_base_realization_from_historic(self.historic_data.emissions_intensities.S2, intensity_metric, base_year)
                 base_year = base_year or base_realization_s1.year
                 if base_realization_s1.value is not None and base_realization_s2.value is not None:
                     self.ghg_s1s2 = (base_realization_s1.value + base_realization_s2.value) * self.base_year_production
@@ -668,12 +679,12 @@ class ICompanyData(BaseModel):
         if self.ghg_s1s2 is None:
             raise ValueError(f"missing historic emissions or intensity data to calculate ghg_s1s2 for {self.company_name}")
         if self.ghg_s3 is None and self.historic_data.emissions and self.historic_data.emissions.S3:
-            base_realization_s3 = self._get_base_realization_from_historic(self.historic_data.emissions.S3, str(self.emissions_metric), base_year)
+            base_realization_s3 = self._get_base_realization_from_historic(self.historic_data.emissions.S3, self.emissions_metric, base_year)
             self.ghg_s3 = base_realization_s3.value
         if self.ghg_s3 is None and self.historic_data.emissions_intensities:
             if self.historic_data.emissions_intensities.S3:
-                intensity_units = (Q_(self.emissions_metric) / Q_(self.production_metric)).units
-                base_realization_s3 = self._get_base_realization_from_historic(self.historic_data.emissions_intensities.S3, intensity_units, base_year)
+                intensity_metric = ureg.parse_units(f"({self.emissions_metric}) / ({self.production_metric})")
+                base_realization_s3 = self._get_base_realization_from_historic(self.historic_data.emissions_intensities.S3, intensity_metric, base_year)
                 if base_realization_s3.value is not None:
                     self.ghg_s3 = base_realization_s3.value * self.base_year_production
 
@@ -681,6 +692,7 @@ class ICompanyData(BaseModel):
 # These aggregate terms are all derived from the benchmark being used
 class ICompanyAggregates(ICompanyData):
     cumulative_budget: Optional[EmissionsQuantity]
+    cumulative_scaled_budget: Optional[EmissionsQuantity]
     cumulative_trajectory: Optional[EmissionsQuantity]
     cumulative_target: Optional[EmissionsQuantity]
     benchmark_temperature: Optional[quantity('delta_degC')]
@@ -707,11 +719,16 @@ class ICompanyAggregates(ICompanyData):
 
     @classmethod
     def from_ICompanyData(cls, super_instance, scope_company_data):
+        '''
+        Fast way to add instance variables to a pre-validated SUPER_INSTANCE
+        SCOPE_COMPANY_DATA is the dictionary of the new values we want to add...for this one company
+        '''
         # FIXME: Would love to know how to run these automatically...
         EmissionsQuantity.validate(scope_company_data['cumulative_budget'])
-        if scope_company_data['cumulative_trajectory']:
+        EmissionsQuantity.validate(scope_company_data['cumulative_scaled_budget'])
+        if not ITR.isna(scope_company_data['cumulative_trajectory']):
             EmissionsQuantity.validate(scope_company_data['cumulative_trajectory'])
-        if scope_company_data['cumulative_target']:
+        if not ITR.isna(scope_company_data['cumulative_target']):
             EmissionsQuantity.validate(scope_company_data['cumulative_target'])
         if not Q_(scope_company_data['benchmark_temperature']).is_compatible_with(ureg('delta_degC')):
             raise ValueError(f"benchmark temperature {scope_company_data['benchmark_temperature']} is not compatible with delta_degC")
@@ -720,9 +737,9 @@ class ICompanyAggregates(ICompanyData):
         EmissionsQuantity.validate(scope_company_data['benchmark_global_budget'])
         if not isinstance(scope_company_data['scope'], EScope):
             raise ValueError(f"scope {scope_company_data['scope']} is not a valid scope")
-        if not pd.isna(scope_company_data['trajectory_exceedance_year']) and not isinstance(scope_company_data['trajectory_exceedance_year'], int):
+        if not ITR.isna(scope_company_data['trajectory_exceedance_year']) and not isinstance(scope_company_data['trajectory_exceedance_year'], int):
             raise ValueError(f"scope {scope_company_data['trajectory_exceedance_year']} is not a valid trajectory exceedance year value")
-        if not pd.isna(scope_company_data['target_exceedance_year']) and not isinstance(scope_company_data['target_exceedance_year'], int):
+        if not ITR.isna(scope_company_data['target_exceedance_year']) and not isinstance(scope_company_data['target_exceedance_year'], int):
             raise ValueError(f"scope {scope_company_data['target_exceedance_year']} is not a valid target exceedance year value")
         # ...while not re-running any validation on super_instnace
         return cls.construct(**scope_company_data, **super_instance.__dict__)

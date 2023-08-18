@@ -27,7 +27,7 @@ import plotly.graph_objects as go
 
 import ITR
 
-from ITR.configs import ITR_median, ITR_mean
+from ITR.configs import ITR_median, ITR_mean, ColumnsConfig, TemperatureScoreConfig
 from ITR.data.data_warehouse import DataWarehouse
 from ITR.portfolio_aggregation import PortfolioAggregationMethod
 from ITR.temperature_score import TemperatureScore
@@ -85,35 +85,13 @@ benchmark_prod_json = os.path.join(root, examples_dir, data_dir, data_json_units
 with open(benchmark_prod_json) as json_file:
     parsed_json = json.load(json_file)
 
-oil_prod_bm = [bm for bm in parsed_json['AnyScope']['benchmarks'] if bm['sector']=='Oil'][0]
-oil_base_prod = ureg(oil_prod_bm['base_year_production']).to('MJ')
-oil_prod_series = pd.DataFrame({**{'year': [oil_prod['year'] for oil_prod in oil_prod_bm['projections_nounits']]},
-                                **{'value': [oil_prod['value'] for oil_prod in oil_prod_bm['projections_nounits']]}}).set_index('year').squeeze()
-oil_prod_series = oil_prod_series.add(1).cumprod().mul(oil_base_prod.m)
-
-gas_prod_bm = [bm for bm in parsed_json['AnyScope']['benchmarks'] if bm['sector']=='Gas'][0]
-gas_base_prod = ureg(gas_prod_bm['base_year_production']).to('MJ')
-gas_prod_series = pd.DataFrame({**{'year': [gas_prod['year'] for gas_prod in gas_prod_bm['projections_nounits']]},
-                                **{'value': [gas_prod['value'] for gas_prod in gas_prod_bm['projections_nounits']]}}).set_index('year').squeeze()
-gas_prod_series = gas_prod_series.add(1).cumprod().mul(gas_base_prod.m)
-
-oil_and_gas_prod_series = oil_prod_series.add(gas_prod_series).div(oil_base_prod.m + gas_base_prod.m)
-oil_and_gas_prod_series = oil_and_gas_prod_series.div(oil_and_gas_prod_series.shift(1))
-oil_and_gas_prod_series.iloc[0] = 1.0
-oil_and_gas_prod_series = oil_and_gas_prod_series.sub(1)
-
-oil_and_gas_bm = dict(oil_prod_bm)
-oil_and_gas_bm['sector'] = 'Oil & Gas'
-oil_and_gas_bm['base_year_production'] = f"{oil_base_prod + gas_base_prod:~P}"
-oil_and_gas_bm['projections_nounits'] = [ {'year': year, 'value': value} for year,value in oil_and_gas_prod_series.to_dict().items() ]
-parsed_json['AnyScope']['benchmarks'].append(oil_and_gas_bm)
-
-# coal_prod_bm = dict([bm for bm in parsed_json['AnyScope']['benchmarks'] if bm['sector']=='Coal'][0])
-# coal_base_prod = ureg(coal_prod_bm['base_year_production']).to('MJ')
-
-# coal_prod_bm['sector'] = 'Diversified Mining'
-# coal_prod_bm['base_year_production'] = f"{coal_base_prod:~P}"
-# parsed_json['AnyScope']['benchmarks'].append(coal_prod_bm)
+# coal_prod_bm_regions = [bm for bm in parsed_json['AnyScope']['benchmarks'] if bm['sector']=='Coal']
+# 
+# for coal_prod_bm in coal_prod_bm_regions:
+#     coal_base_prod = ureg(coal_prod_bm['base_year_production']).to('MJ')
+#     coal_prod_bm['sector'] = 'Diversified Mining'
+#     coal_prod_bm['base_year_production'] = f"{coal_base_prod:~P}"
+#     parsed_json['AnyScope']['benchmarks'].append(coal_prod_bm)
 
 prod_bms = IProductionBenchmarkScopes.parse_obj(parsed_json)
 base_production_bm = BaseProviderProductionBenchmark(production_benchmarks=prod_bms)
@@ -204,7 +182,7 @@ def get_co2_per_sector_region_scope(prod_bm, ei_df, sector, region, scope_list) 
         raise ValueError(f"Scope {sector_scope.name} not in benchmark for sector {sector}")
 
     intensity_df = ei_df.loc[(sector, region, sector_scope)]
-    target_year_cum_co2 = base_prod_ser.mul(intensity_df).cumsum().astype('pint[Gt CO2e]')
+    target_year_cum_co2 = base_prod_ser.mul(intensity_df).pint.m_as('Gt CO2e').cumsum().astype('pint[Gt CO2e]')
     return target_year_cum_co2
 
 energy_activities = {'Energy', 'Coal', 'Gas', 'Oil', 'Oil & Gas'}
@@ -250,6 +228,16 @@ def get_co2_in_sectors_region_scope(prod_bm, ei_df, sectors, region, scope_list)
     utility_sectors = sectors & utility_activities
     end_use_sectors = sectors - energy_sectors - utility_sectors
 
+    def co2_sum_across(df: pd.DataFrame) -> pd.Series:
+        ser = df.iloc[:, 0]
+        if len(df.columns)==1:
+            return ser
+        col_units = ser.dtype
+        ser = ser.pint.m
+        for i in range(1, len(df.columns)):
+            ser = ser + df.iloc[:, i].pint.m_as(str(col_units.units))
+        return ser.astype(str(col_units))
+
     if (not energy_sectors) + (not utility_sectors) + (not end_use_sectors) == 2:
         # All sectors are in a single activity, so aggregate by scope.  Caller sets scope!
         if len(sectors)==1:
@@ -258,7 +246,7 @@ def get_co2_in_sectors_region_scope(prod_bm, ei_df, sectors, region, scope_list)
         if scope_list and (scope_list[0] in [ EScope.S1S2, EScope.S1S2S3 ]):
             co2_s1s2_elements = try_get_co2(prod_bm, ei_df, sectors, region, [ EScope.S1S2 ] )
             if co2_s1s2_elements:
-                total_co2_s1s2 = pd.concat(co2_s1s2_elements, axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+                total_co2_s1s2 = co2_sum_across(pd.concat(co2_s1s2_elements, axis=1))
             else:
                 raise ValueError(f"no benchmark emissions for {sectors} in scope")
             if sectors & {'Utilities'}:
@@ -277,17 +265,17 @@ def get_co2_in_sectors_region_scope(prod_bm, ei_df, sectors, region, scope_list)
                 else:
                     total_co2_s3_elements = try_get_co2(prod_bm, ei_df, utility_sectors, region, [ EScope.S3 ] )
                 if total_co2_s3_elements:
-                    total_co2_s3 = pd.concat(total_co2_s3_elements, axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+                    total_co2_s3 = co2_sum_across(pd.concat(total_co2_s3_elements, axis=1))
                     total_co2 = total_co2 + total_co2_s3
             return total_co2
         # At this point, either scope_list is None, meaning fish out TPI metrics, or S1, S2, or S3, all of which aggregate within activity under OECM
-        return pd.concat( try_get_co2(prod_bm, ei_df, sectors, region, scope_list ), axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+        return co2_sum_across(pd.concat( try_get_co2(prod_bm, ei_df, sectors, region, scope_list ), axis=1))
     # Multi-activity case, so SCOPE sets the rules for OECM
     if scope_list:
         if scope_list[0] in [ EScope.S1S2, EScope.S1S2S3 ]:
             co2_s1s2_elements = try_get_co2(prod_bm, ei_df, sectors, region, [ EScope.S1S2 ] )
             if co2_s1s2_elements:
-                total_co2_s1s2 = pd.concat(co2_s1s2_elements, axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+                total_co2_s1s2 = co2_sum_across(pd.concat(co2_s1s2_elements, axis=1))
             else:
                 raise ValueError(f"No S1S2 data for sectors {sectors}")
             # Now subtract out the S1 from Power Generation so we don't double-count that
@@ -301,11 +289,11 @@ def get_co2_in_sectors_region_scope(prod_bm, ei_df, sectors, region, scope_list)
             if EScope.S1S2S3 in scope_list:
                 total_co2_s3_elements = try_get_co2(prod_bm, ei_df, sectors & end_use_s3_activities, region, [ EScope.S3] )
                 if total_co2_s3_elements:
-                    total_co2_s3 = pd.concat(total_co2_s3_elements, axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+                    total_co2_s3 = co2_sum_across(pd.concat(total_co2_s3_elements, axis=1))
                     total_co2 = total_co2.add(total_co2_s3)
             return total_co2
     # Must be S1 or S2 by itself (or scope_list is None, meaning whatever scope can be found).  try_get_co2 will deal with S3 case.
-    total_co2 = pd.concat(try_get_co2(prod_bm, ei_df, sectors, region, scope_list ), axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+    total_co2 = co2_sum_across(pd.concat(try_get_co2(prod_bm, ei_df, sectors, region, scope_list ), axis=1))
     return total_co2
 
 # nice cheatsheet for managing layout via className attribute: https://hackerthemes.com/bootstrap-cheatsheet/
@@ -319,7 +307,7 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], # theme s
 app.title = "ITR Tool" # this puts text to the browser tab
 server = app.server
 
-filter_width = 6
+filter_width = 10
 filter_box = dbc.Row( # We are a row of the left-side column box
     children=[
         dbc.Row(
@@ -334,7 +322,7 @@ filter_box = dbc.Row( # We are a row of the left-side column box
                         dbc.Popover(dbc.PopoverBody(
                             "Focus on companies from portfolio with specific temperature score"), id="hover2",
                                     target="hover-target2", trigger="hover"),
-                    ], width=2, align="center",
+                    ], width=2, #align="center",
                 ),
             ],
             align="center",
@@ -397,7 +385,8 @@ filter_box = dbc.Row( # We are a row of the left-side column box
     ],
 )
 
-benchmark_width = 6
+
+benchmark_width = 10
 benchmark_box = dbc.Row(
     children=[
         dbc.Row(  # Select Benchmark
@@ -464,6 +453,60 @@ benchmark_box = dbc.Row(
             inline=True,
         ),
         html.Hr(),  # small space from the top
+        dbc.Row(  # Set ProjectionControls TARGET_YEAR
+            [
+                dbc.Col(
+                    dbc.Label("\N{wrench} Select projection end year (2025-2050)"),
+                    width=benchmark_width,
+                ),
+                dbc.Col(
+                    [
+                        dbc.Button("\N{calendar}", id="hover-target9", color="link", n_clicks=0),
+                        dbc.Popover(dbc.PopoverBody(
+                            "Select the ending year of the benchmark analysis"),
+                                    id="hover9", target="hover-target9", trigger="hover"),
+                    ], width=4,
+                ),
+            ],
+            align="center",
+        ),
+        dcc.Slider(
+            id="target-year",
+            min=2025, max=2050,
+            value=2050,
+            step=5,
+            marks={i: str(i) for i in range(2025, 2051, 5)},
+        ),
+        html.Div(id="bm-budgets-target-year"),
+        html.Hr(),  # small space from the top
+        dbc.Row(  # Absolute vs. Contraction budget methodology
+            [
+                dbc.Col(
+                    dbc.Label("\N{Sun Behind Cloud} Select budget methodology"),
+                    width=benchmark_width,
+                ),
+                dbc.Col(
+                    [
+                        dbc.Button("\N{books}", id="hover-target11", color="link", n_clicks=0),
+                        dbc.Popover(dbc.PopoverBody(
+                            "Select benchmark scaling methodology"),
+                                    id="hover11", target="hover-target11", trigger="hover"),
+                    ], width=2,
+                ),
+            ],
+            align="center",
+        ),
+        dcc.RadioItems(
+            id="budget-method",
+            options=[
+                {'label': 'Absolute', 'value': 'absolute'},
+                {'label': 'Contraction', 'value': 'contraction'},
+            ],
+            value='absolute',
+            inputStyle={"margin-right": "10px", "margin-left": "30px"},
+            inline=True,
+        ),
+        html.Hr(),  # small space from the top
         dbc.Row(  # Mean / Median projection
             [
                 dbc.Col(
@@ -517,34 +560,38 @@ benchmark_box = dbc.Row(
             marks={i: str(i) for i in range(0, 101, 10)},
             allowCross=False
         ),
-        html.Hr(),  # small space from the top
-        dbc.Row(  # Set ProjectionControls TARGET_YEAR
+         html.Hr(),  # small space from the top
+        dbc.Row(  # Winsorization of scenarios
             [
                 dbc.Col(
-                    dbc.Label("\N{wrench} Select projection end year (2025-2050)"),
+                    dbc.Label("\N{wrench} Select target probability"),
                     width=benchmark_width,
                 ),
                 dbc.Col(
                     [
-                        dbc.Button("\N{calendar}", id="hover-target9", color="link", n_clicks=0),
+                        dbc.Button("\N{books}", id="hover-target12", color="link", n_clicks=0),
                         dbc.Popover(dbc.PopoverBody(
-                            "Select the ending year of the benchmark analysis"),
-                                    id="hover9", target="hover-target9", trigger="hover"),
-                    ], width=4,
+                            "Select default probability of achieving target"),
+                                    id="hover12", target="hover-target12", trigger="hover"),
+                    ], width=1,
                 ),
             ],
             align="center",
         ),
         dcc.Slider(
-            id="target-year",
-            min=2025, max=2050,
-            value=2050,
-            step=5,
-            marks={i: str(i) for i in range(2025, 2051, 5)},
+            min=0, max=100,
+            value=50,
+            step=10,
+            id="target_probability",
+            marks={
+                i: str(i)+ "%" for i in range (0,101,10)
+            },
         ),
-        html.Div(id="bm-budgets-target-year")
     ],
 )
+
+
+
 
 itr_titlebar = dbc.Row(  # upload portfolio
     [
@@ -563,7 +610,7 @@ itr_titlebar = dbc.Row(  # upload portfolio
                     html.A("OS-Climate Sector Alignment Tool", href="https://github.com/plotly/dash-svm",
                            style={"text-decoration": "none", "color": "inherit"})]),
                 html.Div(
-                    children='Prototype tool for calculating the Implied Temperature Rise of investor portfolio in the steel and electric utilities sectors \N{deciduous tree}'),
+                    children='Tool for calculating the Implied Temperature Rise for a sector-specific investment portfolio such as steel, utilities, chemicals, etc.  \N{deciduous tree}'),
             ],
             width=8,
         ),
@@ -625,7 +672,7 @@ itr_filters_and_benchmarks = dbc.Col(
     width=3,
 )
 
-itr_main_width = 9
+itr_main_width = 7
 itr_main_figures = dbc.Col(
     [  # main pane
         dbc.Card([
@@ -677,7 +724,7 @@ itr_main_figures = dbc.Col(
             dbc.Row(  # row with 2 graphs
                 [
                     dbc.Col(dcc.Graph(id="co2-usage-vs-budget"), width=8),  # big bubble graph
-                    dbc.Col(dcc.Graph(id="itr-coverage"), width=3),  # covered stacked bar graph
+                    dbc.Col(dcc.Graph(id="itr-coverage"), width=4),  # covered stacked bar graph
                 ],
             ),
             dbc.Row(  # row with 2 graphs
@@ -782,7 +829,7 @@ def warehouse_new(banner_title):
     template_company_data = TemplateProviderCompany(company_data_path, projection_controls = ProjectionControls())
     Warehouse = DataWarehouse(template_company_data, benchmark_projected_production=None, benchmarks_projected_ei=None,
                               estimate_missing_data=DataWarehouse.estimate_missing_s3_data)
-    return (json.dumps(pickle.dumps(Warehouse), default=str),
+    return (json.dumps(pickle.dumps(Warehouse), default=ITR.JSONEncoder),
             True,
             "Spin-warehouse")
 
@@ -815,7 +862,7 @@ def recalculate_individual_itr(warehouse_pickle_json, eibm, proj_meth, winz, bm_
         Warehouse.company_data.projection_controls.TREND_CALC_METHOD = ITR_median if proj_meth == 'median' else ITR_mean
         Warehouse.company_data.projection_controls.LOWER_PERCENTILE = winz[0] / 100
         Warehouse.company_data.projection_controls.UPPER_PERCENTILE = winz[1] / 100
-
+       
     if 'eibm-dropdown' in changed_id or Warehouse.benchmarks_projected_ei is None:
         show_oecm_bm = 'no'
         if eibm == 'OECM_PC':
@@ -850,19 +897,16 @@ def recalculate_individual_itr(warehouse_pickle_json, eibm, proj_meth, winz, bm_
                         else:
                             parsed_json[scope_name]['benchmarks'] += extra_json[scope_name]['benchmarks']
         EI_bm = BaseProviderIntensityBenchmark(EI_benchmarks=IEIBenchmarkScopes.parse_obj(parsed_json))
-        if eibm.startswith('OECM'):
-            # Synthesize Oil & Gas sector
-            df = EI_bm._EI_df
-            oil_and_gas_df = df.loc['Gas'].applymap(lambda x: x.to('t CO2e/PJ')) + df.loc['Oil'].applymap(lambda x: x.to('t CO2e/PJ'))
-            EI_bm._EI_df = pd.concat([df, pd.concat([oil_and_gas_df], keys=['Oil & Gas'], names=['sector'])]).sort_index()
         # This updates benchmarks and all that depends on them (including trajectories)
         Warehouse.update_benchmarks(base_production_bm, EI_bm)
         bm_region = eibm
-    elif 'scenarios-cutting' in changed_id or 'projection-method' in changed_id:
+
+    elif 'scenarios-cutting' in changed_id or 'projection-method' in changed_id: 
         # Trajectories are company-specific, but ultimately do depend on benchmarks (for units/scopes)
         Warehouse.update_trajectories()
+        
 
-    return (json.dumps(pickle.dumps(Warehouse), default=str),
+    return (json.dumps(pickle.dumps(Warehouse), default=ITR.JSONEncoder),
             show_oecm_bm,
             bm_region,
             "Spin-eibm")
@@ -939,7 +983,7 @@ def recalculate_warehouse_target_year(warehouse_pickle_json, target_year, sector
         scope = ''
 
     return (
-        json.dumps(pickle.dumps(Warehouse), default=str),
+        json.dumps(pickle.dumps(Warehouse), default=ITR.JSONEncoder),
         json.dumps([{"label": i, "value": i} for i in sorted(pf_bm_sectors)] + [{'label': 'All Sectors', 'value': ''}]),
         sector,
         json.dumps([{"label": i, "value": i} for i in sorted(pf_bm_regions)] + [{'label': 'All Regions', 'value': ''}]),
@@ -1333,31 +1377,46 @@ def bm_budget_year_target(show_oecm, target_year, bm_end_use_budget, bm_1e_budge
     output = (Output("portfolio-df", "data"),
               Output("spinner-ts", "value"),),  # fake for spinner
 
-    inputs = (Input("warehouse-ty", "data"),),
+    inputs = (Input("warehouse-ty", "data"),
+              Input("budget-method", "value"),
+              Input("target_probability", "value"), # winzorization slider
+              ),
 
     prevent_initial_call=True,)
-def calc_temperature_score(warehouse_pickle_json, *_):
+def calc_temperature_score(warehouse_pickle_json, budget_meth, target_probability, *_):
+    '''
+    Calculate temperature scores according to the carbon budget methodology
+    :param warehouse_pickle_json: Pickled JSON version of Warehouse containing only company data
+    :param budget_meth: Budget scaling methodology (absolute or contraction)
+    '''
     global companies
 
+    changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]  # to catch which widgets were pressed
     Warehouse = pickle.loads(ast.literal_eval(json.loads(warehouse_pickle_json)))
+
     temperature_score = TemperatureScore(
         time_frames = [ETimeFrames.LONG],
         scopes=None, # None means "use the appropriate scopes for the benchmark
         # Options for the aggregation method are WATS, TETS, AOTS, MOTS, EOTS, ECOTS, and ROTS
-        aggregation_method=PortfolioAggregationMethod.WATS
+        aggregation_method=PortfolioAggregationMethod.WATS,
+        budget_column=ColumnsConfig.CUMULATIVE_SCALED_BUDGET if budget_meth=='contraction' else ColumnsConfig.CUMULATIVE_BUDGET,
     )
-    df = temperature_score.calculate(data_warehouse=Warehouse, portfolio=companies)
+
+    if "target_probability" in changed_id:
+        df = temperature_score.calculate(data_warehouse=Warehouse, portfolio=companies, target_probability=target_probability/100)
+    else:
+        df = temperature_score.calculate(data_warehouse=Warehouse, portfolio=companies)
     df = df.drop(columns=['historic_data', 'target_data'])
     amended_portfolio = df
-    return (amended_portfolio.to_json(orient='split', default_handler=str),
+    return (amended_portfolio.to_json(orient='split', default_handler=ITR.JSONEncoder),
             "Spin-ts",)
 
-def quantify_col(x, col, unit=None):
+def quantify_col(df: pd.DataFrame, col: str, unit=None):
     if unit is None:
-        return asPintSeries(x[col].map(Q_))
+        return asPintSeries(df[col].map(Q_))
     if not unit.startswith('pint['):
         unit = f"pint[{unit}]"
-    return x[col].map(Q_).astype(unit)
+    return df[col].fillna(f"nan {unit[5:-1]}").map(Q_).astype(unit)
 
 @app.callback(
     Output("co2-usage-vs-budget", "figure"),     # fig1
@@ -1381,12 +1440,14 @@ def quantify_col(x, col, unit=None):
     Input("region-dropdown", "value"),
     State("scope-options", "options"),
     Input("scope-options", "value"),
+    Input("budget-method", "value"),
 
     prevent_initial_call=True,)
 def update_graph(
         portfolio_json,
         te_sc,
         sectors_dl, sec, regions_dl, reg, scopes_dl, scope,
+        budget_meth,
 ):
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]  # to catch which widgets were pressed
     amended_portfolio = pd.read_json(portfolio_json, orient='split')
@@ -1401,6 +1462,7 @@ def update_graph(
         # FIXME: we're going to have to deal with NULL ghg_s3, and possible ghg_s1s2
         ghg_s3=lambda x: quantify_col(x, 'ghg_s3', 't CO2e'),
         cumulative_budget=lambda x: quantify_col(x, 'cumulative_budget', 't CO2e'),
+        cumulative_scaled_budget=lambda x: quantify_col(x, 'cumulative_scaled_budget', 't CO2e'),
         cumulative_trajectory=lambda x: quantify_col(x, 'cumulative_trajectory', 't CO2e'),
         cumulative_target=lambda x: quantify_col(x, 'cumulative_target', 't CO2e'),
         trajectory_score=lambda x: quantify_col(x, 'trajectory_score', 'delta_degC'),
@@ -1467,7 +1529,8 @@ def update_graph(
     filt_df.loc[:, 'cumulative_usage'] = (filt_df.cumulative_target.fillna(filt_df.cumulative_trajectory)
                                           +filt_df.cumulative_trajectory.fillna(filt_df.cumulative_target)
                                           + ureg('t CO2e'))/2.0
-    fig1_kwargs = dict(x="cumulative_budget", y="cumulative_usage",
+    budget_column=ColumnsConfig.CUMULATIVE_SCALED_BUDGET if budget_meth=='contraction' else ColumnsConfig.CUMULATIVE_BUDGET
+    fig1_kwargs = dict(x=budget_column, y="cumulative_usage",
                        size="investment_value",
                        color="sector", labels={"color": "Sector"},
                        hover_data=["company_name", "investment_value", "temperature_score"],
@@ -1476,8 +1539,8 @@ def update_graph(
     if sec:
         fig1_kwargs['text'] = 'company_name'
     fig1 = dequantify_plotly(px.scatter, filt_df, **fig1_kwargs)
-    min_xy = min(min(ITR.nominal_values(filt_df.cumulative_budget.pint.m)), min(ITR.nominal_values(filt_df.cumulative_usage.pint.m)))/2.0
-    max_xy = max(max(ITR.nominal_values(filt_df.cumulative_budget.pint.m)), max(ITR.nominal_values(filt_df.cumulative_usage.pint.m)))*2.0
+    min_xy = min(min(ITR.nominal_values(filt_df[budget_column].pint.m)), min(ITR.nominal_values(filt_df.cumulative_usage.pint.m)))/2.0
+    max_xy = max(max(ITR.nominal_values(filt_df[budget_column].pint.m)), max(ITR.nominal_values(filt_df.cumulative_usage.pint.m)))*2.0
     fig1.add_shape(dict(type='line', line_dash="dash", line_color="red", opacity=0.5, layer='below',
                         yref='y', xref='x', xsizemode='scaled', ysizemode='scaled',
                         y0=min_xy, y1=max_xy, x0=min_xy, x1=max_xy))
@@ -1610,14 +1673,14 @@ def update_graph(
 
     # input for the dash table
     common_columns = [
-        'company_name', 'company_id', 'region', 'sector', 'scope', 'cumulative_budget', 'investment_value',
+        'company_name', 'company_id', 'region', 'sector', 'scope', 'cumulative_budget', 'cumulative_scaled_budget', 'investment_value',
         'trajectory_score', 'trajectory_exceedance_year', 'target_score', 'target_exceedance_year',
         'temperature_score']
     for col in ['trajectory_exceedance_year', 'target_exceedance_year']:
         if col not in filt_df.columns:
             common_columns.remove(col)
     df_for_output_table = filt_df.reset_index('company_id')[common_columns].copy()
-    for col in ['temperature_score', 'trajectory_score', 'target_score', 'cumulative_budget']:
+    for col in ['temperature_score', 'trajectory_score', 'target_score', 'cumulative_budget', 'cumulative_scaled_budget']:
         df_for_output_table[col] = ITR.nominal_values(df_for_output_table[col].pint.m).round(2)  # f"{q:.2f~#P}"
         # pd.to_numeric(...).round(2)
     df_for_output_table['investment_value'] = df_for_output_table['investment_value'].apply(
@@ -1625,7 +1688,8 @@ def update_graph(
     df_for_output_table['scope'] = df_for_output_table['scope'].map(str)
     df_for_output_table.rename(
         columns={'company_name': 'Name', 'company_id': 'ISIN', 'region': 'Region', 'sector': 'Industry',
-                 'cumulative_budget': 'Emissions budget', 'investment_value': 'Notional',
+                 'cumulative_budget': 'Emissions budget', 'cumulative_scaled_budget': 'Emissions budget (scaled)',
+                 'investment_value': 'Notional',
                  'trajectory_score': 'Historical emissions score',
                  'trajectory_exceedance_year': 'Year historic emissions > 2050 budget',
                  'target_score': 'Target score',
@@ -1695,6 +1759,7 @@ def download_xlsx(n_clicks, portfolio_json, te_sc, sectors_dl, sec, reg):
         # FIXME: we're going to have to deal with NULL ghg_s3, and possible ghg_s1s2
         ghg_s3=lambda x: quantify_col(x, 'ghg_s3', 't CO2e'),
         cumulative_budget=lambda x: quantify_col(x, 'cumulative_budget', 't CO2e'),
+        cumulative_scaled_budget=lambda x: quantify_col(x, 'cumulative_scaled_budget', 't CO2e'),
         cumulative_trajectory=lambda x: quantify_col(x, 'cumulative_trajectory', 't CO2e'),
         cumulative_target=lambda x: quantify_col(x, 'cumulative_target', 't CO2e'),
         trajectory_score=lambda x: quantify_col(x, 'trajectory_score', 'delta_degC'),
@@ -1739,8 +1804,10 @@ def download_xlsx(n_clicks, portfolio_json, te_sc, sectors_dl, sec, reg):
 
 @app.callback( # reseting dropdowns
     Output("temp-score-range", "value"),
+    Output("budget-method", "value"),
     Output("projection-method", "value"),
     Output("scenarios-cutting", "value"),
+    Output("target_probability", "value"),
     Output("target-year", "value"),
     Output("reset-sector-region-scope", "children"),
     Output("spinner-reset", "value"),
@@ -1763,8 +1830,10 @@ def reset_filters(n_clicks_reset):
 
     return ( # if button is clicked, reset filters
         [0,4],                  # Elsewhere we have this as 8.5
+        'absolute',
         'median',
         [ProjectionControls.LOWER_PERCENTILE*100,ProjectionControls.UPPER_PERCENTILE*100],
+        100*TemperatureScoreConfig.CONTROLS_CONFIG.target_probability,
         2050,
         "Reset Sector, Region, Scope",
         "Spin-reset",
