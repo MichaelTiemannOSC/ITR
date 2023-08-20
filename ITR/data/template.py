@@ -397,7 +397,8 @@ class TemplateProviderCompany(BaseCompanyDataProvider):
         df.rename(
             columns={'revenue': 'company_revenue', 'market_cap': 'company_market_cap',
                      'ev': 'company_enterprise_value', 'evic': 'company_ev_plus_cash',
-                     'assets': 'company_total_assets'}, inplace=True)
+                     'assets': 'company_total_assets',
+                     'cash': 'company_cash_equivalents', 'debt': 'company_debt'}, inplace=True)
         df.loc[df.region.isnull(), 'region'] = df.country.map(ITR_country_to_region)
 
         df_fundamentals = df.set_index(ColumnsConfig.COMPANY_ID, drop=False).convert_dtypes()
@@ -416,6 +417,9 @@ class TemplateProviderCompany(BaseCompanyDataProvider):
         missing_fundamental_metrics = [fm for fm in fundamental_metrics if fm not in df_fundamentals.columns[col_num+1:]]
         if len(missing_fundamental_metrics)>0:
             raise KeyError(f"Expected fundamental metrics {missing_fundamental_metrics}")
+        for extra_metric in  ['company_cash_equivalents', 'company_debt' ]:
+            if extra_metric not in fundamental_metrics:
+                fundamental_metrics.append(extra_metric)
         if ColumnsConfig.TEMPLATE_FX_QUOTE in df_fundamentals.columns:
             fx_quote = df_fundamentals[ColumnsConfig.TEMPLATE_FX_QUOTE].notna()
             if len(df_fundamentals.loc[~fx_quote, ColumnsConfig.COMPANY_CURRENCY].unique()) > 1 \
@@ -593,8 +597,6 @@ class TemplateProviderCompany(BaseCompanyDataProvider):
             df4 = df3.xs(VariablesConfig.EMISSIONS, level=1) / df3.xs((VariablesConfig.PRODUCTIONS, 'production'), level=[1, 2])
             df4['variable'] = VariablesConfig.EMISSIONS_INTENSITIES
             df4 = df4.reset_index().set_index(['company_id', 'variable', 'scope'])
-            df5 = pd.concat([df3, df4])
-            df_historic_data = df5
         else:
             # We are already much tidier, so don't need the wide_to_long conversion.
             esg_year_columns = df_esg.columns[df_esg.columns.get_loc(self.template_v2_start_year):]
@@ -872,9 +874,8 @@ class TemplateProviderCompany(BaseCompanyDataProvider):
                 asPintDataFrame(df3.xs((VariablesConfig.PRODUCTIONS, 'production'), level=[1,2]).T), axis=1).T
             df4['variable'] = VariablesConfig.EMISSIONS_INTENSITIES
             df4 = df4.reset_index().set_index(['company_id', 'variable', 'scope'])
-            df5 = pd.concat([df3, df4])
 
-            df_historic_data = df5
+        df_historic_data = pd.concat([df3.dropna(axis=1, how='all'), df4.dropna(axis=1, how='all')])
 
         # df_target_data now ready for conversion to model for each company
         df_target_data = self._validate_target_data(df_target_data)
@@ -896,7 +897,9 @@ class TemplateProviderCompany(BaseCompanyDataProvider):
             new_ab = df_a.loc[new_ab_idx, historic_years]+df_b.loc[new_ab_idx, historic_years]
             new_ab.insert(0, 'scope', scope_ab)
             new_ab.set_index('scope', append=True, inplace=True)
-            df_ab[df_ab.applymap(lambda x: ITR.isna(x))] = new_ab.loc[new_ab.index.intersection(df_ab.index)]
+            # FIXME: if DF_AB is empty, this essentially null update will fail, so don't do it
+            if len(new_ab.index.intersection(df_ab.index)):
+                df_ab[df_ab.applymap(lambda x: ITR.isna(x))] = new_ab.loc[new_ab.index.intersection(df_ab.index)]
             # DF_AB has gaps filled, but not whole new rows that did not exist before
             # Drop rows in NEW_AB already covered by DF_AB and consolidate
             new_ab.drop(index=df_ab.index, inplace=True, errors='ignore')

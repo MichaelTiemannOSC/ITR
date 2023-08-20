@@ -1,4 +1,4 @@
-`# Go to folder "examples" and run this app with `python ITR_DV.py` and
+# Go to folder "examples" and run this app with `python ITR_DV.py` and
 # visit http://127.0.0.1:8051/ in your web browser
 
 
@@ -27,7 +27,7 @@ import plotly.graph_objects as go
 
 import ITR
 
-from ITR.configs import ITR_median, ITR_mean
+from ITR.configs import ITR_median, ITR_mean, ColumnsConfig, TemperatureScoreConfig
 from ITR.data.data_warehouse import DataWarehouse
 from ITR.portfolio_aggregation import PortfolioAggregationMethod
 from ITR.temperature_score import TemperatureScore
@@ -36,10 +36,6 @@ from ITR.data.base_providers import BaseProviderProductionBenchmark, BaseProvide
 from ITR.data.template import TemplateProviderCompany
 from ITR.interfaces import EScope, ETimeFrames, EScoreResultType, IEIBenchmarkScopes, IProductionBenchmarkScopes, ProjectionControls
 # from ITR.configs import LoggingConfig
-
-import osc_ingest_trino as osc
-from ITR.data.vault_providers import VaultCompanyDataProvider, VaultProviderProductionBenchmark, \
-    VaultProviderIntensityBenchmark, DataVaultWarehouse, requantify_df
 
 from ITR.data.osc_units import ureg, Q_, asPintSeries, requantify_df_from_columns
 from pint import Quantity
@@ -82,41 +78,6 @@ if len(sys.argv)>1:
 else:
     company_data_path = os.path.join(root, examples_dir, data_dir, "20220927 ITR V2 Sample Data.xlsx")
 
-# Load environment variables from credentials.env
-osc.load_credentials_dotenv()
-
-ingest_catalog = 'osc_datacommons_dev'
-ingest_schema = 'mdt_sandbox'
-dera_schema = 'dera'
-dera_prefix = 'dera_'
-gleif_schema = 'sandbox'
-rmi_schema = 'rmi'
-rmi_prefix = ''
-iso3166_schema = 'mdt_sandbox'
-essd_schema = 'essd'
-essd_prefix = ''
-demo_schema = 'demo_dv'
-
-itr_prefix = 'template_'
-
-engine = osc.attach_trino_engine(verbose=True, catalog=ingest_catalog, schema=demo_schema)
-
-if use_data_vault:
-    vault_company_data = VaultCompanyDataProvider (engine,
-                                                   company_table=f'{itr_prefix}company_data',
-                                                   target_table=None,
-                                                   trajectory_table=None,
-                                                   company_schema=demo_schema,
-                                                   column_config=None)
-
-    vault_warehouse = DataVaultWarehouse(engine,
-                                         company_data=None,
-                                         benchmark_projected_production=None,
-                                         benchmarks_projected_ei=None,
-                                         ingest_schema = demo_schema,
-                                         itr_prefix=itr_prefix,
-                                         column_config=None)
-
 # Production benchmark (there's only one, and we have to stretch it from OECM to cover TPI)
 data_json_units_dir="json-units"
 benchmark_prod_json_file = "benchmark_production_OECM.json"
@@ -136,15 +97,65 @@ prod_bms = IProductionBenchmarkScopes.parse_obj(parsed_json)
 base_production_bm = BaseProviderProductionBenchmark(production_benchmarks=prod_bms)
 logger.info('Load production benchmark from {}'.format(benchmark_prod_json_file))
 
-# Emission intensities
-benchmark_EI_OECM_PC_file = "benchmark_EI_OECM_PC.json"
-benchmark_EI_OECM_S3_file = "benchmark_EI_OECM_S3.json"
-benchmark_EI_OECM_file = "benchmark_EI_OECM.json" # Deprecated!
-benchmark_EI_TPI_15_file = "benchmark_EI_TPI_1_5_degrees.json"
-benchmark_EI_TPI_file = "benchmark_EI_TPI_2_degrees.json"
-benchmark_EI_TPI_below_2_file = "benchmark_EI_TPI_below_2_degrees.json"
-benchmark_EI_TPI_2deg_high_efficiency_file = "benchmark_EI_TPI_2_degrees_high_efficiency.json"
-benchmark_EI_TPI_2deg_shift_improve_file = "benchmark_EI_TPI_2_degrees_shift_improve.json"
+if use_data_vault:
+    import osc_ingest_trino as osc
+    from ITR.data.vault_providers import VaultCompanyDataProvider, VaultProviderProductionBenchmark, \
+        VaultProviderIntensityBenchmark, DataVaultWarehouse, requantify_df
+
+    # Load environment variables from credentials.env
+    osc.load_credentials_dotenv()
+
+    ingest_catalog = 'osc_datacommons_dev'
+    ingest_schema = 'mdt_sandbox'
+    dera_schema = 'dera'
+    dera_prefix = 'dera_'
+    gleif_schema = 'sandbox'
+    rmi_schema = 'rmi'
+    rmi_prefix = ''
+    iso3166_schema = 'mdt_sandbox'
+    essd_schema = 'essd'
+    essd_prefix = ''
+    demo_schema = 'demo_dv'
+
+    itr_prefix = 'template_'
+
+    engine = osc.attach_trino_engine(verbose=True, catalog=ingest_catalog, schema=demo_schema)
+
+    vault_company_data = VaultCompanyDataProvider(
+        engine,
+        company_table=f'{itr_prefix}company_data',
+        target_table=None,
+        trajectory_table=None,
+        company_schema=demo_schema,
+        column_config=None,
+    )
+    # These are things that should already be initialized
+    # vault_production_bm = VaultProviderProductionBenchmark(engine=engine, benchmark_name=f"{itr_prefix}benchmark_prod", production_benchmarks=prod_bms)
+    # benchmark_EI_json = os.path.join(root, "data", "json-units", "benchmark_EI_OECM_S3.json")
+    # with open(benchmark_EI_json) as json_file:
+    #     parsed_json = json.load(json_file)
+    # ei_bms = IEIBenchmarkScopes.parse_obj(parsed_json)
+    # vault_EI_bm = VaultProviderIntensityBenchmark(engine=engine, benchmark_name=f"{itr_prefix}benchmark_ei", EI_benchmarks=ei_bms)
+    vault_warehouse = DataVaultWarehouse(
+        engine,
+        company_data=vault_company_data,
+        benchmark_projected_production=None,  # vault_production_bm
+        benchmarks_projected_ei=None,  # vault_EI_bm
+        ingest_schema = demo_schema,
+        itr_prefix=itr_prefix,
+        column_config=None,
+    )
+    vault_warehouse.quant_init(engine, company_data=vault_company_data, ingest_schema=ingest_schema, itr_prefix=itr_prefix)
+else:
+    # Emission intensities
+    benchmark_EI_OECM_PC_file = "benchmark_EI_OECM_PC.json"
+    benchmark_EI_OECM_S3_file = "benchmark_EI_OECM_S3.json"
+    benchmark_EI_OECM_file = "benchmark_EI_OECM.json" # Deprecated!
+    benchmark_EI_TPI_15_file = "benchmark_EI_TPI_1_5_degrees.json"
+    benchmark_EI_TPI_file = "benchmark_EI_TPI_2_degrees.json"
+    benchmark_EI_TPI_below_2_file = "benchmark_EI_TPI_below_2_degrees.json"
+    benchmark_EI_TPI_2deg_high_efficiency_file = "benchmark_EI_TPI_2_degrees_high_efficiency.json"
+    benchmark_EI_TPI_2deg_shift_improve_file = "benchmark_EI_TPI_2_degrees_shift_improve.json"
 
 # loading dummy portfolio
 df_portfolio = requantify_df_from_columns(pd.read_excel(company_data_path, sheet_name="Portfolio"))
@@ -220,8 +231,8 @@ def get_co2_per_sector_region_scope(prod_bm, ei_df, sector, region, scope_list) 
     elif sector_scope not in EI_scopes:
         raise ValueError(f"Scope {sector_scope.name} not in benchmark for sector {sector}")
 
-    intensity_df = ei_df.loc[(sector, region, sector_scope)]
-    target_year_cum_co2 = base_prod_ser.mul(intensity_df).cumsum().astype('pint[Gt CO2e]')
+    intensity_df = asPintSeries(ei_df.loc[(sector, region, sector_scope)])  # FIXME: ei_df_t would be better...
+    target_year_cum_co2 = base_prod_ser.mul(intensity_df).dropna().pint.m_as('Gt CO2e').cumsum().astype('pint[Gt CO2e]')
     return target_year_cum_co2
 
 energy_activities = {'Energy', 'Coal', 'Gas', 'Oil', 'Oil & Gas'}
@@ -256,6 +267,18 @@ def try_get_co2(prod_bm, ei_df, sectors, region, scope_list):
         # Else we are in TPI, which has no S3 overlaps
     return result
 
+# Pandas 2.0.3 and Pint-Pandas 0.4 don't have fully-working EA support for `reduce`.  So do it by hand until Pandas 2.1 and Pint-Pandas 0.5
+from packaging import version
+if version.parse(pd.__version__) < version.parse("2.1") or version.parse(pint_pandas.__version__) < version.parse("0.5"):
+    def keepdims_sum(df_elements, pint_type):
+        df = pd.concat(df_elements, axis=1).astype(pint_type)
+        df = df.pint.dequantify().sum(axis=1).astype(pint_type)
+        return df
+else:
+    def keepdims_sum(df_elements, pint_type):
+        df = pd.concat(df_elements, axis=1).sum(axis=1).astype(pint_type)
+        return df
+
 # For OECM, calculate multi-sector footprints in a given activity
 def get_co2_in_sectors_region_scope(prod_bm, ei_df, sectors, region, scope_list) -> pd.DataFrame:
     '''
@@ -275,7 +298,8 @@ def get_co2_in_sectors_region_scope(prod_bm, ei_df, sectors, region, scope_list)
         if scope_list and (scope_list[0] in [ EScope.S1S2, EScope.S1S2S3 ]):
             co2_s1s2_elements = try_get_co2(prod_bm, ei_df, sectors, region, [ EScope.S1S2 ] )
             if co2_s1s2_elements:
-                total_co2_s1s2 = pd.concat(co2_s1s2_elements, axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+                # total_co2_s1s2 = pd.concat(co2_s1s2_elements, axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+                total_co2_s1s2 = keepdims_sum(co2_s1s2_elements, 'pint[Gt CO2e]')
             else:
                 raise ValueError(f"no benchmark emissions for {sectors} in scope")
             if sectors & {'Utilities'}:
@@ -294,17 +318,20 @@ def get_co2_in_sectors_region_scope(prod_bm, ei_df, sectors, region, scope_list)
                 else:
                     total_co2_s3_elements = try_get_co2(prod_bm, ei_df, utility_sectors, region, [ EScope.S3 ] )
                 if total_co2_s3_elements:
-                    total_co2_s3 = pd.concat(total_co2_s3_elements, axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+                    # total_co2_s3 = pd.concat(total_co2_s3_elements, axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+                    total_co2_s3 = keepdims_sum(total_co2_s3_elements, 'pint[Gt CO2e]')
                     total_co2 = total_co2 + total_co2_s3
             return total_co2
         # At this point, either scope_list is None, meaning fish out TPI metrics, or S1, S2, or S3, all of which aggregate within activity under OECM
-        return pd.concat( try_get_co2(prod_bm, ei_df, sectors, region, scope_list ), axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+        # return pd.concat(try_get_co2(prod_bm, ei_df, sectors, region, scope_list), axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+        return keepdims_sum(try_get_co2(prod_bm, ei_df, sectors, region, scope_list), 'pint[Gt CO2e]')
     # Multi-activity case, so SCOPE sets the rules for OECM
     if scope_list:
         if scope_list[0] in [ EScope.S1S2, EScope.S1S2S3 ]:
             co2_s1s2_elements = try_get_co2(prod_bm, ei_df, sectors, region, [ EScope.S1S2 ] )
             if co2_s1s2_elements:
-                total_co2_s1s2 = pd.concat(co2_s1s2_elements, axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+                # total_co2_s1s2 = pd.concat(co2_s1s2_elements, axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+                total_co2_s1s2 = keepdims_sum(co2_s1s2_elements, 'pint[Gt CO2e]')
             else:
                 raise ValueError(f"No S1S2 data for sectors {sectors}")
             # Now subtract out the S1 from Power Generation so we don't double-count that
@@ -318,11 +345,13 @@ def get_co2_in_sectors_region_scope(prod_bm, ei_df, sectors, region, scope_list)
             if EScope.S1S2S3 in scope_list:
                 total_co2_s3_elements = try_get_co2(prod_bm, ei_df, sectors & end_use_s3_activities, region, [ EScope.S3] )
                 if total_co2_s3_elements:
-                    total_co2_s3 = pd.concat(total_co2_s3_elements, axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+                    # total_co2_s3 = pd.concat(total_co2_s3_elements, axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+                    total_co2_s3 = keepdims_sum(total_co2_s3_elements, 'pint[Gt CO2e]')
                     total_co2 = total_co2.add(total_co2_s3)
             return total_co2
     # Must be S1 or S2 by itself (or scope_list is None, meaning whatever scope can be found).  try_get_co2 will deal with S3 case.
-    total_co2 = pd.concat(try_get_co2(prod_bm, ei_df, sectors, region, scope_list ), axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+    # total_co2 = pd.concat(try_get_co2(prod_bm, ei_df, sectors, region, scope_list), axis=1).sum(axis=1).astype('pint[Gt CO2e]')
+    total_co2 = keepdims_sum(try_get_co2(prod_bm, ei_df, sectors, region, scope_list), 'pint[Gt CO2e]')
     return total_co2
 
 # nice cheatsheet for managing layout via className attribute: https://hackerthemes.com/bootstrap-cheatsheet/
@@ -336,7 +365,7 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], # theme s
 app.title = "ITR Tool" # this puts text to the browser tab
 server = app.server
 
-filter_width = 6
+filter_width = 10
 filter_box = dbc.Row( # We are a row of the left-side column box
     children=[
         dbc.Row(
@@ -351,7 +380,7 @@ filter_box = dbc.Row( # We are a row of the left-side column box
                         dbc.Popover(dbc.PopoverBody(
                             "Focus on companies from portfolio with specific temperature score"), id="hover2",
                                     target="hover-target2", trigger="hover"),
-                    ], width=2, align="center",
+                    ], width=2,  # align="center",
                 ),
             ],
             align="center",
@@ -414,7 +443,8 @@ filter_box = dbc.Row( # We are a row of the left-side column box
     ],
 )
 
-benchmark_width = 6
+
+benchmark_width = 10
 benchmark_box = dbc.Row(
     children=[
         dbc.Row(  # Select Benchmark
@@ -588,8 +618,36 @@ benchmark_box = dbc.Row(
             marks={i: str(i) for i in range(0, 101, 10)},
             allowCross=False
         ),
+         html.Hr(),  # small space from the top
+        dbc.Row(  # Winsorization of scenarios
+            [
+                dbc.Col(
+                    dbc.Label("\N{wrench} Select target probability"),
+                    width=benchmark_width,
+                ),
+                dbc.Col(
+                    [
+                        dbc.Button("\N{books}", id="hover-target12", color="link", n_clicks=0),
+                        dbc.Popover(dbc.PopoverBody(
+                            "Select default probability of achieving target"),
+                                    id="hover12", target="hover-target12", trigger="hover"),
+                    ], width=1,
+                ),
+            ],
+            align="center",
+        ),
+        dcc.Slider(
+            min=0, max=100,
+            value=50,
+            step=10,
+            id="target_probability",
+            marks={
+                i: str(i)+ "%" for i in range (0,101,10)
+            },
+        ),
     ],
 )
+
 
 itr_titlebar = dbc.Row(  # upload portfolio
     [
@@ -608,7 +666,7 @@ itr_titlebar = dbc.Row(  # upload portfolio
                     html.A("OS-Climate Sector Alignment Tool", href="https://github.com/plotly/dash-svm",
                            style={"text-decoration": "none", "color": "inherit"})]),
                 html.Div(
-                    children='Prototype tool for calculating the Implied Temperature Rise of investor portfolio in the steel and electric utilities sectors \N{deciduous tree}'),
+                    children='Tool for calculating the Implied Temperature Rise for a sector-specific investment portfolio such as steel, utilities, chemicals, etc.  \N{deciduous tree}'),
             ],
             width=8,
         ),
@@ -670,7 +728,7 @@ itr_filters_and_benchmarks = dbc.Col(
     width=3,
 )
 
-itr_main_width = 9
+itr_main_width = 7
 itr_main_figures = dbc.Col(
     [  # main pane
         dbc.Card([
@@ -722,7 +780,7 @@ itr_main_figures = dbc.Col(
             dbc.Row(  # row with 2 graphs
                 [
                     dbc.Col(dcc.Graph(id="co2-usage-vs-budget"), width=8),  # big bubble graph
-                    dbc.Col(dcc.Graph(id="itr-coverage"), width=3),  # covered stacked bar graph
+                    dbc.Col(dcc.Graph(id="itr-coverage"), width=4),  # covered stacked bar graph
                 ],
             ),
             dbc.Row(  # row with 2 graphs
@@ -823,19 +881,20 @@ app.layout = dbc.Container(  # always start with container
 
     prevent_initial_call=False,)
 def warehouse_new(banner_title):
-    # load company data
+    '''
+    Load initial corporate data file
+    '''
+    logger.info(f"warehouse_new: start")
     if use_data_vault:
         Warehouse = vault_warehouse
-        return ('warehouse',
-                True,
-                "Spin-warehouse")
     else:
         template_company_data = TemplateProviderCompany(company_data_path, projection_controls = ProjectionControls())
         Warehouse = DataWarehouse(template_company_data, benchmark_projected_production=None, benchmarks_projected_ei=None,
                                   estimate_missing_data=DataWarehouse.estimate_missing_s3_data)
-        return (json.dumps(pickle.dumps(Warehouse), default=str),
-                True,
-                "Spin-warehouse")
+    logger.info(f"warehouse_new: end")
+    return ('warehouse' if use_data_vault else json.dumps(pickle.dumps(Warehouse), default=str),
+            True,
+            "Spin-warehouse")
 
 @dash.callback(
     output=(Output("warehouse-eibm", "data"),        # Warehouse initialized with benchmark
@@ -866,6 +925,7 @@ def recalculate_individual_itr(warehouse_pickle_json, eibm, proj_meth, winz, bm_
                 bm_region,
                 "Spin-eibm")
 
+    logger.info(f"recalculate_individual_itr: start")
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]  # to catch which widgets were pressed
     Warehouse = pickle.loads(ast.literal_eval(json.loads(warehouse_pickle_json)))
 
@@ -908,19 +968,14 @@ def recalculate_individual_itr(warehouse_pickle_json, eibm, proj_meth, winz, bm_
                         else:
                             parsed_json[scope_name]['benchmarks'] += extra_json[scope_name]['benchmarks']
         EI_bm = BaseProviderIntensityBenchmark(EI_benchmarks=IEIBenchmarkScopes.parse_obj(parsed_json))
-        if eibm.startswith('OECM'):
-            # Synthesize Oil & Gas sector
-            df = EI_bm._EI_df
-            oil_and_gas_df = df.loc['Gas'].applymap(lambda x: x.to('t CO2e/PJ')) + df.loc['Oil'].applymap(lambda x: x.to('t CO2e/PJ'))
-            EI_bm._EI_df = pd.concat([df, pd.concat([oil_and_gas_df], keys=['Oil & Gas'], names=['sector'])]).sort_index()
         # This updates benchmarks and all that depends on them (including trajectories)
         Warehouse.update_benchmarks(base_production_bm, EI_bm)
         bm_region = eibm
     elif 'scenarios-cutting' in changed_id or 'projection-method' in changed_id:
         # Trajectories are company-specific, but ultimately do depend on benchmarks (for units/scopes)
         Warehouse.update_trajectories()
-
-    return (json.dumps(pickle.dumps(Warehouse), default=str),
+    logger.info(f"recalculate_individual_itr: end")
+    return ('warehouse-eibm' if use_data_vault else json.dumps(pickle.dumps(Warehouse), default=str),
             show_oecm_bm,
             bm_region,
             "Spin-eibm")
@@ -1003,7 +1058,7 @@ def recalculate_warehouse_target_year(warehouse_pickle_json, target_year, sector
         scope = ''
 
     return (
-        'warehouse-ty' if use_data_vault else json.dumps(pickle.dumps(Warehouse), default=str),
+        f"warehouse-ty={target_year}" if use_data_vault else json.dumps(pickle.dumps(Warehouse), default=str),
         json.dumps([{"label": i, "value": i} for i in sorted(pf_bm_sectors)] + [{'label': 'All Sectors', 'value': ''}]),
         sector,
         json.dumps([{"label": i, "value": i} for i in sorted(pf_bm_regions)] + [{'label': 'All Regions', 'value': ''}]),
@@ -1078,9 +1133,13 @@ def recalculate_target_year_ts(warehouse_pickle_json, sectors_ty, sector_ty, reg
     '''
 
     if use_data_vault:
+        (_, target_year) = warehouse_pickle_json.split('=')
+        target_year = int(target_year)
         df_fundamentals = pd.read_sql_table(f'{itr_prefix}company_data', engine).set_index('company_id')
         df_prod = requantify_df (pd.read_sql_table(f'{itr_prefix}benchmark_prod', engine)).convert_dtypes()
+        df_prod = df_prod[df_prod.year <= target_year]
         df_ei = requantify_df (pd.read_sql_table(f'{itr_prefix}benchmark_ei', engine, index_col=['year', 'sector', 'region'])).convert_dtypes()
+        df_ei = df_ei[df_ei.index.get_level_values('year') <= target_year]
         df_ei.scope = df_ei.scope.map(lambda x: EScope[x])
         df_ei = df_ei.set_index('scope', append=True)[['intensity']].unstack(level='year').droplevel(level=0, axis=1)
         # Would be so great to be able to use database instead of global variable
@@ -1264,7 +1323,8 @@ def recalculate_target_year_ts(warehouse_pickle_json, sectors_ty, sector_ty, reg
 
     if not scope:
         if 'Energy' in df_ei.index:
-            if EI_bm._EI_benchmarks['S1S2'].production_centric:
+            # FIXME: also needs to work if use_data_vault is True
+            if not use_data_vault and EI_bm._EI_benchmarks['S1S2'].production_centric:
                 scope_list = [ EScope.S1S2 ]
             else:
                 scope_list = [ EScope.S1S2S3 ]
@@ -1336,17 +1396,18 @@ def recalculate_target_year_ts(warehouse_pickle_json, sectors_ty, sector_ty, reg
             target_year_cum_co2 = get_co2_in_sectors_region_scope(prod_bm, df_ei, sectors, bm_region, scope_list)
 
         if use_data_vault:
-            assert ITR.configs.ProjectionControls.TARGET_YEAR in target_year_cum_co2.index
+            assert target_year in target_year_cum_co2.index
         else:
             assert EI_bm.projection_controls.TARGET_YEAR in target_year_cum_co2.index
 
     if use_data_vault:
-        total_target_co2 = target_year_cum_co2.loc[ITR.configs.ProjectionControls.TARGET_YEAR]
+        # data vault should now permit flexible target years...
+        total_target_co2 = target_year_cum_co2.loc[target_year]
         total_final_co2 = target_year_cum_co2.loc[df_ei.columns[-1]]
         if target_year_1e_cum_co2 is not None:
-            target_year_1e = target_year_1e_cum_co2.loc[ITR.configs.ProjectionControls.TARGET_YEAR]
+            target_year_1e = target_year_1e_cum_co2.loc[target_year]
         if target_year_2e_cum_co2 is not None:
-            target_year_2e = target_year_2e_cum_co2.loc[ITR.configs.ProjectionControls.TARGET_YEAR]
+            target_year_2e = target_year_2e_cum_co2.loc[target_year]
     else:
         total_target_co2 = target_year_cum_co2.loc[EI_bm.projection_controls.TARGET_YEAR]
         total_final_co2 = target_year_cum_co2.loc[df_ei.columns[-1]]
@@ -1371,7 +1432,7 @@ def recalculate_target_year_ts(warehouse_pickle_json, sectors_ty, sector_ty, reg
         f"{round(target_year_2e.m, 1)} Gt CO2e" if target_year_2e_cum_co2 is not None else "", # bm-2e-budget
         f"{round(target_year_ts.m, 3)}˚C",
         bm_region,               # Unhide "benchmark-region" and display REGION
-        # EI_bm.projection_controls.TARGET_YEAR,
+        # target_year if use_data_vault else EI_bm.projection_controls.TARGET_YEAR,
         "Spin-ty",
     )
 
@@ -1422,10 +1483,12 @@ def bm_budget_year_target(show_oecm, target_year, bm_end_use_budget, bm_1e_budge
               Output("spinner-ts", "value"),),  # fake for spinner
 
     inputs = (Input("warehouse-ty", "data"),
-              Input("budget-method", "value"),),
+              Input("budget-method", "value"),
+              Input("target_probability", "value"),
+              ),
 
     prevent_initial_call=True,)
-def calc_temperature_score(warehouse_pickle_json, budget_meth, *_):
+def calc_temperature_score(warehouse_pickle_json, budget_meth, target_probability, *_):
     '''
     Calculate temperature scores according to the carbon budget methodology
     :param warehouse_pickle_json: Pickled JSON version of Warehouse containing only company data
@@ -1433,8 +1496,10 @@ def calc_temperature_score(warehouse_pickle_json, budget_meth, *_):
     '''
     global companies
 
+    logger.info(f"calc_temperature_score: start")
     if use_data_vault:
-        # FIXME: need target year!
+        (_, target_year) = warehouse_pickle_json.split('=')
+        target_year = int(target_year)
         sql_query = f"""
 select cd.company_id, cd.sector, cd.region, ts.scope, cd.company_name,
        'LONG' as time_frame, 'COMPLETE' as score_result_type,
@@ -1447,21 +1512,29 @@ select cd.company_id, cd.sector, cd.region, ts.scope, cd.company_name,
        company_revenue, company_market_cap, company_ev as company_enterprise_value, company_evic as company_ev_plus_cash,
        company_total_assets, company_cash_equivalents, company_debt,
        cumulative_budget, cumulative_budget_units,
+       cumulative_budget as cumulative_scaled_budget, cumulative_budget_units as cumulative_scaled_budget_units,
        cumulative_trajectory, cumulative_trajectory_units,
        cumulative_target, cumulative_target_units,
        trajectory_temperature_score as trajectory_score,
-       target_temperature_score as target_score
+       trajectory_overshoot_ratio,  -- dimensionless
+       target_temperature_score as target_score,
+       target_overshoot_ratio,  -- dimensionless
+       format('%.5f %s', (select distinct benchmark_temp from {itr_prefix}benchmark_ei), (select distinct benchmark_temp_units from {itr_prefix}benchmark_ei)) as benchmark_temperature,
+       format('%d %s', (select distinct global_budget from {itr_prefix}benchmark_ei), (select distinct global_budget_units from {itr_prefix}benchmark_ei)) as benchmark_global_budget
 from {itr_prefix}temperature_scores ts
-       join {itr_prefix}production_data pd on ts.company_id=pd.company_id
-       join {itr_prefix}emissions_data co2 on ts.company_id=co2.company_id
+       join {itr_prefix}production_data pd on ts.company_id=pd.company_id and ts.year=pd.year
+       join {itr_prefix}emissions_data co2 on ts.company_id=co2.company_id and ts.year=co2.year
        join {itr_prefix}company_data cd on ts.company_id=cd.company_id
-       join {itr_prefix}cumulative_budget_1 cb on ts.company_id=cb.company_id and ts.scope=cb.scope
-       join {itr_prefix}cumulative_emissions ce on ts.company_id=ce.company_id and ts.scope=ce.scope
-where pd.year=2019 and co2.year=2019"""
+       join {itr_prefix}cumulative_budgets cb on ts.company_id=cb.company_id and ts.scope=cb.scope and cb.year={target_year}
+       join {itr_prefix}cumulative_emissions ce on ts.company_id=ce.company_id and ts.scope=ce.scope and ce.year={target_year}
+       join {itr_prefix}overshoot_ratios overshoot on ts.company_id=overshoot.company_id and ts.scope=overshoot.scope and ts.year=overshoot.year
+       join {itr_prefix}benchmark_ei bm_ei on cd.sector=bm_ei.sector and if(cd.region in ('North America', 'Europe', 'Global'), cd.region, 'Global')=bm_ei.region and pd.year=bm_ei.year and ts.scope=bm_ei.scope
+where pd.year=2019 and bm_ei.year=2019 and co2.year=2019"""
         sql_temp_score_df = pd.read_sql_query(sql_query, engine, index_col='company_id')
         temp_score_df = requantify_df(sql_temp_score_df, typemap={
             'ghg_s1s2':'Mt CO2e', 'ghg_s3':'Mt CO2e',
-            'cumulative_trajectory':'Mt CO2e', 'cumulative_target':'Mt CO2e', 'cumulative_budget':'Mt CO2e',
+            'cumulative_trajectory':'Mt CO2e', 'cumulative_target':'Mt CO2e',
+            'cumulative_budget':'Mt CO2e', 'cumulative_scaled_budget':'Mt CO2e',
             'trajectory_score':'delta_degC', 'target_score':'delta_degC'})
         df = temp_score_df[~temp_score_df.index.isin(['US6362744095+Gas Utilities', 'US0236081024+Gas Utilities', 'CA87807B1076+Gas', 'CA87807B1076+Oil', 'NO0010657505'])]
         df = df.assign(
@@ -1471,26 +1544,69 @@ where pd.year=2019 and co2.year=2019"""
         )
         df['temperature_score'] = (df.trajectory_score.fillna(df.target_score) + df.target_score.fillna(df.trajectory_score)) / 2.0
         amended_portfolio = df.merge(df_portfolio[['company_id', 'investment_value']], on='company_id').set_index('company_id')
+        amended_portfolio = amended_portfolio.sort_values(by='company_name')
     else:
         Warehouse = pickle.loads(ast.literal_eval(json.loads(warehouse_pickle_json)))
         temperature_score = TemperatureScore(
             time_frames = [ETimeFrames.LONG],
             scopes=None, # None means "use the appropriate scopes for the benchmark
             # Options for the aggregation method are WATS, TETS, AOTS, MOTS, EOTS, ECOTS, and ROTS
-        aggregation_method=PortfolioAggregationMethod.WATS
+            aggregation_method=PortfolioAggregationMethod.WATS,
+            budget_column=ColumnsConfig.CUMULATIVE_SCALED_BUDGET if budget_meth=='contraction' else ColumnsConfig.CUMULATIVE_BUDGET,
         )
         df = temperature_score.calculate(data_warehouse=Warehouse, portfolio=companies)
         df = df.drop(columns=['historic_data', 'target_data'])
         amended_portfolio = df
-    return (amended_portfolio.to_json(orient='split', default_handler=str),
+    logger.info(f"calc_temperature_score: end")
+    return (amended_portfolio.to_json(orient='split', default_handler=ITR.JSONEncoder),
             "Spin-ts",)
 
-def quantify_col(x, col, unit=None):
+def quantify_col(df: pd.DataFrame, col: str, unit=None):
+    from pandas.api.types import is_numeric_dtype
     if unit is None:
-        return asPintSeries(x[col].map(Q_))
+        return asPintSeries(df[col].map(Q_))
     if not unit.startswith('pint['):
         unit = f"pint[{unit}]"
-    return x[col].map(Q_).astype(unit)
+    if is_numeric_dtype(df[col]):
+        return df[col].astype(unit)
+    # FIXME: Fix up data coming back from JSON -- is this needed?
+    return df[col].fillna(f"nan {unit[5:-1]}").map(Q_).astype(unit)
+
+def portfolio_from_json(portfolio_json: str) -> pd.DataFrame:
+    amended_portfolio = pd.read_json(portfolio_json, orient='split')
+    # Why does this get lost in translation?
+    amended_portfolio.index.name = 'company_id'
+    amended_portfolio = amended_portfolio.assign(
+        investment_value = lambda x: quantify_col(x, 'investment_value'),
+    )        
+    currency = str(amended_portfolio['investment_value'].dtype)
+    amended_portfolio = amended_portfolio.assign(
+        time_frame=lambda x: x.time_frame.map(lambda y: ETimeFrames[y]),
+        score_result_type=lambda x: x.score_result_type.map(lambda y: EScoreResultType[y]),
+        temperature_score=lambda x: quantify_col (x, 'temperature_score', 'delta_degC'),
+        ghg_s1s2=lambda x: quantify_col(x, 'ghg_s1s2', 't CO2e'),
+        # FIXME: we're going to have to deal with NULL ghg_s3, and possible ghg_s1s2
+        ghg_s3=lambda x: quantify_col(x, 'ghg_s3', 't CO2e'),
+        cumulative_budget=lambda x: quantify_col(x, 'cumulative_budget', 't CO2e'),
+        cumulative_scaled_budget=lambda x: quantify_col(x, 'cumulative_scaled_budget', 't CO2e'),
+        cumulative_trajectory=lambda x: quantify_col(x, 'cumulative_trajectory', 't CO2e'),
+        cumulative_target=lambda x: quantify_col(x, 'cumulative_target', 't CO2e'),
+        trajectory_score=lambda x: quantify_col(x, 'trajectory_score', 'delta_degC'),
+        trajectory_overshoot_ratio=lambda x: quantify_col(x, 'trajectory_overshoot_ratio', 'dimensionless'),
+        target_score=lambda x: quantify_col(x, 'target_score', 'delta_degC'),
+        target_overshoot_ratio=lambda x: quantify_col(x, 'target_overshoot_ratio', 'dimensionless'),
+        company_market_cap=lambda x: quantify_col(x, 'company_market_cap', currency),
+        company_revenue = lambda x: quantify_col(x, 'company_revenue', currency),
+        company_enterprise_value = lambda x: quantify_col(x, 'company_enterprise_value', currency),
+        company_ev_plus_cash = lambda x: quantify_col(x, 'company_ev_plus_cash', currency),
+        company_total_assets = lambda x: quantify_col(x, 'company_total_assets', currency),
+        benchmark_temperature=lambda x: quantify_col(x, 'benchmark_temperature', 'delta_degC'),
+        benchmark_global_budget=lambda x: quantify_col(x, 'benchmark_global_budget', 'Gt CO2e'))
+    if 'scope' in amended_portfolio.columns:
+        amended_portfolio.scope = amended_portfolio.scope.map(lambda y: EScope[y])
+    else:
+        breakpoint()
+    return amended_portfolio
 
 @app.callback(
     Output("co2-usage-vs-budget", "figure"),     # fig1
@@ -1524,33 +1640,7 @@ def update_graph(
         budget_meth,
 ):
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]  # to catch which widgets were pressed
-    amended_portfolio = pd.read_json(portfolio_json, orient='split')
-    # Why does this get lost in translation?
-    amended_portfolio.index.name='company_id'
-    amended_portfolio = amended_portfolio.assign(
-        scope=lambda x: x.scope.map(lambda y: EScope[y]),
-        time_frame=lambda x: x.time_frame.map(lambda y: ETimeFrames[y]),
-        score_result_type=lambda x: x.score_result_type.map(lambda y: EScoreResultType[y]),
-        temperature_score=lambda x: quantify_col (x, 'temperature_score', 'delta_degC'),
-        ghg_s1s2=lambda x: quantify_col(x, 'ghg_s1s2', 't CO2e'),
-        # FIXME: we're going to have to deal with NULL ghg_s3, and possible ghg_s1s2
-        ghg_s3=lambda x: quantify_col(x, 'ghg_s3', 't CO2e'),
-        cumulative_budget=lambda x: quantify_col(x, 'cumulative_budget', 't CO2e'),
-        cumulative_scaled_budget=lambda x: quantify_col(x, 'cumulative_scaled_budget', 't CO2e'),
-        cumulative_trajectory=lambda x: quantify_col(x, 'cumulative_trajectory', 't CO2e'),
-        cumulative_target=lambda x: quantify_col(x, 'cumulative_target', 't CO2e'),
-        trajectory_score=lambda x: quantify_col(x, 'trajectory_score', 'delta_degC'),
-        trajectory_overshoot_ratio=lambda x: quantify_col(x, 'trajectory_overshoot_ratio', 'dimensionless'),
-        target_score=lambda x: quantify_col(x, 'target_score', 'delta_degC'),
-        target_overshoot_ratio=lambda x: quantify_col(x, 'target_overshoot_ratio', 'dimensionless'),
-        company_market_cap=lambda x: quantify_col(x, 'company_market_cap'),
-        company_revenue = lambda x: quantify_col(x, 'company_revenue'),
-        company_enterprise_value = lambda x: quantify_col(x, 'company_enterprise_value'),
-        company_ev_plus_cash = lambda x: quantify_col(x, 'company_ev_plus_cash'),
-        company_total_assets = lambda x: quantify_col(x, 'company_total_assets'),
-        investment_value = lambda x: quantify_col(x, 'investment_value'),
-        benchmark_temperature=lambda x: quantify_col(x, 'benchmark_temperature', 'delta_degC'),
-        benchmark_global_budget=lambda x: quantify_col(x, 'benchmark_global_budget', 'Gt CO2e'))
+    amended_portfolio = portfolio_from_json(portfolio_json)
     temp_score_mask = (amended_portfolio.temperature_score >= Q_(te_sc[0], 'delta_degC')) & (
         amended_portfolio.temperature_score <= Q_(te_sc[1], 'delta_degC'))
 
@@ -1623,6 +1713,8 @@ def update_graph(
 
     # Covered companies analysis; if we pre-filter portfolio-df, then we'll never have "uncovered" companies here
     coverage = filt_df.reset_index('company_id')[['company_id', 'scope', 'ghg_s1s2', 'ghg_s3', 'cumulative_target']]
+    # FIXME: simpler in Pandas 2.1?
+    # coverage['ghg'] = coverage.apply(lambda x: x.ghg_s1s2+x.ghg_s3 if x.scope==EScope.S1S2S3 else x.ghg_s3 if x.scope==EScope.S3 else x.ghg_s1s2, axis=1).astype('pint[t CO2e]')
     coverage['ghg'] = coverage.apply(lambda x: x.ghg_s1s2+x.ghg_s3 if x.scope==EScope.S1S2S3 else x.ghg_s3 if x.scope==EScope.S3 else x.ghg_s1s2, axis=1).astype('pint[t CO2e]')
     coverage['coverage_category'] = np.where(coverage['ghg'].isnull(),
                                              np.where(ITR.isnan(coverage['cumulative_target'].pint.m), "Not Covered",
@@ -1821,33 +1913,7 @@ def update_graph(
 def download_xlsx(n_clicks, portfolio_json, te_sc, sectors_dl, sec, reg):
     if n_clicks is None:
         raise PreventUpdate
-    amended_portfolio = pd.read_json(portfolio_json, orient='split')
-    # Why does this get lost in translation?
-    amended_portfolio.index.name = 'company_id'
-    amended_portfolio = amended_portfolio.assign(
-        # scope=lambda x: x.scope.map(lambda y: EScope[y]),
-        time_frame=lambda x: x.time_frame.map(lambda y: ETimeFrames[y]),
-        score_result_type=lambda x: x.score_result_type.map(lambda y: EScoreResultType[y]),
-        temperature_score=lambda x: quantify_col (x, 'temperature_score', 'delta_degC'),
-        ghg_s1s2=lambda x: quantify_col(x, 'ghg_s1s2', 't CO2e'),
-        # FIXME: we're going to have to deal with NULL ghg_s3, and possible ghg_s1s2
-        ghg_s3=lambda x: quantify_col(x, 'ghg_s3', 't CO2e'),
-        cumulative_budget=lambda x: quantify_col(x, 'cumulative_budget', 't CO2e'),
-        cumulative_scaled_budget=lambda x: quantify_col(x, 'cumulative_scaled_budget', 't CO2e'),
-        cumulative_trajectory=lambda x: quantify_col(x, 'cumulative_trajectory', 't CO2e'),
-        cumulative_target=lambda x: quantify_col(x, 'cumulative_target', 't CO2e'),
-        trajectory_score=lambda x: quantify_col(x, 'trajectory_score', 'delta_degC'),
-        trajectory_overshoot_ratio=lambda x: quantify_col(x, 'trajectory_overshoot_ratio', 'dimensionless'),
-        target_score=lambda x: quantify_col(x, 'target_score', 'delta_degC'),
-        target_overshoot_ratio=lambda x: quantify_col(x, 'target_overshoot_ratio', 'dimensionless'),
-        company_market_cap=lambda x: quantify_col(x, 'company_market_cap'),
-        company_revenue = lambda x: quantify_col(x, 'company_revenue'),
-        company_enterprise_value = lambda x: quantify_col(x, 'company_enterprise_value'),
-        company_ev_plus_cash = lambda x: quantify_col(x, 'company_ev_plus_cash'),
-        company_total_assets = lambda x: quantify_col(x, 'company_total_assets'),
-        investment_value = lambda x: quantify_col(x, 'investment_value'),
-        benchmark_temperature=lambda x: quantify_col(x, 'benchmark_temperature', 'delta_degC'),
-        benchmark_global_budget=lambda x: quantify_col(x, 'benchmark_global_budget', 'Gt CO2e'))
+    amended_portfolio = portfolio_from_json(portfolio_json)
     temp_score_mask = (amended_portfolio.temperature_score >= Q_(te_sc[0], 'delta_degC')) & (
         amended_portfolio.temperature_score <= Q_(te_sc[1], 'delta_degC'))
     # Dropdown filters
@@ -1881,6 +1947,7 @@ def download_xlsx(n_clicks, portfolio_json, te_sc, sectors_dl, sec, reg):
     Output("budget-method", "value"),
     Output("projection-method", "value"),
     Output("scenarios-cutting", "value"),
+    Output("target_probability", "value"),
     Output("target-year", "value"),
     Output("reset-sector-region-scope", "children"),
     Output("spinner-reset", "value"),
@@ -1906,6 +1973,7 @@ def reset_filters(n_clicks_reset):
         'absolute',
         'median',
         [ProjectionControls.LOWER_PERCENTILE*100,ProjectionControls.UPPER_PERCENTILE*100],
+        100*TemperatureScoreConfig.CONTROLS_CONFIG.target_probability,
         2050,
         "Reset Sector, Region, Scope",
         "Spin-reset",
@@ -1925,4 +1993,4 @@ def spinner_concentrator(*_):
     return 'Spin!'
 
 if __name__ == "__main__":
-    app.run_server(use_reloader=True, debug=True, port=8051)
+    app.run_server(use_reloader=False, debug=True, port=8051)

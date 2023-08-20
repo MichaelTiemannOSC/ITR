@@ -322,7 +322,7 @@ filter_box = dbc.Row( # We are a row of the left-side column box
                         dbc.Popover(dbc.PopoverBody(
                             "Focus on companies from portfolio with specific temperature score"), id="hover2",
                                     target="hover-target2", trigger="hover"),
-                    ], width=2, #align="center",
+                    ], width=2,  # align="center",
                 ),
             ],
             align="center",
@@ -591,8 +591,6 @@ benchmark_box = dbc.Row(
 )
 
 
-
-
 itr_titlebar = dbc.Row(  # upload portfolio
     [
         dbc.Col(  # upload OS-C logo
@@ -825,10 +823,14 @@ app.layout = dbc.Container(  # always start with container
 
     prevent_initial_call=False,)
 def warehouse_new(banner_title):
-    # load company data
+    '''
+    Load initial corporate data file
+    '''
+    logger.info(f"warehouse_new: start")
     template_company_data = TemplateProviderCompany(company_data_path, projection_controls = ProjectionControls())
     Warehouse = DataWarehouse(template_company_data, benchmark_projected_production=None, benchmarks_projected_ei=None,
                               estimate_missing_data=DataWarehouse.estimate_missing_s3_data)
+    logger.info(f"warehouse_new: end")
     return (json.dumps(pickle.dumps(Warehouse), default=ITR.JSONEncoder),
             True,
             "Spin-warehouse")
@@ -855,6 +857,7 @@ def recalculate_individual_itr(warehouse_pickle_json, eibm, proj_meth, winz, bm_
     :param proj_meth: Trajectory projection method (median or mean)
     :param winz: Winsorization parameters (limit of outlier data)
     '''
+    logger.info(f"recalculate_individual_itr: start")
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]  # to catch which widgets were pressed
     Warehouse = pickle.loads(ast.literal_eval(json.loads(warehouse_pickle_json)))
 
@@ -862,7 +865,7 @@ def recalculate_individual_itr(warehouse_pickle_json, eibm, proj_meth, winz, bm_
         Warehouse.company_data.projection_controls.TREND_CALC_METHOD = ITR_median if proj_meth == 'median' else ITR_mean
         Warehouse.company_data.projection_controls.LOWER_PERCENTILE = winz[0] / 100
         Warehouse.company_data.projection_controls.UPPER_PERCENTILE = winz[1] / 100
-       
+
     if 'eibm-dropdown' in changed_id or Warehouse.benchmarks_projected_ei is None:
         show_oecm_bm = 'no'
         if eibm == 'OECM_PC':
@@ -900,12 +903,10 @@ def recalculate_individual_itr(warehouse_pickle_json, eibm, proj_meth, winz, bm_
         # This updates benchmarks and all that depends on them (including trajectories)
         Warehouse.update_benchmarks(base_production_bm, EI_bm)
         bm_region = eibm
-
-    elif 'scenarios-cutting' in changed_id or 'projection-method' in changed_id: 
+    elif 'scenarios-cutting' in changed_id or 'projection-method' in changed_id:
         # Trajectories are company-specific, but ultimately do depend on benchmarks (for units/scopes)
         Warehouse.update_trajectories()
-        
-
+    logger.info(f"recalculate_individual_itr: end")
     return (json.dumps(pickle.dumps(Warehouse), default=ITR.JSONEncoder),
             show_oecm_bm,
             bm_region,
@@ -1391,6 +1392,7 @@ def calc_temperature_score(warehouse_pickle_json, budget_meth, target_probabilit
     '''
     global companies
 
+    logger.info(f"calc_temperature_score: start")
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]  # to catch which widgets were pressed
     Warehouse = pickle.loads(ast.literal_eval(json.loads(warehouse_pickle_json)))
 
@@ -1408,6 +1410,7 @@ def calc_temperature_score(warehouse_pickle_json, budget_meth, target_probabilit
         df = temperature_score.calculate(data_warehouse=Warehouse, portfolio=companies)
     df = df.drop(columns=['historic_data', 'target_data'])
     amended_portfolio = df
+    logger.info(f"calc_temperature_score: end")
     return (amended_portfolio.to_json(orient='split', default_handler=ITR.JSONEncoder),
             "Spin-ts",)
 
