@@ -62,7 +62,7 @@ cache = diskcache.Cache("./.webassets-cache")
 background_callback_manager = DiskcacheManager(cache, cache_by=[lambda: launch_uid], expire=600)
 
 # Some variables to control whether we use background caching or not.  Cannot use with vault nor breakpoints.
-have_breakpoint = False
+have_breakpoint = True
 use_data_vault = False
 
 examples_dir ='' #'examples'
@@ -306,6 +306,7 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], # theme s
                 )
 app.title = "ITR Tool" # this puts text to the browser tab
 server = app.server
+logger.info(f"app.server = {app.server}")
 
 filter_width = 10
 filter_box = dbc.Row( # We are a row of the left-side column box
@@ -1621,7 +1622,10 @@ def update_graph(
     agg_temp_scores = [agg_score(i) for i in PortfolioAggregationMethod]
     methods, scores = list(map(list, zip(*agg_temp_scores)))
     if ITR.HAS_UNCERTAINTIES:
-        scores_n, scores_s = [*map(list, zip(*map(lambda x: (x.m.n, x.m.s) if isinstance(x.m, ITR.UFloat) else (x.m, 0.0), scores)))]
+        if ITR.HAS_AUTOUNCERTAINTIES:
+            scores_n, scores_s = [*map(list, zip(*map(lambda x: (x.m._nom, x.m._err) if isinstance(x.m, ITR.UFloat) else (x.m, 0.0), scores)))]
+        else:
+            scores_n, scores_s = [*map(list, zip(*map(lambda x: (x.m.n, x.m.s) if isinstance(x.m, ITR.UFloat) else (x.m, 0.0), scores)))]
         if sum(scores_s) == 0:
             df_temp_score = pd.DataFrame(
                 data={0: pd.Series(methods, dtype='string'),
@@ -1711,7 +1715,10 @@ def update_graph(
     else:
         raise ValueError("No aggregated scores")
     if ITR.HAS_UNCERTAINTIES and isinstance(scores, ITR.UFloat):
-        scores = scores.n
+        if ITR.HAS_AUTOUNCERTAINTIES:
+            scores = scores._nom
+        else:
+            scores = scores.n
 
     return (
         fig1, fig5,
