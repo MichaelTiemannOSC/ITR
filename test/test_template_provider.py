@@ -1,5 +1,6 @@
 import os
 import unittest
+import numpy as np
 import pandas as pd
 
 import ITR
@@ -15,12 +16,8 @@ from ITR.data.data_warehouse import DataWarehouse
 from utils import assert_pint_series_equal, assert_pint_frame_equal
 
 
-class TestTemplateProvider(unittest.TestCase):
-    """
-    Test the excel template provider
-    """
-
-    def setUp(self) -> None:
+class TemplateV1:
+    def __init__(self) -> None:
         self.root = os.path.dirname(os.path.abspath(__file__))
         self.company_data_path = os.path.join(self.root, "inputs", "20220215 ITR Tool Sample Data.xlsx")
         self.sector_data_path = os.path.join(self.root, "inputs", "benchmark_OECM_PC.xlsx")
@@ -42,7 +39,24 @@ class TestTemplateProvider(unittest.TestCase):
             index=pd.Index(self.company_ids, name='company_id'),
             columns=[ColumnsConfig.SECTOR, ColumnsConfig.REGION, ColumnsConfig.SCOPE,
                      ColumnsConfig.BASE_EI, ColumnsConfig.BASE_YEAR_PRODUCTION, ColumnsConfig.PRODUCTION_METRIC])
-        self.company_info_at_base_year['ghg_s1s2'] = self.company_info_at_base_year.base_year_production.mul(self.company_info_at_base_year.ei_at_base_year)
+        self.company_info_at_base_year['ghg_s1s2'] = self.company_info_at_base_year.base_year_production.mul(self.company_info_at_base_year.ei_at_base_year)    
+
+template_V1 = TemplateV1()
+
+class TestTemplateProvider(unittest.TestCase):
+    """
+    Test the excel template provider
+    """
+
+    def setUp(self) -> None:
+        self.company_data_path = template_V1.company_data_path
+        self.sector_data_path = template_V1.sector_data_path
+        self.excel_production_bm = template_V1.excel_production_bm
+        self.excel_EI_bm = template_V1.excel_EI_bm
+        self.template_company_data = template_V1.template_company_data
+        self.data_warehouse = template_V1.data_warehouse
+        self.company_ids = template_V1.company_ids
+        self.company_info_at_base_year = template_V1.company_info_at_base_year
 
     def test_target_projections(self):
         comids = ['US00130H1059', 'US0185223007',
@@ -76,13 +90,13 @@ class TestTemplateProvider(unittest.TestCase):
         for c in company_data:
             # This equality test does not work for scopes that have NaN values
             ei_bm = self.excel_EI_bm
-            if (c.sector, c.region) in ei_bm._EI_df.index:
-                ei_df = ei_bm._EI_df.loc[(c.sector, c.region)]
-            elif (c.sector, "Global") in ei_bm._EI_df.index:
-                ei_df = ei_bm._EI_df.loc[(c.sector, "Global")]
+            if (c.sector, c.region) in ei_bm._EI_df_t.columns:
+                ei_df_t = ei_bm._EI_df_t.loc[:, (c.sector, c.region)]
+            elif (c.sector, "Global") in ei_bm._EI_df_t.columns:
+                ei_df_t = ei_bm._EI_df_t.loc[:, (c.sector, "Global")]
             else:
                 raise ValueError(f"company {c.company_name} with ID {c.company_id} sector={c.sector} region={c.region} not in EI benchmark")
-            temp = EITargetProjector(self.template_company_data.projection_controls).project_ei_targets(c, bm_production_data.loc[(c.company_id, EScope.S1S2)], ei_df).S1S2
+            temp = EITargetProjector(self.template_company_data.projection_controls).project_ei_targets(c, bm_production_data.loc[(c.company_id, EScope.S1S2)], ei_df_t).S1S2
             if c.projected_targets.S1S2 is None and temp is None:
                 continue
             if isinstance(c.projected_targets.S1S2.projections, pd.Series):
