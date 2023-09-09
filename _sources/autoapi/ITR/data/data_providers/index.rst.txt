@@ -21,6 +21,7 @@ Classes
 
 .. py:class:: CompanyDataProvider(**kwargs)
 
+
    Bases: :py:obj:`abc.ABC`
 
    Company data provider super class.
@@ -42,7 +43,7 @@ Classes
    .. py:method:: get_value(company_ids: List[str], variable_name: str) -> pandas.Series
       :abstractmethod:
 
-      Gets the value of a variable for a list of companies idss
+      Gets the value of a variable for a list of companies ids
       :param company_ids: list of company ids
       :param variable_name: variable name of the projected feature
       :return: series of values
@@ -77,6 +78,7 @@ Classes
 
 .. py:class:: ProductionBenchmarkDataProvider(**kwargs)
 
+
    Bases: :py:obj:`abc.ABC`
 
    Production projecton data provider super class.
@@ -106,34 +108,35 @@ Classes
 
 .. py:class:: IntensityBenchmarkDataProvider(benchmark_temperature: pint.Quantity[delta_degC], benchmark_global_budget: pint.Quantity[CO2], is_AFOLU_included: bool, **kwargs)
 
+
    Bases: :py:obj:`abc.ABC`
 
    Production intensity data provider super class.
    This Data Container contains emission intensity data on benchmark level. Data has a regions and sector indices.
    Initialized IntensityBenchmarkDataProvider is required when setting up a data warehouse instance.
 
-   .. py:attribute:: AFOLU_CORRECTION_FACTOR
-      :annotation: = 0.76
-
-      
-
-   .. py:method:: is_AFOLU_included() -> bool
-      :property:
+   .. py:property:: is_AFOLU_included
+      :type: bool
 
       :return: if AFOLU is included in the benchmarks global budget
 
 
-   .. py:method:: benchmark_temperature() -> pint.Quantity[delta_degC]
-      :property:
+   .. py:property:: benchmark_temperature
+      :type: pint.Quantity[delta_degC]
 
       :return: assumed temperature for the benchmark. for OECM 1.5C for example
 
 
-   .. py:method:: benchmark_global_budget() -> pint.Quantity[CO2]
-      :property:
+   .. py:property:: benchmark_global_budget
+      :type: pint.Quantity[CO2]
 
       :return: Benchmark provider assumed global budget. if AFOLU is not included global budget is divided by 0.76
 
+
+   .. py:attribute:: AFOLU_CORRECTION_FACTOR
+      :value: 0.76
+
+      
 
    .. py:method:: _get_intensity_benchmarks(company_sector_region_info: pandas.DataFrame) -> pandas.DataFrame
       :abstractmethod:

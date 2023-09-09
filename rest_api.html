@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Getting Started Using REST API &amp; UI &mdash; ITR Temperature Alignment tool  documentation</title>
@@ -10,11 +10,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -27,11 +27,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> ITR Temperature Alignment tool
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ITR Temperature Alignment tool
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -56,6 +60,19 @@
 <li class="toctree-l1"><a class="reference internal" href="DataRequirements.html">Data Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Legends.html">Data Legends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#submitting-a-bug-report-or-a-feature-request">Submitting a bug report or a feature request</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#contributing-code">Contributing code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#releasing">Releasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#code-of-conduct">Code of conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#id2">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#id3">Submitting a bug report or a feature request</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#id4">Contributing code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#id10">Releasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#id13">Code of conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#id15">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#issue-reports">Issue Reports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#documentation-improvements">Documentation Improvements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#maintainer-tasks">Maintainer tasks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="links.html">Project Links</a></li>
 <li class="toctree-l1"><a class="reference internal" href="terms.html">Terms of Use</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
@@ -74,8 +91,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Getting Started Using REST API &amp; UI</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Getting Started Using REST API &amp; UI</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/rest_api.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -86,19 +103,19 @@
            <div itemprop="articleBody">
              
   <section id="getting-started-using-rest-api-ui">
-<h1>Getting Started Using REST API &amp; UI<a class="headerlink" href="#getting-started-using-rest-api-ui" title="Permalink to this heading"></a></h1>
+<h1>Getting Started Using REST API &amp; UI<a class="headerlink" href="#getting-started-using-rest-api-ui" title="Link to this heading"></a></h1>
 <p>The provided REST API makes it easy to integrate the SBTi temperature alignment tool as a micro-service in your current IT infrastructure.
 Optionally you can also run the REST API with a small frontend, which makes testing easier.</p>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
 <p>The complete REST API reference is available <a class="reference external" href="https://os-c.github.io/ITR/swagger/index.html">here</a>.</p>
 </section>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
 <p>The tool is containerized in a Docker container, which enables easy cloud and on premise deployments.
 We will provide instructions here for installing the REST API either on your local machine or on Amazon AWS.</p>
 <section id="locally">
-<h3>Locally<a class="headerlink" href="#locally" title="Permalink to this heading"></a></h3>
+<h3>Locally<a class="headerlink" href="#locally" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><strong>Step 1</strong>: Install Docker desktop</p></li>
 </ul>
@@ -159,7 +176,7 @@ You can choose whether you only want to run the API or also the UI. To run them,
 </ol>
 </section>
 <section id="amazon-aws">
-<h3>Amazon AWS<a class="headerlink" href="#amazon-aws" title="Permalink to this heading"></a></h3>
+<h3>Amazon AWS<a class="headerlink" href="#amazon-aws" title="Link to this heading"></a></h3>
 <p>These instructions assume that you have installed and configured the Amazon <a class="reference external" href="https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)andthe[ECSCLItools](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_Configuration.html">AWS CLI tools</a> with an IAM account that has at least write access to ECS and EC2 and the capability of creating AIM roles.</p>
 <ol class="arabic">
 <li><p>Configure the cluster. You can update the region and names as you see fit:</p>
@@ -218,7 +235,7 @@ You can choose whether you only want to run the API or also the UI. To run them,
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, OS-Climate.</p>
+    <p>&#169; Copyright 2023, OS-Climate.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -12,23 +12,485 @@
 Module Contents
 ---------------
 
-.. py:data:: ureg
-   
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ITR.data.osc_units.ProductionMetric
+   ITR.data.osc_units.EmissionsMetric
+   ITR.data.osc_units.EI_Metric
+   ITR.data.osc_units.BenchmarkMetric
+   ITR.data.osc_units.EmissionsQuantity
+   ITR.data.osc_units.ProductionQuantity
+   ITR.data.osc_units.EI_Quantity
+   ITR.data.osc_units.BenchmarkQuantity
+   ITR.data.osc_units.MonetaryQuantity
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ITR.data.osc_units.direct_conversions
+   ITR.data.osc_units.time_dimension
+   ITR.data.osc_units.convert_to_annual
+   ITR.data.osc_units.dimension_as
+   ITR.data.osc_units.align_production_to_bm
+   ITR.data.osc_units.quantity
+   ITR.data.osc_units.asPintSeries
+   ITR.data.osc_units.asPintDataFrame
+   ITR.data.osc_units.requantify_df_from_columns
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ITR.data.osc_units.base_currency_unit
+   ITR.data.osc_units.fx_ctx
+   ITR.data.osc_units.NG_DENS
+   ITR.data.osc_units.NG_SE
+   ITR.data.osc_units.ng
+   ITR.data.osc_units.COAL_SE
+   ITR.data.osc_units.coal
+   ITR.data.osc_units.oil
+   ITR.data.osc_units._production_units
+   ITR.data.osc_units._ei_units
+   ITR.data.osc_units.registry
+   ITR.data.osc_units.schema_extra
+
+
+.. py:data:: base_currency_unit
+   :value: 'USD'
 
    
 
-.. py:data:: ureg
-   
+.. py:data:: fx_ctx
 
    
 
-.. py:data:: Q_
-   
+.. py:data:: NG_DENS
 
    
 
-.. py:data:: PA_
-   
+.. py:data:: NG_SE
 
    
+
+.. py:data:: ng
+
+   
+
+.. py:data:: COAL_SE
+
+   
+
+.. py:data:: coal
+
+   
+
+.. py:function:: direct_conversions(ureg, unit) -> [str]
+
+   Return a LIST of unit names that Pint can convert implicitly from/to UNIT.
+   This does not include the list of additional unit names that can be explicitly
+   converted by using the `Quantity.to` method.
+
+
+.. py:function:: time_dimension(unit, exp) -> bool
+
+   True if UNIT can be converted to something related only to time.
+
+
+.. py:function:: convert_to_annual(x, errors='ignore')
+
+   For a quantity X that has units of [time], reduce the time dimension, leaving an "implictly annual" metric.
+   If X has no time dimension, or if it cannot be reduced to zero in a single step, raise a DimensionalityError.
+   If ERRORS=='ignore', allow time dimension to be reduced one step towards zero rather than only to zero.
+   Returns the reduced quantity, or the original quantity if reduction would result in an error being raised.
+
+
+.. py:function:: dimension_as(x, dim_unit)
+
+
+.. py:function:: align_production_to_bm(prod_series: pandas.Series, ei_bm: pandas.Series) -> pandas.Series
+
+   A timeseries of production unit values can be aligned with a timeseries of Emissions Intensity (EI)
+   metrics that uses different units of production.  For example, the production timeseries might be
+   `bbl` (`Blue Barrels of Oil`) but the EI might be `t CO2e/GJ` (`CO2e * metric_ton / gigajoule`).
+   By converting the production series to gigajoules up front, there are no complex conversions
+   needed later (such as trying to convert `t CO2e * metric_ton / bbl` to
+   `CO2e * metric_ton / gigajoule`, which is not straightfowrard, as the former is
+   `[mass] / [length]**3` whereas the latter is `[seconds] ** 2 / [length] **2`.
+
+
+.. py:data:: oil
+
+   
+
+.. py:data:: _production_units
+   :value: ['Wh', 'pkm', 'tkm', 'bcm CH4', 'bbl', 'boe', 't Alloys', 't Aluminum', 't Cement', 't Coal', 't...
+
+   
+
+.. py:data:: _ei_units
+
+   
+
+.. py:class:: ProductionMetric
+
+
+   Bases: :py:obj:`str`
+
+   Valid production metrics accepted by ITR tool
+
+   .. py:method:: __get_validators__()
+      :classmethod:
+
+
+   .. py:method:: __modify_schema__(field_schema)
+      :classmethod:
+
+
+   .. py:method:: validate(units)
+      :classmethod:
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: EmissionsMetric
+
+
+   Bases: :py:obj:`str`
+
+   Valid production metrics accepted by ITR tool
+
+   .. py:method:: __get_validators__()
+      :classmethod:
+
+
+   .. py:method:: __modify_schema__(field_schema)
+      :classmethod:
+
+
+   .. py:method:: validate(units)
+      :classmethod:
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: EI_Metric
+
+
+   Bases: :py:obj:`str`
+
+   Valid production metrics accepted by ITR tool
+
+   .. py:method:: __get_validators__()
+      :classmethod:
+
+
+   .. py:method:: __modify_schema__(field_schema)
+      :classmethod:
+
+
+   .. py:method:: validate(units)
+      :classmethod:
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: BenchmarkMetric
+
+
+   Bases: :py:obj:`str`
+
+   Valid benchmark metrics accepted by ITR tool
+
+   .. py:method:: __get_validators__()
+      :classmethod:
+
+
+   .. py:method:: __modify_schema__(field_schema)
+      :classmethod:
+
+
+   .. py:method:: validate(units)
+      :classmethod:
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:data:: registry
+
+   
+
+.. py:data:: schema_extra
+
+   
+
+.. py:function:: quantity(dimensionality: str) -> type
+
+   A method for making a pydantic compliant Pint quantity field type.
+
+
+.. py:class:: EmissionsQuantity
+
+
+   Bases: :py:obj:`pint.Quantity`
+
+   A method for making a pydantic compliant Pint emissions quantity.
+
+   .. py:class:: Config
+
+
+      .. py:attribute:: validate_assignment
+         :value: True
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+      .. py:attribute:: json_encoders
+
+         
+
+
+   .. py:method:: __get_validators__()
+      :classmethod:
+
+
+   .. py:method:: __modify_schema__(field_schema)
+      :classmethod:
+
+
+   .. py:method:: validate(quantity)
+      :classmethod:
+
+
+   .. py:method:: __repr__()
+
+
+
+.. py:class:: ProductionQuantity
+
+
+   Bases: :py:obj:`str`
+
+   A method for making a pydantic compliant Pint production quantity.
+
+   .. py:class:: Config
+
+
+      .. py:attribute:: validate_assignment
+         :value: True
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+      .. py:attribute:: json_encoders
+
+         
+
+
+   .. py:method:: __get_validators__()
+      :classmethod:
+
+
+   .. py:method:: __modify_schema__(field_schema)
+      :classmethod:
+
+
+   .. py:method:: validate(quantity)
+      :classmethod:
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: EI_Quantity
+
+
+   Bases: :py:obj:`str`
+
+   A method for making a pydantic compliant Pint Emissions Intensity quantity.
+
+   .. py:class:: Config
+
+
+      .. py:attribute:: validate_assignment
+         :value: True
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+      .. py:attribute:: json_encoders
+
+         
+
+
+   .. py:method:: __get_validators__()
+      :classmethod:
+
+
+   .. py:method:: __modify_schema__(field_schema)
+      :classmethod:
+
+
+   .. py:method:: validate(quantity)
+      :classmethod:
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: BenchmarkQuantity
+
+
+   Bases: :py:obj:`str`
+
+   A method for making a pydantic compliant Pint Benchmark quantity (which includes dimensionless production growth).
+
+   .. py:class:: Config
+
+
+      .. py:attribute:: validate_assignment
+         :value: True
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+      .. py:attribute:: json_encoders
+
+         
+
+
+   .. py:method:: __get_validators__()
+      :classmethod:
+
+
+   .. py:method:: __modify_schema__(field_schema)
+      :classmethod:
+
+
+   .. py:method:: validate(quantity)
+      :classmethod:
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: MonetaryQuantity
+
+
+   Bases: :py:obj:`str`
+
+   A method for making a pydantic compliant Pint Financial quantity (which is basically some amount of money denominated in a currency).
+
+   .. py:class:: Config
+
+
+      .. py:attribute:: validate_assignment
+         :value: True
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+      .. py:attribute:: json_encoders
+
+         
+
+
+   .. py:method:: __get_validators__()
+      :classmethod:
+
+
+   .. py:method:: __modify_schema__(field_schema)
+      :classmethod:
+
+
+   .. py:method:: validate(quantity)
+      :classmethod:
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:function:: asPintSeries(series: pandas.Series, name=None, errors='ignore', inplace=False) -> pandas.Series
+
+   :param series : pd.Series possibly containing Quantity values, not already in a PintArray.
+   :param name : the name to give to the resulting series
+   :param errors : { 'raise', 'ignore' }, default 'ignore'
+   :param inplace : bool, default False.  If True, perform operation in-place.
+
+   :return: If there is only one type of unit in the series, a PintArray version of the series, replacing NULL values with Quantity (np.nan, unit_type).
+
+   Raises ValueError if there are more than one type of units in the series.
+   Silently returns series if no conversion needed to be done.
+
+
+.. py:function:: asPintDataFrame(df: pandas.DataFrame, errors='ignore', inplace=False) -> pandas.DataFrame
+
+   :param df : pd.DataFrame with columns to be converted into PintArrays where possible.
+   :param errors : { 'raise', 'ignore' }, default 'ignore'
+   :param inplace : bool, default False.  If True, perform operation in-place.
+
+   :return: A pd.DataFrame with columns converted to PintArrays where possible.
+
+   Raises ValueError if there are more than one type of units in any of the columns.
+
+
+.. py:function:: requantify_df_from_columns(df: pandas.DataFrame, inplace=False) -> pandas.DataFrame
+
+   :param df: pd.DataFrame
+   :param inplace: bool, default False.  If True, perform operation in-place.
+
+   :return: A pd.DataFrame with columns originally matching the pattern COLUMN_NAME [UNITS] renamed to COLUMN_NAME and replaced with a PintArray with dtype=ureg(UNITS) (aka 'pint[UNITS]')
+
 

@@ -24,369 +24,513 @@ Classes
    ITR.configs.TargetConfig
    ITR.configs.TabsConfig
    ITR.configs.PortfolioAggregationConfig
+   ITR.configs.ProjectionControls
+   ITR.configs.TemperatureScoreControls
    ITR.configs.TemperatureScoreConfig
    ITR.configs.LoggingConfig
 
 
 
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ITR.configs.ITR_median
+   ITR.configs.ITR_mean
+
+
+
+.. py:function:: ITR_median(*args, **kwargs)
+
+
+.. py:function:: ITR_mean(*args, **kwargs)
+
 
 .. py:class:: ColumnsConfig
 
+
    .. py:attribute:: COMPANY_ID
-      :annotation: = company_id
+      :value: 'company_id'
 
       
 
    .. py:attribute:: COMPANY_LEI
-      :annotation: = company_lei
+      :value: 'company_lei'
 
       
 
    .. py:attribute:: COMPANY_ISIN
-      :annotation: = company_isin
+      :value: 'company_isin'
 
       
 
    .. py:attribute:: COMPANY_ISIC
-      :annotation: = isic
+      :value: 'isic'
+
+      
+
+   .. py:attribute:: COMPANY_CURRENCY
+      :value: 'currency'
 
       
 
    .. py:attribute:: COMPANY_MARKET_CAP
-      :annotation: = company_market_cap
+      :value: 'company_market_cap'
 
       
 
    .. py:attribute:: INVESTMENT_VALUE
-      :annotation: = investment_value
+      :value: 'investment_value'
 
       
 
    .. py:attribute:: COMPANY_ENTERPRISE_VALUE
-      :annotation: = company_enterprise_value
+      :value: 'company_enterprise_value'
 
       
 
    .. py:attribute:: COMPANY_EV_PLUS_CASH
-      :annotation: = company_ev_plus_cash
+      :value: 'company_ev_plus_cash'
 
       
 
    .. py:attribute:: COMPANY_TOTAL_ASSETS
-      :annotation: = company_total_assets
+      :value: 'company_total_assets'
 
       
 
    .. py:attribute:: SCOPE
-      :annotation: = scope
+      :value: 'scope'
 
       
 
    .. py:attribute:: START_YEAR
-      :annotation: = start_year
+      :value: 'start_year'
 
       
 
    .. py:attribute:: VARIABLE
-      :annotation: = variable
+      :value: 'variable'
 
       
 
    .. py:attribute:: SLOPE
-      :annotation: = slope
+      :value: 'slope'
 
       
 
    .. py:attribute:: TIME_FRAME
-      :annotation: = time_frame
+      :value: 'time_frame'
 
       
 
    .. py:attribute:: TEMPERATURE_SCORE
-      :annotation: = temperature_score
+      :value: 'temperature_score'
 
       
 
    .. py:attribute:: COMPANY_NAME
-      :annotation: = company_name
+      :value: 'company_name'
 
       
 
    .. py:attribute:: OWNED_EMISSIONS
-      :annotation: = owned_emissions
+      :value: 'owned_emissions'
 
       
 
    .. py:attribute:: COUNTRY
-      :annotation: = country
+      :value: 'country'
 
       
 
    .. py:attribute:: SECTOR
-      :annotation: = sector
+      :value: 'sector'
 
       
 
    .. py:attribute:: TEMPLATE_EXPOSURE
-      :annotation: = exposure
+      :value: 'exposure'
 
       
 
-   .. py:attribute:: TEMPLATE_CURRENCY
-      :annotation: = currency
+   .. py:attribute:: TEMPLATE_FX_QUOTE
+      :value: 'fx_quote'
+
+      
+
+   .. py:attribute:: TEMPLATE_FX_RATE
+      :value: 'fx_rate'
 
       
 
    .. py:attribute:: TEMPLATE_REPORT_DATE
-      :annotation: = report_date
+      :value: 'report_date'
 
       
 
    .. py:attribute:: EMISSIONS_METRIC
-      :annotation: = emissions_metric
+      :value: 'emissions_metric'
 
       
 
    .. py:attribute:: PRODUCTION_METRIC
-      :annotation: = production_metric
+      :value: 'production_metric'
 
       
 
    .. py:attribute:: BASE_YEAR_PRODUCTION
-      :annotation: = base_year_production
+      :value: 'base_year_production'
 
       
 
    .. py:attribute:: GHG_SCOPE12
-      :annotation: = ghg_s1s2
+      :value: 'ghg_s1s2'
 
       
 
    .. py:attribute:: GHG_SCOPE3
-      :annotation: = ghg_s3
+      :value: 'ghg_s3'
 
       
 
    .. py:attribute:: TEMPLATE_SCOPE1
-      :annotation: = em_s1
+      :value: 'em_s1'
 
       
 
    .. py:attribute:: TEMPLATE_SCOPE2
-      :annotation: = em_s2
+      :value: 'em_s2'
 
       
 
    .. py:attribute:: TEMPLATE_SCOPE12
-      :annotation: = em_s1s2
+      :value: 'em_s1s2'
 
       
 
    .. py:attribute:: TEMPLATE_SCOPE3
-      :annotation: = em_s3
+      :value: 'em_s3'
 
       
 
    .. py:attribute:: TEMPLATE_SCOPE123
-      :annotation: = em_s1s2s3
+      :value: 'em_s1s2s3'
 
       
 
    .. py:attribute:: HISTORIC_DATA
-      :annotation: = historic_data
+      :value: 'historic_data'
 
       
 
    .. py:attribute:: TARGET_DATA
-      :annotation: = target_data
+      :value: 'target_data'
 
       
 
    .. py:attribute:: TEMPLATE_PRODUCTION
-      :annotation: = production
+      :value: 'production'
 
       
 
    .. py:attribute:: COMPANY_REVENUE
-      :annotation: = company_revenue
+      :value: 'company_revenue'
 
       
 
-   .. py:attribute:: CASH_EQUIVALENTS
-      :annotation: = company_cash_equivalents
+   .. py:attribute:: COMPANY_CASH_EQUIVALENTS
+      :value: 'company_cash_equivalents'
 
       
 
    .. py:attribute:: BASE_YEAR
-      :annotation: = base_year
+      :value: 'base_year'
 
       
 
    .. py:attribute:: END_YEAR
-      :annotation: = end_year
+      :value: 'end_year'
 
       
 
    .. py:attribute:: ISIC
-      :annotation: = isic
+      :value: 'isic'
 
       
 
    .. py:attribute:: INDUSTRY_LVL1
-      :annotation: = industry_level_1
+      :value: 'industry_level_1'
 
       
 
    .. py:attribute:: INDUSTRY_LVL2
-      :annotation: = industry_level_2
+      :value: 'industry_level_2'
 
       
 
    .. py:attribute:: INDUSTRY_LVL3
-      :annotation: = industry_level_3
+      :value: 'industry_level_3'
 
       
 
    .. py:attribute:: INDUSTRY_LVL4
-      :annotation: = industry_level_4
+      :value: 'industry_level_4'
 
       
 
    .. py:attribute:: REGION
-      :annotation: = region
+      :value: 'region'
 
       
 
    .. py:attribute:: CUMULATIVE_BUDGET
-      :annotation: = cumulative_budget
+      :value: 'cumulative_budget'
+
+      
+
+   .. py:attribute:: CUMULATIVE_SCALED_BUDGET
+      :value: 'cumulative_scaled_budget'
 
       
 
    .. py:attribute:: CUMULATIVE_TRAJECTORY
-      :annotation: = cumulative_trajectory
+      :value: 'cumulative_trajectory'
 
       
 
    .. py:attribute:: CUMULATIVE_TARGET
-      :annotation: = cumulative_target
+      :value: 'cumulative_target'
+
+      
+
+   .. py:attribute:: TRAJECTORY_EXCEEDANCE_YEAR
+      :value: 'trajectory_exceedance_year'
+
+      
+
+   .. py:attribute:: TARGET_EXCEEDANCE_YEAR
+      :value: 'target_exceedance_year'
 
       
 
    .. py:attribute:: TARGET_PROBABILITY
-      :annotation: = target_probability
+      :value: 'target_probability'
 
       
 
    .. py:attribute:: BENCHMARK_TEMP
-      :annotation: = benchmark_temperature
+      :value: 'benchmark_temperature'
 
       
 
    .. py:attribute:: BENCHMARK_GLOBAL_BUDGET
-      :annotation: = benchmark_global_budget
+      :value: 'benchmark_global_budget'
 
       
 
    .. py:attribute:: BASE_EI
-      :annotation: = ei_at_base_year
+      :value: 'ei_at_base_year'
 
       
 
    .. py:attribute:: PROJECTED_EI
-      :annotation: = projected_intensities
+      :value: 'projected_intensities'
 
       
 
    .. py:attribute:: PROJECTED_TARGETS
-      :annotation: = projected_targets
+      :value: 'projected_targets'
 
       
 
    .. py:attribute:: HISTORIC_PRODUCTIONS
-      :annotation: = historic_productions
+      :value: 'historic_productions'
 
       
 
    .. py:attribute:: HISTORIC_EMISSIONS
-      :annotation: = historic_emissions
+      :value: 'historic_emissions'
 
       
 
    .. py:attribute:: HISTORIC_EI
-      :annotation: = historic_ei
+      :value: 'historic_ei'
 
       
 
    .. py:attribute:: TRAJECTORY_SCORE
-      :annotation: = trajectory_score
+      :value: 'trajectory_score'
 
       
 
    .. py:attribute:: TRAJECTORY_OVERSHOOT
-      :annotation: = trajectory_overshoot_ratio
+      :value: 'trajectory_overshoot_ratio'
 
       
 
    .. py:attribute:: TARGET_SCORE
-      :annotation: = target_score
+      :value: 'target_score'
 
       
 
    .. py:attribute:: TARGET_OVERSHOOT
-      :annotation: = target_overshoot_ratio
+      :value: 'target_overshoot_ratio'
 
       
 
    .. py:attribute:: WEIGHTED_TEMPERATURE_SCORE
-      :annotation: = weighted_temperature_score
+      :value: 'weighted_temperature_score'
 
       
 
    .. py:attribute:: CONTRIBUTION_RELATIVE
-      :annotation: = contribution_relative
+      :value: 'contribution_relative'
 
       
 
    .. py:attribute:: CONTRIBUTION
-      :annotation: = contribution
+      :value: 'contribution'
 
       
 
 
 .. py:class:: SectorsConfig
 
+
+   .. py:attribute:: POWER_UTILITY
+      :value: 'Electricity Utilities'
+
+      
+
+   .. py:attribute:: GAS_UTILITY
+      :value: 'Gas Utilities'
+
+      
+
+   .. py:attribute:: UTILITY
+      :value: 'Utilities'
+
+      
+
    .. py:attribute:: STEEL
-      :annotation: = Steel
+      :value: 'Steel'
 
       
 
-   .. py:attribute:: ELECTRICITY
-      :annotation: = Electricity Utilities
+   .. py:attribute:: ALUMINUM
+      :value: 'Aluminum'
 
       
 
-   .. py:attribute:: INFORMATION_TECHNOLOGY
-      :annotation: = Information Technology
+   .. py:attribute:: ENERGY
+      :value: 'Energy'
 
       
 
-   .. py:attribute:: INDUSTRIALS
-      :annotation: = Industrials
+   .. py:attribute:: OIL_AND_GAS
+      :value: 'Oil & Gas'
 
       
 
-   .. py:attribute:: FINANCIALS
-      :annotation: = Financials
+   .. py:attribute:: COAL
+      :value: 'Coal'
 
       
 
-   .. py:attribute:: HEALTH_CARE
-      :annotation: = Health Care
+   .. py:attribute:: OIL
+      :value: 'Oil'
+
+      
+
+   .. py:attribute:: GAS
+      :value: 'Gas'
 
       
 
    .. py:attribute:: AUTOMOBILE
-      :annotation: = Autos
+      :value: 'Autos'
+
+      
+
+   .. py:attribute:: TRUCKING
+      :value: 'Trucking'
+
+      
+
+   .. py:attribute:: CEMENT
+      :value: 'Cement'
+
+      
+
+   .. py:attribute:: BUILDINGS_CONSTRUCTION
+      :value: 'Construction Buildings'
+
+      
+
+   .. py:attribute:: BUILDINGS_RESIDENTIAL
+      :value: 'Residential Buildings'
+
+      
+
+   .. py:attribute:: BUILDINGS_COMMERCIAL
+      :value: 'Commercial Buildings'
+
+      
+
+   .. py:attribute:: TEXTILES
+      :value: 'Textiles'
+
+      
+
+   .. py:attribute:: CHEMICALS
+      :value: 'Chemicals'
+
+      
+
+   .. py:attribute:: PLASTICS
+      :value: 'Petrochem & Plastics'
+
+      
+
+   .. py:attribute:: AG_CHEM
+      :value: 'Ag Chem'
+
+      
+
+   .. py:attribute:: CONSUMER_PRODUCTS
+      :value: 'Consumer Products'
+
+      
+
+   .. py:attribute:: PHARMACEUTICALS
+      :value: 'Pharmaceuticals'
+
+      
+
+   .. py:attribute:: FIBERS_AND_RUBBER
+      :value: 'Fiber & Rubber'
+
+      
+
+   .. py:attribute:: INFORMATION_TECHNOLOGY
+      :value: 'Information Technology'
+
+      
+
+   .. py:attribute:: INDUSTRIALS
+      :value: 'Industrials'
+
+      
+
+   .. py:attribute:: FINANCIALS
+      :value: 'Financials'
+
+      
+
+   .. py:attribute:: HEALTH_CARE
+      :value: 'Health Care'
 
       
 
@@ -400,155 +544,255 @@ Classes
 
 .. py:class:: VariablesConfig
 
+
    .. py:attribute:: EMISSIONS
-      :annotation: = Emissions
+      :value: 'Emissions'
 
       
 
    .. py:attribute:: PRODUCTIONS
-      :annotation: = Productions
+      :value: 'Productions'
 
       
 
    .. py:attribute:: EMISSIONS_INTENSITIES
-      :annotation: = Emissions Intensities
+      :value: 'Emissions Intensities'
 
       
 
 
 .. py:class:: TargetConfig
 
+
    .. py:attribute:: COMPANY_ID
-      :annotation: = company_id
+      :value: 'company_id'
 
       
 
    .. py:attribute:: COMPANY_LEI
-      :annotation: = company_lei
+      :value: 'company_lei'
 
       
 
    .. py:attribute:: COMPANY_ISIN
-      :annotation: = company_isin
+      :value: 'company_isin'
 
       
 
    .. py:attribute:: COMPANY_ISIC
-      :annotation: = isic
+      :value: 'isic'
 
       
 
    .. py:attribute:: NETZERO_DATE
-      :annotation: = netzero_date
+      :value: 'netzero_date'
 
       
 
    .. py:attribute:: TARGET_TYPE
-      :annotation: = target_type
+      :value: 'target_type'
 
       
 
    .. py:attribute:: TARGET_SCOPE
-      :annotation: = target_scope
+      :value: 'target_scope'
 
       
 
    .. py:attribute:: TARGET_START_YEAR
-      :annotation: = target_start_year
+      :value: 'target_start_year'
 
       
 
    .. py:attribute:: TARGET_BASE_YEAR
-      :annotation: = target_base_year
+      :value: 'target_base_year'
 
       
 
    .. py:attribute:: TARGET_BASE_MAGNITUDE
-      :annotation: = target_base_year_qty
+      :value: 'target_base_year_qty'
 
       
 
    .. py:attribute:: TARGET_BASE_UNITS
-      :annotation: = target_base_year_unit
+      :value: 'target_base_year_unit'
 
       
 
    .. py:attribute:: TARGET_YEAR
-      :annotation: = target_year
+      :value: 'target_year'
 
       
 
    .. py:attribute:: TARGET_REDUCTION_VS_BASE
-      :annotation: = target_reduction_ambition
+      :value: 'target_reduction_ambition'
 
       
 
 
 .. py:class:: TabsConfig
 
+
    .. py:attribute:: FUNDAMENTAL
-      :annotation: = fundamental_data
+      :value: 'fundamental_data'
 
       
 
    .. py:attribute:: PROJECTED_EI
-      :annotation: = projected_ei_in_Wh
+      :value: 'projected_ei'
 
       
 
    .. py:attribute:: PROJECTED_PRODUCTION
-      :annotation: = projected_production
+      :value: 'projected_production'
 
       
 
    .. py:attribute:: PROJECTED_TARGET
-      :annotation: = projected_target
+      :value: 'projected_target'
 
       
 
    .. py:attribute:: HISTORIC_DATA
-      :annotation: = historic_data
+      :value: 'historic_data'
 
       
 
    .. py:attribute:: TEMPLATE_INPUT_DATA
-      :annotation: = ITR input data
+      :value: 'ITR input data'
+
+      
+
+   .. py:attribute:: TEMPLATE_INPUT_DATA_V2
+      :value: 'ITR V2 input data'
+
+      
+
+   .. py:attribute:: TEMPLATE_ESG_DATA_V2
+      :value: 'ITR V2 esg data'
 
       
 
    .. py:attribute:: TEMPLATE_TARGET_DATA
-      :annotation: = ITR target input data
+      :value: 'ITR target input data'
 
       
 
 
 .. py:class:: PortfolioAggregationConfig
 
+
    .. py:attribute:: COLS
-      
 
       
+
+
+.. py:class:: ProjectionControls
+
+
+   .. py:attribute:: LOWER_PERCENTILE
+      :type: float
+      :value: 0.1
+
+      
+
+   .. py:attribute:: UPPER_PERCENTILE
+      :type: float
+      :value: 0.9
+
+      
+
+   .. py:attribute:: LOWER_DELTA
+      :type: float
+
+      
+
+   .. py:attribute:: UPPER_DELTA
+      :type: float
+
+      
+
+   .. py:attribute:: BASE_YEAR
+      :type: int
+      :value: 2019
+
+      
+
+   .. py:attribute:: TARGET_YEAR
+      :type: int
+      :value: 2050
+
+      
+
+   .. py:attribute:: TREND_CALC_METHOD
+      :type: Callable[[pandas.DataFrame], pandas.DataFrame]
+
+      
+
+
+.. py:class:: TemperatureScoreControls
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   .. py:property:: tcre_multiplier
+      :type: quantity('delta_degC/(t CO2)')
+
+
+   .. py:attribute:: base_year
+      :type: int
+
+      
+
+   .. py:attribute:: target_end_year
+      :type: int
+
+      
+
+   .. py:attribute:: tcre
+      :type: quantity('delta_degC')
+
+      
+
+   .. py:attribute:: carbon_conversion
+      :type: ITR.data.osc_units.EmissionsQuantity
+
+      
+
+   .. py:attribute:: scenario_target_temperature
+      :type: quantity('delta_degC')
+
+      
+
+   .. py:attribute:: target_probability
+      :type: float
+
+      
+
+   .. py:method:: __getitem__(item)
+
 
 
 .. py:class:: TemperatureScoreConfig
 
+
    Bases: :py:obj:`PortfolioAggregationConfig`
 
    .. py:attribute:: SCORE_RESULT_TYPE
-      :annotation: = score_result_type
+      :value: 'score_result_type'
 
       
 
    .. py:attribute:: CONTROLS_CONFIG
-      
 
       
 
 
 .. py:class:: LoggingConfig
 
+
    .. py:attribute:: FORMAT
-      :annotation: = %(asctime)s - %(name)s - %(levelname)s - %(message)s
+      :value: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
       
 

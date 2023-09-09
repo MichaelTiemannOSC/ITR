@@ -24,7 +24,7 @@ Functions
 .. autoapisummary::
 
    ITR.data.excel.convert_dimensionless_benchmark_excel_to_model
-   ITR.data.excel.convert_intensity_benchmark_excel_to_model
+   ITR.data.excel.convert_benchmarks_ei_excel_to_model
 
 
 
@@ -34,57 +34,48 @@ Attributes
 .. autoapisummary::
 
    ITR.data.excel.logger
-   ITR.data.excel.ureg
-   ITR.data.excel.Q_
    ITR.data.excel.sector_to_production_metric
    ITR.data.excel.sector_to_intensity_metric
 
 
 .. py:data:: logger
-   
-
-   
-
-.. py:data:: ureg
-   
-
-   
-
-.. py:data:: Q_
-   
 
    
 
 .. py:data:: sector_to_production_metric
-   
 
    
 
 .. py:data:: sector_to_intensity_metric
-   
 
    
 
-.. py:function:: convert_dimensionless_benchmark_excel_to_model(df_excel: dict, sheetname: str, column_name_region: str, column_name_sector: str) -> ITR.interfaces.IBenchmarks
+.. py:function:: convert_dimensionless_benchmark_excel_to_model(df_excel: dict, sheetname: str, column_name_sector: str, column_name_region: str) -> ITR.interfaces.IBenchmarks
 
    Converts excel into IBenchmarks
    :param df_excel: dictionary with a pd.DataFrame for each key representing a sheet of an Excel file
    :param sheetname: name of Excel file sheet to convert
-   :param column_name_region: name of region
    :param column_name_sector: name of sector
+   :param column_name_region: name of region
    :return: IBenchmarks instance (list of IBenchmark)
 
 
-.. py:function:: convert_intensity_benchmark_excel_to_model(df_excel: pandas.DataFrame, sheetname: str, column_name_region: str, column_name_sector: str) -> ITR.interfaces.IBenchmarks
+.. py:function:: convert_benchmarks_ei_excel_to_model(df_excel: pandas.DataFrame, sheetname: str, column_name_sector: str, column_name_region: str, benchmark_temperature, benchmark_global_budget, is_AFOLU_included) -> ITR.interfaces.IEIBenchmarkScopes
 
    Converts excel into IBenchmarks
    :param excal_path: file path to excel
-   :return: IBenchmarks instance (list of IBenchmark)
+   :return: IEIBenchmarkScopes instance
 
 
-.. py:class:: ExcelProviderProductionBenchmark(excel_path: str, column_config: Type[ITR.configs.ColumnsConfig] = ColumnsConfig, tempscore_config: Type[ITR.configs.TemperatureScoreConfig] = TemperatureScoreConfig)
+.. py:class:: ExcelProviderProductionBenchmark(excel_path: str, column_config: Type[ITR.configs.ColumnsConfig] = ColumnsConfig)
+
 
    Bases: :py:obj:`ITR.data.base_providers.BaseProviderProductionBenchmark`
+
+   Production projecton data provider super class.
+
+   This Data Container contains Production data on benchmark level. Data has a regions and sector indices.
+   Initialized ProductionBenchmarkDataProvider is required when setting up a data warehouse instance.
 
    .. py:method:: _get_projected_production(scope: ITR.interfaces.EScope = EScope.S1S2) -> pandas.DataFrame
 
@@ -94,12 +85,18 @@ Attributes
 
 
 
-.. py:class:: ExcelProviderIntensityBenchmark(excel_path: str, benchmark_temperature: pint.Quantity[delta_degC], benchmark_global_budget: pint.Quantity[CO2], is_AFOLU_included: bool, column_config: Type[ITR.configs.ColumnsConfig] = ColumnsConfig, tempscore_config: Type[ITR.configs.TemperatureScoreConfig] = TemperatureScoreConfig)
+.. py:class:: ExcelProviderIntensityBenchmark(excel_path: str, benchmark_temperature: quantity('delta_degC'), benchmark_global_budget: ITR.data.osc_units.EmissionsQuantity, is_AFOLU_included: bool, column_config: Type[ITR.configs.ColumnsConfig] = ColumnsConfig)
+
 
    Bases: :py:obj:`ITR.data.base_providers.BaseProviderIntensityBenchmark`
 
+   Production intensity data provider super class.
+   This Data Container contains emission intensity data on benchmark level. Data has a regions and sector indices.
+   Initialized IntensityBenchmarkDataProvider is required when setting up a data warehouse instance.
 
-.. py:class:: ExcelProviderCompany(excel_path: str, column_config: Type[ITR.configs.ColumnsConfig] = ColumnsConfig, tempscore_config: Type[ITR.configs.TemperatureScoreConfig] = TemperatureScoreConfig)
+
+.. py:class:: ExcelProviderCompany(excel_path: str, column_config: Type[ITR.configs.ColumnsConfig] = ColumnsConfig, projection_controls: Type[ITR.configs.ProjectionControls] = ProjectionControls)
+
 
    Bases: :py:obj:`ITR.data.base_providers.BaseCompanyDataProvider`
 
@@ -107,7 +104,6 @@ Attributes
 
    :param excel_path: A path to the Excel file with the company data
    :param column_config: An optional ColumnsConfig object containing relevant variable names
-   :param tempscore_config: An optional TemperatureScoreConfig object containing temperature scoring settings
 
    .. py:method:: _check_company_data(company_tabs: dict) -> None
 
@@ -124,7 +120,7 @@ Attributes
       :return: List of ICompanyData objects
 
 
-   .. py:method:: _convert_series_to_projections(projections: pandas.Series, ProjectionType: ITR.interfaces.BaseModel) -> [ITR.interfaces.IProjection]
+   .. py:method:: _convert_series_to_projections(projections: pandas.Series, ProjectionType: pydantic.BaseModel) -> [ITR.interfaces.IProjection]
 
       Converts a Pandas Series to a list of IProjection
       :param projections: Pandas Series with years as indices
@@ -134,7 +130,6 @@ Attributes
    .. py:method:: _company_df_to_model(df_fundamentals: pandas.DataFrame, df_targets: pandas.DataFrame, df_ei: pandas.DataFrame, df_historic: pandas.DataFrame) -> List[ITR.interfaces.ICompanyData]
 
       transforms target Dataframe into list of IDataProviderTarget instances
-
       :param df_fundamentals: pandas Dataframe with fundamental data
       :param df_targets: pandas Dataframe with targets
       :param df_ei: pandas Dataframe with emission intensities
@@ -153,36 +148,41 @@ Attributes
       :return: series of projected emission intensities
 
 
-   .. py:method:: _get_historic_data(company_ids: List[str], historic_data: pandas.DataFrame) -> pandas.DataFrame
-
-      get the historic data for list of companies
-      :param company_ids: list of company ids
-      :param historic_data: Dataframe Productions, Emissions, and Emission Intensities mixed together
-      :return: historic data with unit attributes added to yearly data on a per-element basis
-
-
-   .. py:method:: _convert_historic_data(historic: pandas.DataFrame) -> ITR.interfaces.IHistoricData
+   .. py:method:: _convert_target_data(target_data: pandas.DataFrame) -> List[ITR.interfaces.ITargetData]
 
       :param historic: historic production, emission and emission intensity data for a company
       :return: IHistoricData Pydantic object
 
 
+   .. py:method:: _get_historic_data(company_ids: List[str], historic_data: pandas.DataFrame) -> pandas.DataFrame
+
+      get the historic data for list of companies
+      :param company_ids: list of company ids
+      :param historic_data: Dataframe Productions, Emissions, and Emissions Intensities mixed together
+      :return: historic data with unit attributes added on a per-element basis
+
+
+   .. py:method:: _convert_historic_data(historic: pandas.DataFrame) -> ITR.interfaces.IHistoricData
+
+      :param historic: historic production, emission and emission intensity data for a company (already unitized)
+      :return: IHistoricData Pydantic object
+
+
    .. py:method:: _convert_to_historic_emissions(emissions: pandas.DataFrame) -> Optional[ITR.interfaces.IHistoricEmissionsScopes]
 
-      :param historic: historic production, emission and emission intensity data for a company
-      :param convert_unit: whether or not to convert the units of measure
+      :param emissions: historic emissions data for a company
       :return: List of historic emissions per scope, or None if no data are provided
 
 
    .. py:method:: _convert_to_historic_productions(productions: pandas.DataFrame) -> Optional[List[ITR.interfaces.IProductionRealization]]
 
-      :param historic: historic production, emission and emission intensity data for a company
+      :param productions: historic production data for a company
       :return: A list containing historic productions, or None if no data are provided
 
 
    .. py:method:: _convert_to_historic_ei(intensities: pandas.DataFrame) -> Optional[ITR.interfaces.IHistoricEIScopes]
 
-      :param historic: historic production, emission and emission intensity data for a company
+      :param intensities: historic emission intensity data for a company
       :return: A list of historic emission intensities per scope, or None if no data are provided
 
 

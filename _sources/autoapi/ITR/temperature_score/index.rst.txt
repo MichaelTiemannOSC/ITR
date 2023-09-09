@@ -17,7 +17,20 @@ Classes
 
 
 
-.. py:class:: TemperatureScore(time_frames: List[ITR.interfaces.ETimeFrames], scopes: List[ITR.interfaces.EScope], fallback_score: float = Q_(3.2, ureg.delta_degC), aggregation_method: ITR.portfolio_aggregation.PortfolioAggregationMethod = PortfolioAggregationMethod.WATS, grouping: Optional[List] = None, config: Type[ITR.configs.TemperatureScoreConfig] = TemperatureScoreConfig)
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ITR.temperature_score.logger
+
+
+.. py:data:: logger
+
+   
+
+.. py:class:: TemperatureScore(time_frames: List[ITR.interfaces.ETimeFrames], scopes: List[ITR.interfaces.EScope], fallback_score: float = Q_(3.2, ureg.delta_degC), aggregation_method: ITR.portfolio_aggregation.PortfolioAggregationMethod = PortfolioAggregationMethod.WATS, budget_column: str = ColumnsConfig.CUMULATIVE_BUDGET, grouping: Optional[List] = None, config: Type[ITR.configs.TemperatureScoreConfig] = TemperatureScoreConfig)
+
 
    Bases: :py:obj:`ITR.portfolio_aggregation.PortfolioAggregation`
 
@@ -28,7 +41,7 @@ Classes
                    if you'd like to overwrite a constant. This can be done by extending the TemperatureScoreConfig
                    class and overwriting one of the parameters.
 
-   .. py:method:: get_score(scorable_row: pandas.Series) -> Tuple[pint.Quantity[delta_degC], pint.Quantity[delta_degC], float, pint.Quantity[delta_degC], float, ITR.interfaces.EScoreResultType]
+   .. py:method:: get_score(scorable_row: pandas.Series) -> Tuple[quantity('delta_degC'), quantity('delta_degC'), float, quantity('delta_degC'), float, ITR.interfaces.EScoreResultType]
 
       Get the temperature score for a certain target based on the annual reduction rate and the regression parameters.
 
@@ -37,38 +50,38 @@ Classes
                       TARGET_SCORE, TARGET_OVERSHOOT, TEMPERATURE_RESULTS])
 
 
-   .. py:method:: get_ghc_temperature_score(row: pandas.Series, company_data: pandas.DataFrame) -> pint.Quantity[delta_degC]
+   .. py:method:: get_ghc_temperature_score(row: pandas.Series, company_data: pandas.DataFrame) -> quantity('delta_degC')
 
       Get the aggregated temperature score. S1+S2+S3 is an emissions weighted sum of S1+S2 and S3.
 
-      :param company_data: The original data, grouped by company, time frame and scope category
+      :param company_data: The original data, grouped by company, scope category, and time frame
       :param row: The row to calculate the temperature score for (if the scope of the row isn't s1s2s3, it will return the original score)
       :return: The aggregated temperature score for a company
 
 
-   .. py:method:: get_default_score(target: pandas.Series) -> pint.Quantity[delta_degC]
+   .. py:method:: get_default_score(target: pandas.Series) -> quantity('delta_degC')
 
       :param target: The target as a row of a dataframe
       :return: The temperature score
 
 
-   .. py:method:: _prepare_data(data: pandas.DataFrame)
+   .. py:method:: _prepare_data(data: pandas.DataFrame, target_probability: float)
 
       Prepare the data such that it can be used to calculate the temperature score.
 
-      :param data: The original data set as a pandas data frame
-      :return: The extended data frame
+      :param data: The original data set as a pandas data frame, indexed by (COMPANY_ID, SCOPE)
+      :return: The extended data frame, indexed by COMPANY_ID
 
 
    .. py:method:: _calculate_company_score(data)
 
-      Calculate the combined s1s2s3 scores for all companies.
+      Calculate the combined, weighted s1s2s3 scores for all companies.
 
       :param data: The original data set as a pandas data frame
       :return: The data frame, with an updated s1s2s3 temperature score
 
 
-   .. py:method:: calculate(data: Optional[pandas.DataFrame] = None, data_warehouse: Optional[ITR.data.data_warehouse.DataWarehouse] = None, portfolio: Optional[List[ITR.interfaces.PortfolioCompany]] = None)
+   .. py:method:: calculate(data: Optional[pandas.DataFrame] = None, data_warehouse: Optional[ITR.data.data_warehouse.DataWarehouse] = None, portfolio: Optional[List[ITR.interfaces.PortfolioCompany]] = None, target_probability: Optional[float] = None)
 
       Calculate the temperature for a dataframe of company data. The columns in the data frame should be a combination
       of IDataProviderTarget and IDataProviderCompany.

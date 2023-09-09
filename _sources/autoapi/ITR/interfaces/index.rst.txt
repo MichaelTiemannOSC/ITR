@@ -12,17 +12,6 @@ Classes
 
 .. autoapisummary::
 
-   ITR.interfaces.PintModel
-   ITR.interfaces.PowerGeneration
-   ITR.interfaces.ManufactureSteel
-   ITR.interfaces.ProductionMetric
-   ITR.interfaces.EmissionsMetric
-   ITR.interfaces.EmissionsIntensity_PowerGeneration
-   ITR.interfaces.EmissionsIntensity_ManufactureAuto
-   ITR.interfaces.EmissionsIntensity_ManufactureSteel
-   ITR.interfaces.IntensityMetric
-   ITR.interfaces.DimensionlessNumber
-   ITR.interfaces.OSC_Metric
    ITR.interfaces.SortableEnum
    ITR.interfaces.EScope
    ITR.interfaces.ETimeFrames
@@ -42,6 +31,7 @@ Classes
    ITR.interfaces.IEIBenchmarkScopes
    ITR.interfaces.ICompanyEIProjection
    ITR.interfaces.ICompanyEIProjections
+   ITR.interfaces.DF_ICompanyEIProjections
    ITR.interfaces.ICompanyEIProjectionsScopes
    ITR.interfaces.IProductionRealization
    ITR.interfaces.IEmissionRealization
@@ -52,162 +42,24 @@ Classes
    ITR.interfaces.ITargetData
    ITR.interfaces.ICompanyData
    ITR.interfaces.ICompanyAggregates
-   ITR.interfaces.TemperatureScoreControls
-   ITR.interfaces.ProjectionControls
 
 
 
-Functions
-~~~~~~~~~
+
+Attributes
+~~~~~~~~~~
 
 .. autoapisummary::
 
-   ITR.interfaces.pint_ify
-   ITR.interfaces.UProjections_to_IProjections
+   ITR.interfaces.logger
 
 
+.. py:data:: logger
 
-.. py:class:: PintModel
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   .. py:class:: Config
-
-      .. py:attribute:: arbitrary_types_allowed
-         :annotation: = True
-
-         
-
-
-
-.. py:class:: PowerGeneration
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   .. py:attribute:: units
-      :annotation: :str
-
-      
-
-   .. py:method:: unit_must_be_energy(v)
-
-
-
-.. py:class:: ManufactureSteel
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   .. py:attribute:: units
-      :annotation: :str
-
-      
-
-   .. py:method:: units_must_be_Fe_ton(v)
-
-
-
-.. py:class:: ProductionMetric
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   .. py:attribute:: units
-      :annotation: :str
-
-      
-
-   .. py:method:: unit_must_be_production(v)
-
-
-
-.. py:class:: EmissionsMetric
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   .. py:attribute:: units
-      :annotation: :str
-
-      
-
-   .. py:method:: units_must_be_tCO2(v)
-
-
-
-.. py:class:: EmissionsIntensity_PowerGeneration
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   .. py:attribute:: units
-      :annotation: :str
-
-      
-
-   .. py:method:: units_must_be_EI(v)
-
-
-
-.. py:class:: EmissionsIntensity_ManufactureAuto
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   .. py:attribute:: units
-      :annotation: :str
-
-      
-
-   .. py:method:: units_must_be_EI(v)
-
-
-
-.. py:class:: EmissionsIntensity_ManufactureSteel
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   .. py:attribute:: units
-      :annotation: :str
-
-      
-
-   .. py:method:: units_must_be_EI(v)
-
-
-
-.. py:class:: IntensityMetric
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   .. py:attribute:: units
-      :annotation: :str
-
-      
-
-   .. py:method:: units_must_be_EI(v)
-
-
-
-.. py:class:: DimensionlessNumber
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   .. py:attribute:: units
-      :annotation: :Literal[dimensionless]
-
-      
-
-
-.. py:class:: OSC_Metric
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   .. py:attribute:: units
-      :annotation: :str
-
-      
-
-   .. py:method:: units_must_be_OSC(v)
-
-
+   
 
 .. py:class:: SortableEnum
+
 
    Bases: :py:obj:`enum.Enum`
 
@@ -243,6 +95,7 @@ Functions
 
 .. py:class:: EScope
 
+
    Bases: :py:obj:`SortableEnum`
 
    Generic enumeration.
@@ -250,29 +103,44 @@ Functions
    Derive from this class to define new enumerations.
 
    .. py:attribute:: S1
-      :annotation: = S1
+      :value: 'S1'
 
       
 
    .. py:attribute:: S2
-      :annotation: = S2
+      :value: 'S2'
 
       
 
    .. py:attribute:: S3
-      :annotation: = S3
+      :value: 'S3'
 
       
 
    .. py:attribute:: S1S2
-      :annotation: = S1+S2
+      :value: 'S1+S2'
 
       
 
    .. py:attribute:: S1S2S3
-      :annotation: = S1+S2+S3
+      :value: 'S1+S2+S3'
 
       
+
+   .. py:attribute:: AnyScope
+      :value: 'AnyScope'
+
+      
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
 
    .. py:method:: get_scopes() -> List[str]
       :classmethod:
@@ -292,27 +160,29 @@ Functions
 
 .. py:class:: ETimeFrames
 
+
    Bases: :py:obj:`SortableEnum`
 
    TODO: add support for multiple timeframes. Long currently corresponds to 2050.
 
    .. py:attribute:: SHORT
-      :annotation: = short
+      :value: 'short'
 
       
 
    .. py:attribute:: MID
-      :annotation: = mid
+      :value: 'mid'
 
       
 
    .. py:attribute:: LONG
-      :annotation: = long
+      :value: 'long'
 
       
 
 
 .. py:class:: ECarbonBudgetScenario
+
 
    Bases: :py:obj:`enum.Enum`
 
@@ -321,22 +191,23 @@ Functions
    Derive from this class to define new enumerations.
 
    .. py:attribute:: P25
-      :annotation: = 25 percentile
+      :value: '25 percentile'
 
       
 
    .. py:attribute:: P75
-      :annotation: = 75 percentile
+      :value: '75 percentile'
 
       
 
    .. py:attribute:: MEAN
-      :annotation: = Average
+      :value: 'Average'
 
       
 
 
 .. py:class:: EScoreResultType
+
 
    Bases: :py:obj:`enum.Enum`
 
@@ -345,47 +216,70 @@ Functions
    Derive from this class to define new enumerations.
 
    .. py:attribute:: DEFAULT
-      :annotation: = Default
+      :value: 'Default'
 
       
 
    .. py:attribute:: TRAJECTORY_ONLY
-      :annotation: = Trajectory only
+      :value: 'Trajectory only'
+
+      
+
+   .. py:attribute:: TARGET_ONLY
+      :value: 'Target only'
 
       
 
    .. py:attribute:: COMPLETE
-      :annotation: = Complete
+      :value: 'Complete'
 
       
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: get_result_types() -> List[str]
+      :classmethod:
+
+      Get a list of all result types, ordered by priority (first << last priority).
+      :return: A list of the EScoreResultType values
+
 
 
 .. py:class:: AggregationContribution
 
-   Bases: :py:obj:`PintModel`
+
+   Bases: :py:obj:`pydantic.BaseModel`
 
    .. py:attribute:: company_name
-      :annotation: :str
+      :type: str
 
       
 
    .. py:attribute:: company_id
-      :annotation: :str
+      :type: str
 
       
 
    .. py:attribute:: temperature_score
-      :annotation: :pint.Quantity[delta_degC]
+      :type: quantity('delta_degC')
 
       
 
    .. py:attribute:: contribution_relative
-      :annotation: :Optional[pint.Quantity[delta_degC]]
+      :type: Optional[quantity('percent')]
 
       
 
    .. py:attribute:: contribution
-      :annotation: :Optional[pint.Quantity[delta_degC]]
+      :type: Optional[quantity('delta_degC')]
 
       
 
@@ -395,20 +289,21 @@ Functions
 
 .. py:class:: Aggregation
 
-   Bases: :py:obj:`PintModel`
+
+   Bases: :py:obj:`pydantic.BaseModel`
 
    .. py:attribute:: score
-      :annotation: :pint.Quantity[delta_degC]
+      :type: quantity('delta_degC')
 
       
 
    .. py:attribute:: proportion
-      :annotation: :float
+      :type: float
 
       
 
    .. py:attribute:: contributions
-      :annotation: :List[AggregationContribution]
+      :type: List[AggregationContribution]
 
       
 
@@ -418,20 +313,21 @@ Functions
 
 .. py:class:: ScoreAggregation
 
+
    Bases: :py:obj:`pydantic.BaseModel`
 
    .. py:attribute:: all
-      :annotation: :Aggregation
+      :type: Aggregation
 
       
 
    .. py:attribute:: influence_percentage
-      :annotation: :float
+      :type: quantity('percent')
 
       
 
    .. py:attribute:: grouped
-      :annotation: :Dict[str, Aggregation]
+      :type: Dict[str, Aggregation]
 
       
 
@@ -441,20 +337,31 @@ Functions
 
 .. py:class:: ScoreAggregationScopes
 
+
    Bases: :py:obj:`pydantic.BaseModel`
 
+   .. py:attribute:: S1
+      :type: Optional[ScoreAggregation]
+
+      
+
+   .. py:attribute:: S2
+      :type: Optional[ScoreAggregation]
+
+      
+
    .. py:attribute:: S1S2
-      :annotation: :Optional[ScoreAggregation]
+      :type: Optional[ScoreAggregation]
 
       
 
    .. py:attribute:: S3
-      :annotation: :Optional[ScoreAggregation]
+      :type: Optional[ScoreAggregation]
 
       
 
    .. py:attribute:: S1S2S3
-      :annotation: :Optional[ScoreAggregation]
+      :type: Optional[ScoreAggregation]
 
       
 
@@ -464,20 +371,21 @@ Functions
 
 .. py:class:: ScoreAggregations
 
+
    Bases: :py:obj:`pydantic.BaseModel`
 
    .. py:attribute:: short
-      :annotation: :Optional[ScoreAggregationScopes]
+      :type: Optional[ScoreAggregationScopes]
 
       
 
    .. py:attribute:: mid
-      :annotation: :Optional[ScoreAggregationScopes]
+      :type: Optional[ScoreAggregationScopes]
 
       
 
    .. py:attribute:: long
-      :annotation: :Optional[ScoreAggregationScopes]
+      :type: Optional[ScoreAggregationScopes]
 
       
 
@@ -487,91 +395,99 @@ Functions
 
 .. py:class:: PortfolioCompany
 
+
    Bases: :py:obj:`pydantic.BaseModel`
 
    .. py:attribute:: company_name
-      :annotation: :str
+      :type: str
 
       
 
    .. py:attribute:: company_id
-      :annotation: :str
+      :type: str
 
       
 
    .. py:attribute:: company_isin
-      :annotation: :Optional[str]
+      :type: Optional[str]
 
       
 
    .. py:attribute:: investment_value
-      :annotation: :float
+      :type: ITR.data.osc_units.MonetaryQuantity
 
       
 
    .. py:attribute:: user_fields
-      :annotation: :Optional[dict]
+      :type: Optional[dict]
 
       
-
-
-.. py:function:: pint_ify(x, units='dimensionless')
-
-
-.. py:function:: UProjections_to_IProjections(classtype, ul, metric)
 
 
 .. py:class:: UProjection
 
+
    Bases: :py:obj:`pydantic.BaseModel`
 
    .. py:attribute:: year
-      :annotation: :int
+      :type: int
 
       
 
    .. py:attribute:: value
-      :annotation: :Optional[float]
+      :type: float
 
       
 
 
 .. py:class:: IProjection
 
-   Bases: :py:obj:`PintModel`
+
+   Bases: :py:obj:`pydantic.BaseModel`
 
    .. py:attribute:: year
-      :annotation: :int
+      :type: int
 
       
 
    .. py:attribute:: value
-      :annotation: :Optional[pint.Quantity]
+      :type: ITR.data.osc_units.BenchmarkQuantity
 
       
 
 
-.. py:class:: IBenchmark(benchmark_metric, projections, *args, **kwargs)
+.. py:class:: IBenchmark(benchmark_metric, projections_nounits=None, projections=None, base_year_production=None, *args, **kwargs)
+
 
    Bases: :py:obj:`pydantic.BaseModel`
 
    .. py:attribute:: sector
-      :annotation: :str
+      :type: str
 
       
 
    .. py:attribute:: region
-      :annotation: :str
+      :type: str
 
       
 
    .. py:attribute:: benchmark_metric
-      :annotation: :OSC_Metric
+      :type: ITR.data.osc_units.BenchmarkMetric
+
+      
+
+   .. py:attribute:: projections_nounits
+      :type: Optional[List[UProjection]]
 
       
 
    .. py:attribute:: projections
-      :annotation: :List[IProjection]
+      :type: Optional[List[IProjection]]
+
+      
+
+   .. py:attribute:: base_year_production
+      :type: Optional[ITR.data.osc_units.ProductionQuantity]
 
       
 
@@ -581,10 +497,16 @@ Functions
 
 .. py:class:: IBenchmarks
 
+
    Bases: :py:obj:`pydantic.BaseModel`
 
    .. py:attribute:: benchmarks
-      :annotation: :List[IBenchmark]
+      :type: List[IBenchmark]
+
+      
+
+   .. py:attribute:: production_centric
+      :value: False
 
       
 
@@ -594,55 +516,85 @@ Functions
 
 .. py:class:: IProductionBenchmarkScopes
 
+
    Bases: :py:obj:`pydantic.BaseModel`
 
+   .. py:attribute:: AnyScope
+      :type: Optional[IBenchmarks]
+
+      
+
+   .. py:attribute:: S1
+      :type: Optional[IBenchmarks]
+
+      
+
+   .. py:attribute:: S2
+      :type: Optional[IBenchmarks]
+
+      
+
    .. py:attribute:: S1S2
-      :annotation: :Optional[IBenchmarks]
+      :type: Optional[IBenchmarks]
 
       
 
    .. py:attribute:: S3
-      :annotation: :Optional[IBenchmarks]
+      :type: Optional[IBenchmarks]
 
       
 
    .. py:attribute:: S1S2S3
-      :annotation: :Optional[IBenchmarks]
+      :type: Optional[IBenchmarks]
 
       
 
+   .. py:method:: __getitem__(item)
 
-.. py:class:: IEIBenchmarkScopes(benchmark_temperature, benchmark_global_budget, *args, **kwargs)
 
-   Bases: :py:obj:`PintModel`
+
+.. py:class:: IEIBenchmarkScopes
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   .. py:attribute:: S1
+      :type: Optional[IBenchmarks]
+
+      
+
+   .. py:attribute:: S2
+      :type: Optional[IBenchmarks]
+
+      
 
    .. py:attribute:: S1S2
-      :annotation: :Optional[IBenchmarks]
+      :type: Optional[IBenchmarks]
 
       
 
    .. py:attribute:: S3
-      :annotation: :Optional[IBenchmarks]
+      :type: Optional[IBenchmarks]
 
       
 
    .. py:attribute:: S1S2S3
-      :annotation: :Optional[IBenchmarks]
+      :type: Optional[IBenchmarks]
 
       
 
    .. py:attribute:: benchmark_temperature
-      :annotation: :pint.Quantity[delta_degC]
+      :type: quantity('delta_degC')
 
       
 
    .. py:attribute:: benchmark_global_budget
-      :annotation: :pint.Quantity[CO2]
+      :type: quantity('Gt CO2')
 
       
 
    .. py:attribute:: is_AFOLU_included
-      :annotation: :bool
+      :type: bool
 
       
 
@@ -652,497 +604,537 @@ Functions
 
 .. py:class:: ICompanyEIProjection
 
-   Bases: :py:obj:`PintModel`
+
+   Bases: :py:obj:`pydantic.BaseModel`
 
    .. py:attribute:: year
-      :annotation: :int
+      :type: int
 
       
 
    .. py:attribute:: value
-      :annotation: :Optional[pint.Quantity]
+      :type: Optional[ITR.data.osc_units.EI_Quantity]
 
       
 
+   .. py:method:: __getitem__(item)
 
-.. py:class:: ICompanyEIProjections(ei_metric, projections, *args, **kwargs)
+
+   .. py:method:: __eq__(o)
+
+
+   .. py:method:: add(o)
+
+
+   .. py:method:: min(o)
+
+
+
+.. py:class:: ICompanyEIProjections
+
 
    Bases: :py:obj:`pydantic.BaseModel`
 
    .. py:attribute:: ei_metric
-      :annotation: :IntensityMetric
+      :type: ITR.data.osc_units.EI_Metric
 
       
 
    .. py:attribute:: projections
-      :annotation: :List[ICompanyEIProjection]
+      :type: List[ICompanyEIProjection]
 
       
 
    .. py:method:: __getitem__(item)
 
 
+   .. py:method:: __str__()
 
-.. py:class:: ICompanyEIProjectionsScopes
+
+
+.. py:class:: DF_ICompanyEIProjections(icompany_ei_projections=None, *args, **kwargs)
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   .. py:class:: Config
+
+
+      .. py:attribute:: arbitrary_types_allowed
+         :value: True
+
+         
+
+
+   .. py:attribute:: ei_metric
+      :type: Optional[ITR.data.osc_units.EI_Metric]
+
+      
+
+   .. py:attribute:: projections
+      :type: pandas.Series
+
+      
+
+   .. py:method:: allow_projections(v)
+
+
+
+.. py:class:: ICompanyEIProjectionsScopes(*args, **kwargs)
+
 
    Bases: :py:obj:`pydantic.BaseModel`
 
    .. py:attribute:: S1
-      :annotation: :Optional[ICompanyEIProjections]
+      :type: Optional[DF_CompanyEIProjections]
 
       
 
    .. py:attribute:: S2
-      :annotation: :Optional[ICompanyEIProjections]
+      :type: Optional[DF_CompanyEIProjections]
 
       
 
    .. py:attribute:: S1S2
-      :annotation: :Optional[ICompanyEIProjections]
+      :type: Optional[DF_CompanyEIProjections]
 
       
 
    .. py:attribute:: S3
-      :annotation: :Optional[ICompanyEIProjections]
+      :type: Optional[DF_CompanyEIProjections]
 
       
 
    .. py:attribute:: S1S2S3
-      :annotation: :Optional[ICompanyEIProjections]
+      :type: Optional[DF_CompanyEIProjections]
 
       
 
    .. py:method:: __getitem__(item)
+
+
+   .. py:method:: __str__()
 
 
 
 .. py:class:: IProductionRealization
 
-   Bases: :py:obj:`PintModel`
+
+   Bases: :py:obj:`pydantic.BaseModel`
 
    .. py:attribute:: year
-      :annotation: :int
+      :type: int
 
       
 
    .. py:attribute:: value
-      :annotation: :Optional[pint.Quantity[ProductionMetric]]
+      :type: Optional[ITR.data.osc_units.ProductionQuantity]
 
       
 
 
 .. py:class:: IEmissionRealization
 
-   Bases: :py:obj:`PintModel`
+
+   Bases: :py:obj:`pydantic.BaseModel`
 
    .. py:attribute:: year
-      :annotation: :int
+      :type: int
 
       
 
    .. py:attribute:: value
-      :annotation: :Optional[pint.Quantity[CO2]]
-
-      
-
-
-.. py:class:: IHistoricEmissionsScopes
-
-   Bases: :py:obj:`PintModel`
-
-   .. py:attribute:: S1
-      :annotation: :List[IEmissionRealization]
-
-      
-
-   .. py:attribute:: S2
-      :annotation: :List[IEmissionRealization]
-
-      
-
-   .. py:attribute:: S1S2
-      :annotation: :List[IEmissionRealization]
-
-      
-
-   .. py:attribute:: S3
-      :annotation: :List[IEmissionRealization]
-
-      
-
-   .. py:attribute:: S1S2S3
-      :annotation: :List[IEmissionRealization]
-
-      
-
-
-.. py:class:: IEIRealization
-
-   Bases: :py:obj:`PintModel`
-
-   .. py:attribute:: year
-      :annotation: :int
-
-      
-
-   .. py:attribute:: value
-      :annotation: :Optional[pint.Quantity[IntensityMetric]]
-
-      
-
-
-.. py:class:: IHistoricEIScopes
-
-   Bases: :py:obj:`PintModel`
-
-   .. py:attribute:: S1
-      :annotation: :List[IEIRealization]
-
-      
-
-   .. py:attribute:: S2
-      :annotation: :List[IEIRealization]
-
-      
-
-   .. py:attribute:: S1S2
-      :annotation: :List[IEIRealization]
-
-      
-
-   .. py:attribute:: S3
-      :annotation: :List[IEIRealization]
-
-      
-
-   .. py:attribute:: S1S2S3
-      :annotation: :List[IEIRealization]
-
-      
-
-
-.. py:class:: IHistoricData
-
-   Bases: :py:obj:`PintModel`
-
-   .. py:attribute:: productions
-      :annotation: :Optional[List[IProductionRealization]]
-
-      
-
-   .. py:attribute:: emissions
-      :annotation: :Optional[IHistoricEmissionsScopes]
-
-      
-
-   .. py:attribute:: emissions_intensities
-      :annotation: :Optional[IHistoricEIScopes]
-
-      
-
-
-.. py:class:: ITargetData
-
-   Bases: :py:obj:`PintModel`
-
-   .. py:attribute:: netzero_year
-      :annotation: :Optional[int]
-
-      
-
-   .. py:attribute:: target_type
-      :annotation: :Union[Literal[intensity], Literal[absolute], Literal[Intensity], Literal[Absolute]]
-
-      
-
-   .. py:attribute:: target_scope
-      :annotation: :EScope
-
-      
-
-   .. py:attribute:: target_start_year
-      :annotation: :Optional[int]
-
-      
-
-   .. py:attribute:: target_base_year
-      :annotation: :int
-
-      
-
-   .. py:attribute:: target_end_year
-      :annotation: :int
-
-      
-
-   .. py:attribute:: target_base_year_qty
-      :annotation: :float
-
-      
-
-   .. py:attribute:: target_base_year_unit
-      :annotation: :str
-
-      
-
-   .. py:attribute:: target_reduction_pct
-      :annotation: :float
-
-      
-
-   .. py:method:: must_be_greater_than_2022(v)
-
-
-
-.. py:class:: ICompanyData(historic_data=None, projected_targets=None, projected_intensities=None, emissions_metric=None, production_metric=None, base_year_production=None, ghg_s1s2=None, ghg_s3=None, *args, **kwargs)
-
-   Bases: :py:obj:`PintModel`
-
-   .. py:attribute:: company_name
-      :annotation: :str
-
-      
-
-   .. py:attribute:: company_id
-      :annotation: :str
-
-      
-
-   .. py:attribute:: region
-      :annotation: :str
-
-      
-
-   .. py:attribute:: sector
-      :annotation: :str
-
-      
-
-   .. py:attribute:: target_probability
-      :annotation: :float = 0.5
-
-      
-
-   .. py:attribute:: target_data
-      :annotation: :Optional[List[ITargetData]]
-
-      
-
-   .. py:attribute:: historic_data
-      :annotation: :Optional[IHistoricData]
-
-      
-
-   .. py:attribute:: country
-      :annotation: :Optional[str]
-
-      
-
-   .. py:attribute:: emissions_metric
-      :annotation: :Optional[EmissionsMetric]
-
-      
-
-   .. py:attribute:: production_metric
-      :annotation: :Optional[ProductionMetric]
-
-      
-
-   .. py:attribute:: base_year_production
-      :annotation: :Optional[pint.Quantity[ProductionMetric]]
-
-      
-
-   .. py:attribute:: ghg_s1s2
-      :annotation: :Optional[pint.Quantity[EmissionsMetric]]
-
-      
-
-   .. py:attribute:: ghg_s3
-      :annotation: :Optional[pint.Quantity[EmissionsMetric]]
-
-      
-
-   .. py:attribute:: industry_level_1
-      :annotation: :Optional[str]
-
-      
-
-   .. py:attribute:: industry_level_2
-      :annotation: :Optional[str]
-
-      
-
-   .. py:attribute:: industry_level_3
-      :annotation: :Optional[str]
-
-      
-
-   .. py:attribute:: industry_level_4
-      :annotation: :Optional[str]
-
-      
-
-   .. py:attribute:: company_revenue
-      :annotation: :Optional[float]
-
-      
-
-   .. py:attribute:: company_market_cap
-      :annotation: :Optional[float]
-
-      
-
-   .. py:attribute:: company_enterprise_value
-      :annotation: :Optional[float]
-
-      
-
-   .. py:attribute:: company_ev_plus_cash
-      :annotation: :Optional[float]
-
-      
-
-   .. py:attribute:: company_total_assets
-      :annotation: :Optional[float]
-
-      
-
-   .. py:attribute:: company_cash_equivalents
-      :annotation: :Optional[float]
-
-      
-
-   .. py:attribute:: projected_targets
-      :annotation: :Optional[ICompanyEIProjectionsScopes]
-
-      
-
-   .. py:attribute:: projected_intensities
-      :annotation: :Optional[ICompanyEIProjectionsScopes]
-
-      
-
-   .. py:method:: _fixup_year_value_list(ListType, u_list, metric, inferred_metric)
-
-
-   .. py:method:: _fixup_ei_projections(projections, production_metric, emissions_metric, sector)
-
-
-   .. py:method:: _fixup_historic_data(historic_data, production_metric, emissions_metric, sector)
-
-
-   .. py:method:: _get_base_realization_from_historic(realized_values: List[PintModel], units, base_year=None)
-
-
-
-.. py:class:: ICompanyAggregates(cumulative_budget, cumulative_trajectory, cumulative_target, benchmark_temperature, benchmark_global_budget, *args, **kwargs)
-
-   Bases: :py:obj:`ICompanyData`
-
-   .. py:attribute:: cumulative_budget
-      :annotation: :pint.Quantity[CO2]
-
-      
-
-   .. py:attribute:: cumulative_trajectory
-      :annotation: :pint.Quantity[CO2]
-
-      
-
-   .. py:attribute:: cumulative_target
-      :annotation: :pint.Quantity[CO2]
-
-      
-
-   .. py:attribute:: benchmark_temperature
-      :annotation: :pint.Quantity[delta_degC]
-
-      
-
-   .. py:attribute:: benchmark_global_budget
-      :annotation: :pint.Quantity[CO2]
-
-      
-
-
-.. py:class:: TemperatureScoreControls
-
-   Bases: :py:obj:`PintModel`
-
-   .. py:attribute:: base_year
-      :annotation: :int
-
-      
-
-   .. py:attribute:: target_end_year
-      :annotation: :int
-
-      
-
-   .. py:attribute:: projection_start_year
-      :annotation: :int
-
-      
-
-   .. py:attribute:: projection_end_year
-      :annotation: :int
-
-      
-
-   .. py:attribute:: tcre
-      :annotation: :pint.Quantity[delta_degC]
-
-      
-
-   .. py:attribute:: carbon_conversion
-      :annotation: :pint.Quantity[CO2]
-
-      
-
-   .. py:attribute:: scenario_target_temperature
-      :annotation: :pint.Quantity[delta_degC]
+      :type: Optional[ITR.data.osc_units.EmissionsQuantity]
 
       
 
    .. py:method:: __getitem__(item)
 
 
-   .. py:method:: tcre_multiplier() -> pint.Quantity[delta_degC/CO2]
-      :property:
+   .. py:method:: __eq__(o)
+
+
+   .. py:method:: add(o)
 
 
 
-.. py:class:: ProjectionControls
+.. py:class:: IHistoricEmissionsScopes
 
-   .. py:attribute:: LOWER_PERCENTILE
-      :annotation: :float = 0.1
 
-      
+   Bases: :py:obj:`pydantic.BaseModel`
 
-   .. py:attribute:: UPPER_PERCENTILE
-      :annotation: :float = 0.9
-
-      
-
-   .. py:attribute:: LOWER_DELTA
-      :annotation: :float
+   .. py:attribute:: S1
+      :type: List[IEmissionRealization]
 
       
 
-   .. py:attribute:: UPPER_DELTA
-      :annotation: :float
+   .. py:attribute:: S2
+      :type: List[IEmissionRealization]
 
       
 
-   .. py:attribute:: TARGET_YEAR
-      :annotation: :int = 2050
+   .. py:attribute:: S1S2
+      :type: List[IEmissionRealization]
 
       
 
-   .. py:attribute:: TREND_CALC_METHOD
-      :annotation: :Callable[[pandas.DataFrame], pandas.DataFrame]
+   .. py:attribute:: S3
+      :type: List[IEmissionRealization]
 
       
+
+   .. py:attribute:: S1S2S3
+      :type: List[IEmissionRealization]
+
+      
+
+   .. py:method:: __getitem__(item)
+
+
+   .. py:method:: __str__()
+
+
+
+.. py:class:: IEIRealization
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   .. py:attribute:: year
+      :type: int
+
+      
+
+   .. py:attribute:: value
+      :type: Optional[ITR.data.osc_units.EI_Quantity]
+
+      
+
+   .. py:method:: __getitem__(item)
+
+
+   .. py:method:: __eq__(o)
+
+
+   .. py:method:: add(o)
+
+
+
+.. py:class:: IHistoricEIScopes
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   .. py:attribute:: S1
+      :type: List[IEIRealization]
+
+      
+
+   .. py:attribute:: S2
+      :type: List[IEIRealization]
+
+      
+
+   .. py:attribute:: S1S2
+      :type: List[IEIRealization]
+
+      
+
+   .. py:attribute:: S3
+      :type: List[IEIRealization]
+
+      
+
+   .. py:attribute:: S1S2S3
+      :type: List[IEIRealization]
+
+      
+
+   .. py:method:: __getitem__(item)
+
+
+   .. py:method:: __str__()
+
+
+
+.. py:class:: IHistoricData
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   .. py:attribute:: productions
+      :type: Optional[List[IProductionRealization]]
+
+      
+
+   .. py:attribute:: emissions
+      :type: Optional[IHistoricEmissionsScopes]
+
+      
+
+   .. py:attribute:: emissions_intensities
+      :type: Optional[IHistoricEIScopes]
+
+      
+
+
+.. py:class:: ITargetData
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   .. py:attribute:: netzero_year
+      :type: Optional[int]
+
+      
+
+   .. py:attribute:: target_type
+      :type: Union[Literal[intensity], Literal[absolute], Literal[Intensity], Literal[Absolute]]
+
+      
+
+   .. py:attribute:: target_scope
+      :type: EScope
+
+      
+
+   .. py:attribute:: target_start_year
+      :type: Optional[int]
+
+      
+
+   .. py:attribute:: target_base_year
+      :type: int
+
+      
+
+   .. py:attribute:: target_end_year
+      :type: int
+
+      
+
+   .. py:attribute:: target_base_year_qty
+      :type: float
+
+      
+
+   .. py:attribute:: target_base_year_err
+      :type: Optional[float]
+
+      
+
+   .. py:attribute:: target_base_year_unit
+      :type: str
+
+      
+
+   .. py:attribute:: target_reduction_pct
+      :type: float
+
+      
+
+   .. py:method:: start_end_base_order(v)
+
+
+
+.. py:class:: ICompanyData(emissions_metric=None, production_metric=None, base_year_production=None, ghg_s1s2=None, ghg_s3=None, target_data=None, historic_data=None, *args, **kwargs)
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   .. py:attribute:: company_name
+      :type: str
+
+      
+
+   .. py:attribute:: company_id
+      :type: str
+
+      
+
+   .. py:attribute:: sector
+      :type: str
+
+      
+
+   .. py:attribute:: region
+      :type: str
+
+      
+
+   .. py:attribute:: target_probability
+      :type: float
+
+      
+
+   .. py:attribute:: target_data
+      :type: Optional[List[ITargetData]]
+
+      
+
+   .. py:attribute:: historic_data
+      :type: Optional[IHistoricData]
+
+      
+
+   .. py:attribute:: country
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: emissions_metric
+      :type: Optional[ITR.data.osc_units.EmissionsMetric]
+
+      
+
+   .. py:attribute:: production_metric
+      :type: Optional[ITR.data.osc_units.ProductionMetric]
+
+      
+
+   .. py:attribute:: base_year_production
+      :type: Optional[ITR.data.osc_units.ProductionQuantity]
+
+      
+
+   .. py:attribute:: ghg_s1s2
+      :type: Optional[ITR.data.osc_units.EmissionsQuantity]
+
+      
+
+   .. py:attribute:: ghg_s3
+      :type: Optional[ITR.data.osc_units.EmissionsQuantity]
+
+      
+
+   .. py:attribute:: industry_level_1
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: industry_level_2
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: industry_level_3
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: industry_level_4
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: company_revenue
+      :type: Optional[ITR.data.osc_units.MonetaryQuantity]
+
+      
+
+   .. py:attribute:: company_market_cap
+      :type: Optional[ITR.data.osc_units.MonetaryQuantity]
+
+      
+
+   .. py:attribute:: company_enterprise_value
+      :type: Optional[ITR.data.osc_units.MonetaryQuantity]
+
+      
+
+   .. py:attribute:: company_ev_plus_cash
+      :type: Optional[ITR.data.osc_units.MonetaryQuantity]
+
+      
+
+   .. py:attribute:: company_total_assets
+      :type: Optional[ITR.data.osc_units.MonetaryQuantity]
+
+      
+
+   .. py:attribute:: company_cash_equivalents
+      :type: Optional[ITR.data.osc_units.MonetaryQuantity]
+
+      
+
+   .. py:attribute:: projected_targets
+      :type: Optional[ICompanyEIProjectionsScopes]
+
+      
+
+   .. py:attribute:: projected_intensities
+      :type: Optional[ICompanyEIProjectionsScopes]
+
+      
+
+   .. py:method:: _sector_to_production_units(sector, region='Global')
+
+
+   .. py:method:: _get_base_realization_from_historic(realized_values: List[pydantic.BaseModel], metric, base_year=None)
+
+
+   .. py:method:: _normalize_historic_data(historic_data: IHistoricData, production_metric: ITR.data.osc_units.ProductionMetric, emissions_metric: ITR.data.osc_units.EmissionsMetric) -> IHistoricData
+
+
+
+.. py:class:: ICompanyAggregates(emissions_metric=None, production_metric=None, base_year_production=None, ghg_s1s2=None, ghg_s3=None, target_data=None, historic_data=None, *args, **kwargs)
+
+
+   Bases: :py:obj:`ICompanyData`
+
+   .. py:attribute:: cumulative_budget
+      :type: Optional[ITR.data.osc_units.EmissionsQuantity]
+
+      
+
+   .. py:attribute:: cumulative_scaled_budget
+      :type: Optional[ITR.data.osc_units.EmissionsQuantity]
+
+      
+
+   .. py:attribute:: cumulative_trajectory
+      :type: Optional[ITR.data.osc_units.EmissionsQuantity]
+
+      
+
+   .. py:attribute:: cumulative_target
+      :type: Optional[ITR.data.osc_units.EmissionsQuantity]
+
+      
+
+   .. py:attribute:: benchmark_temperature
+      :type: Optional[quantity('delta_degC')]
+
+      
+
+   .. py:attribute:: benchmark_global_budget
+      :type: Optional[ITR.data.osc_units.EmissionsQuantity]
+
+      
+
+   .. py:attribute:: scope
+      :type: Optional[EScope]
+
+      
+
+   .. py:attribute:: trajectory_exceedance_year
+      :type: Optional[int]
+
+      
+
+   .. py:attribute:: target_exceedance_year
+      :type: Optional[int]
+
+      
+
+   .. py:method:: allow_NA(v)
+
+
+   .. py:method:: from_ICompanyData(super_instance, scope_company_data)
+      :classmethod:
+
+      Fast way to add instance variables to a pre-validated SUPER_INSTANCE
+      SCOPE_COMPANY_DATA is the dictionary of the new values we want to add...for this one company
+
 
 

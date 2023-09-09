@@ -32,3 +32,124 @@ Submodules
    utils/index.rst
 
 
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ITR.EScope
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ITR.isna
+   ITR.Q_m_as
+   ITR.recombine_nom_and_std
+   ITR.JSONEncoder
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ITR._ufloat_nan
+
+
+.. py:class:: EScope
+
+
+   Bases: :py:obj:`SortableEnum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. py:attribute:: S1
+      :value: 'S1'
+
+      
+
+   .. py:attribute:: S2
+      :value: 'S2'
+
+      
+
+   .. py:attribute:: S3
+      :value: 'S3'
+
+      
+
+   .. py:attribute:: S1S2
+      :value: 'S1+S2'
+
+      
+
+   .. py:attribute:: S1S2S3
+      :value: 'S1+S2+S3'
+
+      
+
+   .. py:attribute:: AnyScope
+      :value: 'AnyScope'
+
+      
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: get_scopes() -> List[str]
+      :classmethod:
+
+      Get a list of all scopes.
+      :return: A list of EScope string values
+
+
+   .. py:method:: get_result_scopes() -> List[EScope]
+      :classmethod:
+
+      Get a list of scopes that should be calculated if the user leaves it open.
+
+      :return: A list of EScope objects
+
+
+
+.. py:data:: _ufloat_nan
+
+   
+
+.. py:function:: isna(x)
+
+   True if X is either a NaN-like Quantity or otherwise NA-like
+
+
+.. py:function:: Q_m_as(value, units, inplace=False)
+
+   Convert VALUE from a string to a Quantity.
+   If the Quanity is not already in UNITS, then convert in place.
+   Returns the MAGNITUDE of the (possibly) converted value.
+
+
+.. py:function:: recombine_nom_and_std(nom: pandas.Series, std: pandas.Series) -> pandas.Series
+
+   A Pandas-friendly way to combine nominal and error terms for uncertainties
+
+
+.. py:function:: JSONEncoder(q)
+
+

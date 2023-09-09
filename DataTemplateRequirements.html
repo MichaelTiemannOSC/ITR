@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Data Template Requirements &mdash; ITR Temperature Alignment tool  documentation</title>
@@ -10,11 +10,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -26,11 +26,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> ITR Temperature Alignment tool
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ITR Temperature Alignment tool
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -45,6 +49,19 @@
 <li class="toctree-l1"><a class="reference internal" href="DataRequirements.html">Data Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Legends.html">Data Legends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#submitting-a-bug-report-or-a-feature-request">Submitting a bug report or a feature request</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#contributing-code">Contributing code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#releasing">Releasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#code-of-conduct">Code of conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#id2">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#id3">Submitting a bug report or a feature request</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#id4">Contributing code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#id10">Releasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#id13">Code of conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#id15">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#issue-reports">Issue Reports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#documentation-improvements">Documentation Improvements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html#maintainer-tasks">Maintainer tasks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="links.html">Project Links</a></li>
 <li class="toctree-l1"><a class="reference internal" href="terms.html">Terms of Use</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
@@ -63,8 +80,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Data Template Requirements</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Data Template Requirements</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/DataTemplateRequirements.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -75,7 +92,7 @@
            <div itemprop="articleBody">
              
   <section id="data-template-requirements">
-<h1>Data Template Requirements<a class="headerlink" href="#data-template-requirements" title="Permalink to this heading"></a></h1>
+<h1>Data Template Requirements<a class="headerlink" href="#data-template-requirements" title="Link to this heading"></a></h1>
 <p>The ITR Data Template comes with two sheets dedicated to documentation
 (Read me, Definitions) and three to be filled by data by users (ITR
 input data, ITR target input data, Portfolio).  The documentation
@@ -88,7 +105,7 @@ at the moment it relies heavily on data being both somewhat
 constrained and well-formatted.  We will talk more about what that
 means in the following sections.  At the end we will reiterate how to set up your environment to test out the Jupyter Notebook that implements the tool.</p>
 <section id="itr-input-data">
-<h2>ITR Input Data<a class="headerlink" href="#itr-input-data" title="Permalink to this heading"></a></h2>
+<h2>ITR Input Data<a class="headerlink" href="#itr-input-data" title="Link to this heading"></a></h2>
 <p>The <code class="code docutils literal notranslate"><span class="pre">ITR</span> <span class="pre">Input</span> <span class="pre">Data</span></code> sheet is effectively the Universe of all
 instruments the tool can analyze.  We are currently limiting our
 analysis to stock issues, but expect to support bonds in the near
@@ -123,7 +140,7 @@ to other BI analysis.</p>
 </ul>
 </section>
 <section id="units-scopes-emissions-and-production">
-<h2>Units, Scopes, Emissions, and Production<a class="headerlink" href="#units-scopes-emissions-and-production" title="Permalink to this heading"></a></h2>
+<h2>Units, Scopes, Emissions, and Production<a class="headerlink" href="#units-scopes-emissions-and-production" title="Link to this heading"></a></h2>
 <p>Unlike many tools which treat numbers as dimensionless objects (in
 which case the <cite>1</cite> of <cite>1 dollar</cite>, <cite>1 fish</cite>, and <cite>1 kg of fish</cite> are all
 the same value–one), the ITR Tool works with <em>quantities</em>, which have
@@ -161,7 +178,8 @@ disclosures.  The tool deals with three types of missing data:</p>
 <li><p>If the data is missing to the right, it will extrapolate the data until it has filled in all cells up to the latest reported data.  If all but a few companies report 2020 data and none report 2021 data, tool will extrapolation 2019 data for those companies missing 2020 data.  If there are also some companies with 2021 data, the tool will extrapolate missing data for 2021 and, if needed, also 2020 data.</p></li>
 </ul>
 <p>The tool handles data reports for all scopes defined by the GHG
-Protocol: <span class="math notranslate nohighlight">\(Scope 1\)</span> (own emissions), <span class="math notranslate nohighlight">\(Scope 2\)</span> (upstream and
+Protocol: <span class="math notranslate nohighlight">\(Scope 1\)</span> (own emissions), <span class="math notranslate nohighlight">\(Scope 2`(emissinos caused by
+utilities supplying electric power), :math:`Scope 3\)</span> (upstream and
 downstream emissions caused by transportation, use, and disposal of
 products).  The tool also handles <span class="math notranslate nohighlight">\(S1+S2\)</span> as a combined emission and
 <span class="math notranslate nohighlight">\(S1+S2+S3\)</span> as a combined emission.  <em>HOWEVER</em>, at the present time the
@@ -175,7 +193,8 @@ will not check the math that <span class="math notranslate nohighlight">\(S1 + S
 granular reporting of S1 and S2 data, more accurate in its
 interpretation of how these should combine or remain separated
 according to sectors and benchmarks, but for the present time we
-strongly encourage that all data either have both <span class="math notranslate nohighlight">\(S1\)</span> and <span class="math notranslate nohighlight">\(S2\)</span> data.</p>
+strongly encourage that all data either have both <span class="math notranslate nohighlight">\(S1\)</span> and <span class="math notranslate nohighlight">\(S2`data or
+combined :math:`S1+S2\)</span> data.</p>
 <p>Finally, columns of the form YYYY_production are for production
 metrics.  As with the _ghg_ columns, the numbers in the production
 columns are interpreted to denote amounts based on the
@@ -183,7 +202,7 @@ production_metrics column.  Missing production data is filled in the
 same way as missing emissions data.</p>
 </section>
 <section id="itr-target-input-data">
-<h2>ITR target input data<a class="headerlink" href="#itr-target-input-data" title="Permalink to this heading"></a></h2>
+<h2>ITR target input data<a class="headerlink" href="#itr-target-input-data" title="Link to this heading"></a></h2>
 <p>The same identifiers–<em>company_name</em>, <em>ompany_lei</em>, and <em>company_id</em>–are
 used to connect a row of <code class="code docutils literal notranslate"><span class="pre">ITR</span> <span class="pre">input</span> <span class="pre">data</span></code> to rows of <code class="code docutils literal notranslate"><span class="pre">ITR</span> <span class="pre">target</span> <span class="pre">input</span>
 <span class="pre">data</span></code>.  Most companies have set a short-term reduction ambition target
@@ -223,13 +242,13 @@ interpret reducing emissions to less than half-a-percent of the
 initial amount as rounding down to zero.</p>
 </section>
 <section id="installation-notes">
-<h2>Installation Notes<a class="headerlink" href="#installation-notes" title="Permalink to this heading"></a></h2>
+<h2>Installation Notes<a class="headerlink" href="#installation-notes" title="Link to this heading"></a></h2>
 <p>The first step is to request an invitation to join the OS-Climate GitHub team.  This is required to access repositories that are not yet public.  (They will be published soon, but not yet.)  You will need a Personal Access Token, which you can get by following these instructions: &lt;<a class="reference external" href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token">https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token</a>&gt;.  Because the ITR repository is currently Private, you will need to select <code class="code docutils literal notranslate"><span class="pre">repo</span></code> privileges (the first option box) when requesting the token.  GitHub will magically select all the boxes indented under the <cite>repo</cite> option.</p>
 <p><strong>Getting Started with conda</strong></p>
 <p>If you don’t already have a conda environment, you’ll need to download one from <cite>&lt;https://docs.conda.io/en/latest/miniconda.html&gt;</cite> (Python 3.9 preferred).</p>
 <p>If you are installing conda on a Windows system, follow these instructions: <a class="reference external" href="https://conda.io/projects/conda/en/latest/user-guide/install/windows.html">https://conda.io/projects/conda/en/latest/user-guide/install/windows.html</a>
 You will want to open the Anaconda PowerShell after installation, which you can do from the Start menu.</p>
-<p>If you are on OSX, you will need to install parts of the (utterly massive) Xcode system.  The subset you’ll need can be installed by typing <code class="code docutils literal notranslate"><span class="pre">xcode-select</span> <span class="pre">--install</span></code> into a Terminal window (which you can open from Applications&gt;Utilities&gt;Terminal).  Thought it is tempting to install the <code class="code docutils literal notranslate"><span class="pre">.pkg</span> <span class="pre">`</span> <span class="pre">version</span> <span class="pre">of</span> <span class="pre">miniconda,</span> <span class="pre">there's</span> <span class="pre">nothing</span> <span class="pre">user-friendly</span> <span class="pre">about</span> <span class="pre">how</span> <span class="pre">OSX</span> <span class="pre">tries</span> <span class="pre">to</span> <span class="pre">manage</span> <span class="pre">its</span> <span class="pre">own</span> <span class="pre">concepts</span> <span class="pre">of</span> <span class="pre">system</span> <span class="pre">security.</span>&#160; <span class="pre">It</span> <span class="pre">is</span> <span class="pre">easier</span> <span class="pre">to</span> <span class="pre">start</span> <span class="pre">from</span> <span class="pre">the</span> <span class="pre">:code:`bash</span></code> version and follow those instructions.  For other installation instructions, please read <a class="reference external" href="https://conda.io/projects/conda/en/latest/user-guide/install/macos.html">https://conda.io/projects/conda/en/latest/user-guide/install/macos.html</a></p>
+<p>If you are on OSX, you will need to install parts of the (utterly massive) Xcode system.  The subset you’ll need can be installed by typing <code class="code docutils literal notranslate"><span class="pre">xcode-select</span> <span class="pre">--install</span></code> into a Terminal window (which you can open from Applications&gt;Utilities&gt;Terminal).  Thought it is tempting to install the <code class="code docutils literal notranslate"><span class="pre">.pkg</span></code> version of miniconda, there’s nothing user-friendly about how OSX tries to manage its own concepts of system security.  It is easier to start from the <code class="code docutils literal notranslate"><span class="pre">bash</span></code> version and follow those instructions.  For other installation instructions, please read <a class="reference external" href="https://conda.io/projects/conda/en/latest/user-guide/install/macos.html">https://conda.io/projects/conda/en/latest/user-guide/install/macos.html</a></p>
 <p>For Linux: <a class="reference external" href="https://conda.io/projects/conda/en/latest/user-guide/install/linux.html">https://conda.io/projects/conda/en/latest/user-guide/install/linux.html</a>.  And note that you don’t have to use the fish shell.  You can use bash, csh, sh, zsh, or whatever is your favorite shell.</p>
 <p>You will know you have succeeded in the installation and initialization of conda when you can type <code class="code docutils literal notranslate"><span class="pre">conda</span> <span class="pre">info</span> <span class="pre">-e</span></code> and see an environent listed as base.  If your shell cannot find a conda to run, it likely means you have not yet run <code class="code docutils literal notranslate"><span class="pre">conda</span> <span class="pre">init</span> <span class="pre">--all</span></code></p>
 <p><strong>Getting Started with Git</strong></p>
@@ -240,12 +259,12 @@ You will want to open the Anaconda PowerShell after installation, which you can 
 <li><p>Set GITHUB_TOKEN to your GitHub access token (windows :code`$Env:GITHUB_TOKEN = “your_github_token”<cite>) (OSX/Linux: :code:`export GITHUB_TOKEN=your_github_token</cite>)</p></li>
 <li><p>Clone the ITR repository: <code class="code docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/os-climate/ITR.git</span></code></p></li>
 <li><p>Change your directory to the top-level ITR directory: <code class="code docutils literal notranslate"><span class="pre">cd</span> <span class="pre">ITR</span></code></p></li>
-<li><p>Switch to the correct branch: <code class="code docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">develop-pint-steel-projections</span></code></p></li>
+<li><p>Optionally switch to the development branch: <code class="code docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">develop</span></code> (if you don’t, you’ll be using the branch <code class="code docutils literal notranslate"><span class="pre">origin/main</span></code>)</p></li>
 <li><p>create the conda itr_env: <code class="code docutils literal notranslate"><span class="pre">conda</span> <span class="pre">env</span> <span class="pre">create</span> <span class="pre">-f</span> <span class="pre">environment.yml</span></code></p></li>
 <li><p>Activate that environment: <code class="code docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">itr_env</span></code></p></li>
-<li><p>Install the ITR libraries to your local environment: <code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code> (you may need :code:–no-cache-dir` on windows to avoid permissions errors; please also note that the <cite>.</cite> character is part of the <code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code> command)</p></li>
-<li><p>Change to the <em>examples</em> directory: <code class="code docutils literal notranslate"><span class="pre">cd</span> <span class="pre">ITR/examples</span></code></p></li>
-<li><p>Start your notebook: code:<cite>jupyter-lab</cite>.  This should cause your default browser to pop to the front and open a page with a Jupyter Notebook.</p></li>
+<li><p>Install the ITR libraries to your local environment: <code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code> (you may need <code class="code docutils literal notranslate"><span class="pre">--no-cache-dir</span></code> on windows to avoid permissions errors; please also note that the <cite>.</cite> character is part of the <code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code> command)</p></li>
+<li><p>Change to the <em>examples</em> directory: <code class="code docutils literal notranslate"><span class="pre">cd</span> <span class="pre">examples</span></code></p></li>
+<li><p>Start your notebook: <code class="code docutils literal notranslate"><span class="pre">jupyter-lab</span></code>.  This should cause your default browser to pop to the front and open a page with a Jupyter Notebook.</p></li>
 <li><p>Make the file browser to the left of the notebook wide enough to expose the full names of the files in the <em>examples</em> directory.  You should see a file named <code class="code docutils literal notranslate"><span class="pre">quick_template_score_calc.ipynb</span></code>.  Double click on that file to open it.</p></li>
 <li><p>Run the notebook with a fresh kernel by pressing the <code class="code docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> button.  Accept the option to Restart Kernel and clear all previous variables.</p></li>
 </ol>
@@ -273,8 +292,8 @@ You will want to open the Anaconda PowerShell after installation, which you can 
 </ol>
 </section>
 <section id="filing-issues-and-updating-the-itr-repository">
-<h2>Filing Issues and Updating the ITR Repository<a class="headerlink" href="#filing-issues-and-updating-the-itr-repository" title="Permalink to this heading"></a></h2>
-<p>Once you are able to run the <cite>quick_template_score_calc.ipynb</cite> sample notebook with the provided sample data (<code class="code docutils literal notranslate"><span class="pre">examples/data/20220306</span> <span class="pre">ITR</span> <span class="pre">Tool</span> <span class="pre">Sample</span> <span class="pre">Data.xlsx</span></code>), you are ready to start trying things with your own data.  The notebook explains how to do this at the heading labeled <code class="code docutils literal notranslate"><span class="pre">Download/load</span> <span class="pre">the</span> <span class="pre">sample</span> <span class="pre">template</span> <span class="pre">data</span></code> before Cell 6.  As you try loading your own data, you will inevitably find errors–sometimes with the data you receive, sometimes with the data you present to the tool, sometimes with the way the tool loads or does not load your data, sometimes with the way the tool interprets or presents your data.  It is the goal of the Data Commons to streamline and simplify access to data so as to reduce the first to cases of errors, and it is the goal of the ITR project team to continuously improve the ITR tool to reduce the other cases of errors.  In all cases, the correction of errors begins with an error reporting process and ends with an effective update process.</p>
+<h2>Filing Issues and Updating the ITR Repository<a class="headerlink" href="#filing-issues-and-updating-the-itr-repository" title="Link to this heading"></a></h2>
+<p>Once you are able to run the <cite>quick_template_score_calc.ipynb</cite> sample notebook with the provided sample data (<code class="code docutils literal notranslate"><span class="pre">examples/data/20230106</span> <span class="pre">ITR</span> <span class="pre">Tool</span> <span class="pre">Sample</span> <span class="pre">Data.xlsx</span></code>), you are ready to start trying things with your own data.  The notebook explains how to do this at the heading labeled <code class="code docutils literal notranslate"><span class="pre">Download/load</span> <span class="pre">the</span> <span class="pre">sample</span> <span class="pre">template</span> <span class="pre">data</span></code> before Cell 6.  As you try loading your own data, you will inevitably find errors–sometimes with the data you receive, sometimes with the data you present to the tool, sometimes with the way the tool loads or does not load your data, sometimes with the way the tool interprets or presents your data.  It is the goal of the Data Commons to streamline and simplify access to data so as to reduce the first to cases of errors, and it is the goal of the ITR project team to continuously improve the ITR tool to reduce the other cases of errors.  In all cases, the correction of errors begins with an error reporting process and ends with an effective update process.</p>
 <p>To report errors, please use the GitHub Issues interface for the ITR tool: <a class="reference external" href="https://github.com/os-climate/ITR/issues">https://github.com/os-climate/ITR/issues</a></p>
 <p>Immediately you will see all open issues filed against the tool, and you may find that a problem you are having has already been reported.  You can search for keywords, and usually in the process of solving issues, commentary on a specific issue may provide insights into work-arounds.  If you do not see an existing issue (you don’t need to search exhaustively; just enough to save yourself time writing up an issue that’s already been filed), then by all means open an issue describing the problem, ideally with a reproducible test case (such as an excel file containing the minimum amount of anonymozed data required to reproduce the problem).  The team can then assign the problem and you will see progress as the issue is worked.</p>
 <p>The collective actions of many people reporting issues and many people working collaboratively to resolve issues is one of the great advantages of open source software development, and a great opportunity to see its magic at work.</p>
@@ -284,8 +303,8 @@ You will want to open the Anaconda PowerShell after installation, which you can 
 <li><p>Change your directory to the top of your ITR tree: <code class="code docutils literal notranslate"><span class="pre">cd</span> <span class="pre">~/os-climate/ITR</span></code> (or some such)</p></li>
 <li><p>Pull changes from upstream: git pull</p></li>
 <li><p>If git complains that you have modified some files (such as your notebook, which is “modified” every time you run it), you can
-1. remove the notebook file: <code class="code docutils literal notranslate"><span class="pre">rm</span> <span class="pre">examples/data/20220306ITRToolSampleData.xlsx</span></code>
-2. restore it from the updated repository: <code class="code docutils literal notranslate"><span class="pre">git</span> <span class="pre">restore</span> <span class="pre">examples/data/20220306ITRToolSampleData.xlsx</span></code></p></li>
+1. remove the notebook file: <code class="code docutils literal notranslate"><span class="pre">rm</span> <span class="pre">examples/data/20230106ITRToolSampleData.xlsx</span></code>
+2. restore it from the updated repository: <code class="code docutils literal notranslate"><span class="pre">git</span> <span class="pre">restore</span> <span class="pre">examples/data/20230106ITRToolSampleData.xlsx</span></code></p></li>
 <li><p>Restart your jupyter-lab server</p></li>
 </ol>
 <p>Over time you may do other things to your local repository that makes it difficult to sync with git.  You can file an issue for help, you can do your own research (many of us find answers on github community forums or StackOverflow), or you can go with Option #1: run the installation process from top to bottom in a new directory.</p>
@@ -301,7 +320,7 @@ You will want to open the Anaconda PowerShell after installation, which you can 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, OS-Climate.</p>
+    <p>&#169; Copyright 2023, OS-Climate.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
