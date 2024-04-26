@@ -2,17 +2,17 @@
 This file defines the constants used throughout the different classes. In order to redefine these settings whilst using
 the module, extend the respective config class and pass it to the class as the "constants" parameter.
 """
+
 from __future__ import annotations
 
 import logging
-from typing import List
-from pydantic import BaseModel, ConfigDict
 from dataclasses import dataclass
+from typing import Callable, List, Optional
 
 import pandas as pd
-import pint
-import ITR
-from ITR.data.osc_units import ureg, Q_, Quantity_type, EmissionsQuantity
+from pydantic import BaseModel, ConfigDict
+
+from .data.osc_units import EmissionsQuantity, Quantity, delta_degC_Quantity
 
 
 def ITR_median(*args, **kwargs):
@@ -56,11 +56,6 @@ class ColumnsConfig:
     BASE_YEAR_PRODUCTION = "base_year_production"
     GHG_SCOPE12 = "ghg_s1s2"
     GHG_SCOPE3 = "ghg_s3"
-    TEMPLATE_SCOPE1 = "em_s1"
-    TEMPLATE_SCOPE2 = "em_s2"
-    TEMPLATE_SCOPE12 = "em_s1s2"
-    TEMPLATE_SCOPE3 = "em_s3"
-    TEMPLATE_SCOPE123 = "em_s1s2s3"
     HISTORIC_DATA = "historic_data"
     TARGET_DATA = "target_data"
     TEMPLATE_PRODUCTION = "production"
@@ -212,7 +207,7 @@ class ProjectionControls:
 
     BASE_YEAR: int = 2019
     TARGET_YEAR: int = 2050
-    TREND_CALC_METHOD: Callable[[pd.DataFrame], pd.DataFrame] = ITR_median
+    TREND_CALC_METHOD: Callable[[pd.DataFrame, Optional[str], Optional[bool]], pd.DataFrame] = ITR_median
 
 
 class TemperatureScoreControls(BaseModel):
@@ -220,16 +215,16 @@ class TemperatureScoreControls(BaseModel):
 
     base_year: int
     target_end_year: int
-    tcre: Quantity_type("delta_degC")
+    tcre: delta_degC_Quantity
     carbon_conversion: EmissionsQuantity
-    scenario_target_temperature: Quantity_type("delta_degC")
+    scenario_target_temperature: delta_degC_Quantity
     target_probability: float
 
     def __getitem__(self, item):
         return getattr(self, item)
 
     @property
-    def tcre_multiplier(self) -> Quantity_type("delta_degC/(t CO2)"):
+    def tcre_multiplier(self) -> Quantity:
         return self.tcre / self.carbon_conversion
 
 

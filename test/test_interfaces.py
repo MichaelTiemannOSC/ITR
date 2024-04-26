@@ -1,30 +1,25 @@
-import os
 import unittest
 
 import pandas as pd
 
-import ITR
-from ITR.data.osc_units import (
-    ureg,
-    Q_,
-    PA_,
-    BenchmarkMetric,
-    ProductionMetric,
-    EI_Metric,
-    BenchmarkQuantity,
-    EI_Quantity,
-)
+import ITR  # noqa F401
 from ITR.configs import TemperatureScoreConfig
+from ITR.data.osc_units import (
+    Q_,
+    BenchmarkMetric,
+    EI_Metric,
+    EI_Quantity,
+    ProductionMetric,
+)
 from ITR.interfaces import (
     EScope,
-    UProjection,
-    IProjection,
     IBenchmark,
     ICompanyData,
-    ICompanyEIProjectionsScopes,
-    ICompanyEIProjections,
     ICompanyEIProjection,
+    ICompanyEIProjections,
+    ICompanyEIProjectionsScopes,
     ITargetData,
+    UProjection,
 )
 
 
@@ -61,30 +56,21 @@ class TestInterfaces(unittest.TestCase):
     def test_IProjection(self):
         row = pd.Series([0.9, 0.8, 0.7], index=[2019, 2020, 2021], name="ei_bm")
 
-        bm = IBenchmark(
+        bm = IBenchmark(  # noqa: F841
             region="North America",
             sector="Steel",
             benchmark_metric=BenchmarkMetric("dimensionless"),
-            projections_nounits=[
-                UProjection(year=int(k), value=v) for k, v in row.items()
-            ],
+            projections_nounits=[UProjection(year=int(k), value=v) for k, v in row.items()],
         )
 
     def test_ICompanyProjectionScopes(self):
         row = pd.Series([0.9, 0.8, 0.7], index=[2019, 2020, 2021], name="nl_steel")
-        p = [
-            ICompanyEIProjection(
-                year=int(k), value=EI_Quantity(Q_(v, "t CO2/(t Steel)"))
-            )
-            for k, v in row.items()
-        ]
-        S1S2 = ICompanyEIProjections(
-            projections=p, ei_metric=EI_Metric("t CO2/(t Steel)")
-        )
-        x = ICompanyEIProjectionsScopes(S1S2=S1S2)
+        p = [ICompanyEIProjection(year=int(k), value=EI_Quantity(Q_(v, "t CO2/(t Steel)"))) for k, v in row.items()]
+        S1S2 = ICompanyEIProjections(projections=p, ei_metric=EI_Metric("t CO2/(t Steel)"))
+        x = ICompanyEIProjectionsScopes(S1S2=S1S2)  # noqa: F841
 
     def test_ICompanyData(self):
-        company_data = ICompanyData(
+        company_data = ICompanyData(  # noqa: F841
             company_name="Company AV",
             company_id="US6293775085",
             region="Europe",
@@ -102,7 +88,7 @@ class TestInterfaces(unittest.TestCase):
         )
 
     def test_ITargetData(self):
-        target_data = ITargetData(
+        target_data = ITargetData(  # noqa: F841
             netzero_year=2022,
             target_type="Absolute",
             target_scope=EScope.S1S2,
@@ -116,7 +102,7 @@ class TestInterfaces(unittest.TestCase):
 
     def test_fail_ITargetData(self):
         with self.assertRaises(ValueError):
-            target_data = ITargetData(
+            target_data = ITargetData(  # noqa: F841
                 netzero_year=2022,
                 target_type="absolute",
                 target_scope=EScope.S1S2,

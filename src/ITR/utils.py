@@ -1,32 +1,29 @@
 from __future__ import annotations
 
+import logging
 import sys
-import pandas as pd
-import numpy as np
 from pathlib import Path
 from typing import List, Optional, Tuple
 
-import ITR
-from ITR.data.osc_units import ureg, Q_, asPintSeries
-import pint
-from pint_pandas import PintType
+import numpy as np
+import pandas as pd
 
-from .interfaces import PortfolioCompany, EScope, ETimeFrames, ScoreAggregations
+import ITR
+
 from .configs import (
     ColumnsConfig,
-    TemperatureScoreControls,
-    TemperatureScoreConfig,
     LoggingConfig,
+    TemperatureScoreConfig,
+    TemperatureScoreControls,
 )
-
-import logging
+from .data.data_warehouse import DataWarehouse
+from .data.osc_units import Q_, asPintSeries, delta_degC_Quantity
+from .interfaces import EScope, ETimeFrames, PortfolioCompany, ScoreAggregations
+from .portfolio_aggregation import PortfolioAggregationMethod
+from .temperature_score import TemperatureScore
 
 logger = logging.getLogger(__name__)
 LoggingConfig.add_config_to_logger(logger)
-
-from .data.data_warehouse import DataWarehouse
-from .portfolio_aggregation import PortfolioAggregationMethod
-from .temperature_score import TemperatureScore
 
 
 # If this file is moved, the computation of get_project_root may also need to change
@@ -59,9 +56,7 @@ def _make_isin_map(df_portfolio: pd.DataFrame) -> dict:
     """
     return {
         company_id: company[ColumnsConfig.COMPANY_ISIN]
-        for company_id, company in df_portfolio[
-            [ColumnsConfig.COMPANY_ID, ColumnsConfig.COMPANY_ISIN]
-        ]
+        for company_id, company in df_portfolio[[ColumnsConfig.COMPANY_ID, ColumnsConfig.COMPANY_ISIN]]
         .set_index(ColumnsConfig.COMPANY_ID)
         .to_dict(orient="index")
         .items()
@@ -77,31 +72,22 @@ def dataframe_to_portfolio(df_portfolio: pd.DataFrame) -> List[PortfolioCompany]
     """
     # Adding some non-empty checks for portfolio upload
     if df_portfolio[ColumnsConfig.INVESTMENT_VALUE].isnull().any():
-        error_message = f"Investment values are missing for one or more companies in the input file."
+        error_message = "Investment values are missing for one or more companies in the input file."
         logger.error(error_message)
         raise ValueError(error_message)
     if df_portfolio[ColumnsConfig.COMPANY_ISIN].isnull().any():
-        error_message = (
-            f"Company ISINs are missing for one or more companies in the input file."
-        )
+        error_message = "Company ISINs are missing for one or more companies in the input file."
         logger.error(error_message)
         raise ValueError(error_message)
     if df_portfolio[ColumnsConfig.COMPANY_ID].isnull().any():
-        error_message = (
-            f"Company IDs are missing for one or more companies in the input file."
-        )
+        error_message = "Company IDs are missing for one or more companies in the input file."
         logger.error(error_message)
         raise ValueError(error_message)
 
-    return [
-        PortfolioCompany.model_validate(company)
-        for company in df_portfolio.to_dict(orient="records")
-    ]
+    return [PortfolioCompany.model_validate(company) for company in df_portfolio.to_dict(orient="records")]
 
 
-def get_data(
-    data_warehouse: DataWarehouse, portfolio: List[PortfolioCompany]
-) -> pd.DataFrame:
+def get_data(data_warehouse: DataWarehouse, portfolio: List[PortfolioCompany]) -> pd.DataFrame:
     """
     Get the required data from the data provider(s) and return a 9-box grid for each company.
 
@@ -109,41 +95,30 @@ def get_data(
     :param portfolio: A list of PortfolioCompany models
     :return: A data frame containing the relevant company data indexed by (COMPANY_ID, SCOPE)
     """
+    company_ids = set(data_warehouse.company_data.get_company_ids())
     df_portfolio = pd.DataFrame.from_records(
-        [
-            _flatten_user_fields(c)
-            for c in portfolio
-            if c.company_id not in data_warehouse.company_data.missing_ids
-        ]
+        [_flatten_user_fields(c) for c in portfolio if c.company_id in company_ids]
     )
-    df_portfolio[ColumnsConfig.INVESTMENT_VALUE] = asPintSeries(
-        df_portfolio[ColumnsConfig.INVESTMENT_VALUE]
-    )
+    df_portfolio[ColumnsConfig.INVESTMENT_VALUE] = asPintSeries(df_portfolio[ColumnsConfig.INVESTMENT_VALUE])
 
     if ColumnsConfig.COMPANY_ID not in df_portfolio.columns:
-        raise ValueError(f"Portfolio contains no company_id data")
+        raise ValueError("Portfolio contains no company_id data")
 
     # This transforms a dataframe of portfolio data into model data just so we can transform that back into a dataframe?!
     # It does this for all scopes, not only the scopes of interest
-    company_data = data_warehouse.get_preprocessed_company_data(
-        df_portfolio[ColumnsConfig.COMPANY_ID].to_list()
-    )
+    company_data = data_warehouse.get_preprocessed_company_data(df_portfolio[ColumnsConfig.COMPANY_ID].to_list())
 
     if len(company_data) == 0:
-        raise ValueError(
-            "None of the companies in your portfolio could be found by the data providers"
-        )
+        raise ValueError("None of the companies in your portfolio could be found by the data providers")
 
     df_company_data = pd.DataFrame.from_records([dict(c) for c in company_data])
     # Until we have https://github.com/hgrecco/pint-pandas/pull/58...
     df_company_data.ghg_s1s2 = df_company_data.ghg_s1s2.astype("pint[Mt CO2e]")
     s3_data_invalid = df_company_data[ColumnsConfig.GHG_SCOPE3].isna()
     if len(s3_data_invalid[s3_data_invalid].index) > 0:
-        df_company_data.loc[
+        df_company_data.loc[s3_data_invalid, ColumnsConfig.GHG_SCOPE3] = df_company_data.loc[
             s3_data_invalid, ColumnsConfig.GHG_SCOPE3
-        ] = df_company_data.loc[s3_data_invalid, ColumnsConfig.GHG_SCOPE3].map(
-            lambda x: Q_(np.nan, "Mt CO2e")
-        )
+        ].map(lambda x: Q_(np.nan, "Mt CO2e"))
     for col in [
         ColumnsConfig.GHG_SCOPE3,
         ColumnsConfig.CUMULATIVE_BUDGET,
@@ -161,9 +136,9 @@ def get_data(
         ColumnsConfig.COMPANY_CASH_EQUIVALENTS,
     ]:
         df_company_data[col] = asPintSeries(df_company_data[col])
-    df_company_data[ColumnsConfig.BENCHMARK_TEMP] = df_company_data[
-        ColumnsConfig.BENCHMARK_TEMP
-    ].astype("pint[delta_degC]")
+    df_company_data[ColumnsConfig.BENCHMARK_TEMP] = df_company_data[ColumnsConfig.BENCHMARK_TEMP].astype(
+        "pint[delta_degC]"
+    )
     df_company_data[ColumnsConfig.BENCHMARK_GLOBAL_BUDGET] = df_company_data[
         ColumnsConfig.BENCHMARK_GLOBAL_BUDGET
     ].astype("pint[Gt CO2e]")
@@ -176,9 +151,64 @@ def get_data(
     return portfolio_data
 
 
+def get_benchmark_projections(
+    prod_df: pd.DataFrame, company_sector_region_scope: Optional[pd.DataFrame] = None, scope: EScope = EScope.AnyScope
+) -> pd.DataFrame:
+    """
+    :param prod_df: DataFrame of production statistics by sector, region, scope (and year)
+    :param company_sector_region_scope: DataFrame indexed by ColumnsConfig.COMPANY_ID
+    with at least the following columns: ColumnsConfig.SECTOR, ColumnsConfig.REGION, and ColumnsConfig.SCOPE
+    :param scope: a scope
+    :return: A pint[dimensionless] DataFrame with partial production benchmark data per calendar year per row, indexed by company.
+    """
+
+    if company_sector_region_scope is None:
+        return prod_df
+
+    # We drop the meaningless S1S2/AnyScope from the production benchmark and replace it with the company's scope.
+    # This is needed to make indexes align when we go to multiply production times intensity for a scope.
+    prod_df_anyscope = prod_df.droplevel("scope")
+    df = (
+        company_sector_region_scope[["sector", "region", "scope"]]
+        .reset_index()
+        .drop_duplicates()
+        .set_index(["company_id", "scope"])
+    )
+    # We drop the meaningless S1S2/AnyScope from the production benchmark and replace it with the company's scope.
+    # This is needed to make indexes align when we go to multiply production times intensity for a scope.
+    company_benchmark_projections = df.merge(
+        prod_df_anyscope,
+        left_on=["sector", "region"],
+        right_index=True,
+        how="left",
+    )
+    # If we don't get a match, then the projections will be `nan`.  Look at the last year's column to find them.
+    mask = company_benchmark_projections.iloc[:, -1].isna()
+    if mask.any():
+        # Patch up unknown regions as "Global"
+        global_benchmark_projections = (
+            df[mask]
+            .drop(columns="region")
+            .merge(
+                prod_df_anyscope.loc[(slice(None), "Global"), :].droplevel(["region"]),
+                left_on=["sector"],
+                right_index=True,
+                how="left",
+            )
+        )
+        combined_benchmark_projections = pd.concat(
+            [
+                company_benchmark_projections[~mask].drop(columns="region"),
+                global_benchmark_projections,
+            ]
+        )
+        return combined_benchmark_projections.drop(columns="sector")
+    return company_benchmark_projections.drop(columns=["sector", "region"])
+
+
 def calculate(
     portfolio_data: pd.DataFrame,
-    fallback_score: pint.Quantity["delta_degC"],
+    fallback_score: delta_degC_Quantity,
     aggregation_method: PortfolioAggregationMethod,
     grouping: Optional[List[str]],
     time_frames: List[ETimeFrames],
@@ -238,11 +268,7 @@ def umean(unquantified_data):
     :return: The weighted mean of the values, with a freshly calculated error term
     """
     arr = np.array(
-        [
-            v if isinstance(v, ITR.UFloat) else ITR.ufloat(v, 0)
-            for v in unquantified_data
-            if not ITR.isnan(v)
-        ]
+        [v if isinstance(v, ITR.UFloat) else ITR.ufloat(v, 0) for v in unquantified_data if not ITR.isnan(v)]
     )
     N = len(arr)
     if N == 0:

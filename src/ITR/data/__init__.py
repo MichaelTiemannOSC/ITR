@@ -2,12 +2,11 @@
 This module contains classes that create connections to data providers and initializes our system of units
 """
 
-import pint
-from pint import set_application_registry
-from openscm_units import unit_registry
 import re
 
-import numpy as np
+import pint
+from openscm_units import unit_registry
+from pint import set_application_registry
 
 currency_dict = {
     # 'US$':'USD', NOTE: don't try to re-define USD...it leads to infinite recursion
@@ -54,9 +53,7 @@ def escape_currency_symbols(text):
     return escaped_text
 
 
-currency_keep_regexp = re.compile(
-    rf"({'|'.join([cur_abbrev for cur_abbrev in currency_dict.values()])})"
-)
+currency_keep_regexp = re.compile(rf"({'|'.join([cur_abbrev for cur_abbrev in currency_dict.values()])})")
 currency_split_regexp = re.compile(
     rf"(\$|\bUS\$|{'|'.join([escape_currency_symbols(currency_symbol) for currency_symbol in currency_dict])})"
 )
@@ -71,7 +68,7 @@ def translate_currency_symbols_1(text):
     pairs = zip(split_text[::2], split_text[1::2])
     retval = "".join(
         map(
-            lambda x: f"{x[0]}{'USD' if x[1]=='$' or x[1]=='US$' else currency_dict.get(x[1], '')}",
+            lambda x: f"{x[0]}{'USD' if x[1] == '$' or x[1] == 'US$' else currency_dict.get(x[1], '')}",
             pairs,
         )
     )
@@ -86,13 +83,7 @@ def translate_currency_symbols(text):
     if len(keep_text) & 1 and keep_text[-1] != "":
         keep_text.append("")
     pairs = zip(keep_text[::2], keep_text[1::2])
-    retval = "".join(
-        [
-            inner
-            for outer in pairs
-            for inner in [translate_currency_symbols_1(outer[0]), outer[1]]
-        ]
-    )
+    retval = "".join([inner for outer in pairs for inner in [translate_currency_symbols_1(outer[0]), outer[1]]])
     # print(f"{text} -> {keep_text} -> {retval}")
     return retval
 
@@ -120,7 +111,7 @@ pint.Measurement = ureg.Measurement
 pint.Context = ureg.Context
 
 # FIXME: delay loading of pint_pandas until after we've initialized ourselves
-from pint_pandas import PintType, PintArray
+from pint_pandas import PintArray, PintType  # noqa E402
 
 Q_ = ureg.Quantity
 M_ = ureg.Measurement

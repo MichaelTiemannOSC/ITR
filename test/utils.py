@@ -1,20 +1,23 @@
-import unittest
-import pandas as pd
 import json
 import random
+import unittest
+
+import pandas as pd
 
 import ITR
-from pint import Quantity
-from pint_pandas import PintType
-from ITR.data.osc_units import EI_Metric, EI_Quantity, asPintSeries
-
-from ITR.interfaces import EScope
-from ITR.interfaces import (
+from ITR.data.osc_units import EI_Metric, EI_Quantity, asPintSeries  # noqa: F401
+from ITR.interfaces import (  # noqa: F401
+    EScope,
     ICompanyData,
-    ICompanyEIProjectionsScopes,
-    ICompanyEIProjections,
     ICompanyEIProjection,
+    ICompanyEIProjections,
+    ICompanyEIProjectionsScopes,
 )
+
+# isort: split
+
+from pint import Quantity
+from pint_pandas import PintType  # noqa: F401
 
 
 class ITR_Encoder(json.JSONEncoder):
@@ -28,13 +31,7 @@ class ITR_Encoder(json.JSONEncoder):
         elif isinstance(q, pd.Series):
             units = q.dtype.units
             res = (
-                pd.DataFrame(
-                    {
-                        "value": q.map(
-                            lambda x: f"nan {units}" if ITR.isna(x) else f"{x:.5f}"
-                        )
-                    }
-                )
+                pd.DataFrame({"value": q.map(lambda x: f"nan {units}" if ITR.isna(x) else f"{x:.5f}")})
                 .reset_index()
                 .to_dict("records")
             )
@@ -52,7 +49,7 @@ class DequantifyQuantity(json.JSONEncoder):
 
 
 def assert_pint_series_equal(
-    case: unittest.case,
+    case: unittest.case.TestCase,
     left: pd.Series,
     right: pd.Series,
     places=7,
@@ -83,7 +80,7 @@ def assert_pint_series_equal(
 
 
 def assert_pint_frame_equal(
-    case: unittest.case,
+    case: unittest.case.TestCase,
     left: pd.DataFrame,
     right: pd.DataFrame,
     places=7,
@@ -119,7 +116,7 @@ def assert_pint_frame_equal(
                 delta,
             )
         except AssertionError as e:
-            errors.append((e.args[0]))
+            errors.append(e.args[0])
     if errors:
         raise AssertionError("\n".join(errors))
 
@@ -145,9 +142,7 @@ def interpolate_value_at_year(y, bm_ei, ei_nz_year, ei_max_negative):
         bm_ei.iloc[0] * (ei_nz_year - y) / (ei_nz_year - bm_ei.index[0]),
         ei_max_negative,
     )
-    bm_interpolation = (
-        bm_ei[first_y] * (last_y - y) + bm_ei[last_y] * (y - first_y)
-    ) / (last_y - first_y)
+    bm_interpolation = (bm_ei[first_y] * (last_y - y) + bm_ei[last_y] * (y - first_y)) / (last_y - first_y)
     return min(nz_interpolation, bm_interpolation)
 
 
@@ -185,22 +180,16 @@ def gen_company_data(
             elif EScope.S1S2 in scopes:  # and EScope.S3 not in scopes
                 # Compute S3 from S1S2S3 - S1S2
                 company_dict["ghg_s3"] = production * (
-                    bm_ei[2019]
-                    - bm_ei_scopes_t.loc[2019, (sector, slice(None), EScope.S1S2)].iloc[
-                        0
-                    ]
+                    bm_ei[2019] - bm_ei_scopes_t.loc[2019, (sector, slice(None), EScope.S1S2)].iloc[0]
                 )
             elif EScope.S3 in scopes:  # and EScope.S1S2 not in scopes
                 # Compute S1S2 from S1S2S3 - S3
                 company_dict["ghg_s1s2"] = production * (
-                    bm_ei[2019]
-                    - bm_ei_scopes_t.loc[2019, (sector, slice(None), EScope.S3)].iloc[0]
+                    bm_ei[2019] - bm_ei_scopes_t.loc[2019, (sector, slice(None), EScope.S3)].iloc[0]
                 )
             else:
                 s1s2_s3_split = random.uniform(0.5, 0.9)
-                company_dict["ghg_s1s2"] = (
-                    production * bm_ei[2019] * (1 - s1s2_s3_split)
-                )
+                company_dict["ghg_s1s2"] = production * bm_ei[2019] * (1 - s1s2_s3_split)
                 company_dict["ghg_s3"] = production * bm_ei[2019] * s1s2_s3_split
                 scope_projections[EScope.S1S2.name] = {
                     "ei_metric": EI_Metric(ei_metric),
@@ -255,11 +244,7 @@ def gen_company_data(
                 ICompanyEIProjection.model_validate(
                     {
                         "year": y,
-                        "value": EI_Quantity(
-                            interpolate_value_at_year(
-                                y, bm_ei, ei_nz_year, ei_max_negative
-                            )
-                        ),
+                        "value": EI_Quantity(interpolate_value_at_year(y, bm_ei, ei_nz_year, ei_max_negative)),
                     }
                 )
                 for y in range(2019, 2051)
